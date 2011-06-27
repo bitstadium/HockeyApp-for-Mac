@@ -9,9 +9,9 @@
   }
 }
 
-+ (void)checkDelegate:(id)delegate performSelector:(SEL)selector withObject:(id)object withObject:(id)object {
++ (void)checkDelegate:(id)delegate performSelector:(SEL)selector withObject:(id)object0 withObject:(id)object1 {
   if ([delegate respondsToSelector:selector]) {
-    [delegate performSelector:selector withObject:object withObject:object];
+    [delegate performSelector:selector withObject:object0 withObject:object1];
   }
 }
 

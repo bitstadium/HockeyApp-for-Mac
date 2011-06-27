@@ -28,6 +28,9 @@
 		4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
 		4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
 		4D4D07E713B277B30063E405 /* CNSArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4D07E613B277B30063E405 /* CNSArchive.m */; };
+		4D4E7AFA13B8D39A002F0439 /* MenuIconNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7AF913B8D39A002F0439 /* MenuIconNormal.png */; };
+		4D4E7B0213B912FC002F0439 /* CNSDragStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */; };
+		4D4E7B0413B91C8F002F0439 /* MenuIconHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -80,6 +83,10 @@
 		4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Vendor/Sparkle.framework; sourceTree = "<group>"; };
 		4D4D07E513B277B30063E405 /* CNSArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSArchive.h; sourceTree = "<group>"; };
 		4D4D07E613B277B30063E405 /* CNSArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSArchive.m; sourceTree = "<group>"; };
+		4D4E7AF913B8D39A002F0439 /* MenuIconNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuIconNormal.png; sourceTree = "<group>"; };
+		4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSDragStatusView.h; sourceTree = "<group>"; };
+		4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSDragStatusView.m; sourceTree = "<group>"; };
+		4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuIconHighlighted.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +106,10 @@
 		4D20DDB61345FA0500344114 = {
 			isa = PBXGroup;
 			children = (
-				4D20DDCB1345FA0500344114 /* HockeyApp */,
+				4D20DDCB1345FA0500344114 /* Classes */,
 				4D20DDC41345FA0500344114 /* Frameworks */,
 				4D20DDC21345FA0500344114 /* Products */,
+				4D4E7AF813B8D39A002F0439 /* Resources */,
 				4D20DDF71345FC1100344114 /* Vendor */,
 			);
 			sourceTree = "<group>";
@@ -135,21 +143,23 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		4D20DDCB1345FA0500344114 /* HockeyApp */ = {
+		4D20DDCB1345FA0500344114 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				4D20DDD71345FA0500344114 /* CNSApp.h */,
 				4D20DDD81345FA0500344114 /* CNSApp.m */,
 				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
 				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
+				4D4D07E513B277B30063E405 /* CNSArchive.h */,
+				4D4D07E613B277B30063E405 /* CNSArchive.m */,
+				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
+				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
 				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
 				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
 				4D20DDDA1345FA0500344114 /* CNSApp.xib */,
 				4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */,
 				4D20DDDD1345FA0500344114 /* MainMenu.xib */,
 				4D20DDCC1345FA0500344114 /* Supporting Files */,
-				4D4D07E513B277B30063E405 /* CNSArchive.h */,
-				4D4D07E613B277B30063E405 /* CNSArchive.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -226,6 +236,15 @@
 			path = EMKeychain;
 			sourceTree = "<group>";
 		};
+		4D4E7AF813B8D39A002F0439 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */,
+				4D4E7AF913B8D39A002F0439 /* MenuIconNormal.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -280,6 +299,8 @@
 				4D20DDDF1345FA0500344114 /* MainMenu.xib in Resources */,
 				4D20DF5813461D0700344114 /* Icon.icns in Resources */,
 				4D1C7F0E13AA7C0500E2C048 /* CNSPreferencesView.xib in Resources */,
+				4D4E7AFA13B8D39A002F0439 /* MenuIconNormal.png in Resources */,
+				4D4E7B0413B91C8F002F0439 /* MenuIconHighlighted.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +322,7 @@
 				4D3EA83A13471E0400B664DB /* NSFileHandle+CNSAvailableData.m in Sources */,
 				4D1C7F0C13AA7BD100E2C048 /* CNSPreferencesViewController.m in Sources */,
 				4D4D07E713B277B30063E405 /* CNSArchive.m in Sources */,
+				4D4E7B0213B912FC002F0439 /* CNSDragStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D1C7F0C13AA7BD100E2C048 /* CNSPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */; };
+		4D1C7F0E13AA7C0500E2C048 /* CNSPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */; };
+		4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D20DDC51345FA0500344114 /* Cocoa.framework */; };
+		4D20DDD01345FA0500344114 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDCE1345FA0500344114 /* InfoPlist.strings */; };
+		4D20DDD31345FA0500344114 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DDD21345FA0500344114 /* main.m */; };
+		4D20DDD61345FA0500344114 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDD41345FA0500344114 /* Credits.rtf */; };
+		4D20DDD91345FA0500344114 /* CNSApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DDD81345FA0500344114 /* CNSApp.m */; };
+		4D20DDDC1345FA0500344114 /* CNSApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDDA1345FA0500344114 /* CNSApp.xib */; };
+		4D20DDDF1345FA0500344114 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDDD1345FA0500344114 /* MainMenu.xib */; };
+		4D20DF411345FC1100344114 /* CNSClassUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DEC71345FC1100344114 /* CNSClassUtils.m */; };
+		4D20DF421345FC1100344114 /* CNSConnectionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DEC91345FC1100344114 /* CNSConnectionHelper.m */; };
+		4D20DF431345FC1100344114 /* CNSLogHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DECB1345FC1100344114 /* CNSLogHelper.m */; };
+		4D20DF4A1345FCF900344114 /* CNSApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */; };
+		4D20DF4E134609FE00344114 /* NSString+CNSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DF4D134609FE00344114 /* NSString+CNSStringAdditions.m */; };
+		4D20DF531346160400344114 /* EMKeychainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DF511346160400344114 /* EMKeychainItem.m */; };
+		4D20DF56134616D600344114 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D20DF55134616D600344114 /* Security.framework */; };
+		4D20DF5813461D0700344114 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DF5713461D0700344114 /* Icon.icns */; };
+		4D3EA83A13471E0400B664DB /* NSFileHandle+CNSAvailableData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3EA83913471E0400B664DB /* NSFileHandle+CNSAvailableData.m */; };
+		4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
+		4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
+		4D4D07E713B277B30063E405 /* CNSArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4D07E613B277B30063E405 /* CNSArchive.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D4337FE13B3B07E00B8ADE2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSPreferencesViewController.h; sourceTree = "<group>"; };
+		4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSPreferencesViewController.m; sourceTree = "<group>"; };
+		4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CNSPreferencesView.xib; sourceTree = "<group>"; };
+		4D20DDC11345FA0500344114 /* HockeyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HockeyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D20DDC51345FA0500344114 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4D20DDC81345FA0500344114 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		4D20DDC91345FA0500344114 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4D20DDCA1345FA0500344114 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4D20DDCD1345FA0500344114 /* HockeyApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HockeyApp-Info.plist"; sourceTree = "<group>"; };
+		4D20DDCF1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HockeyApp-Prefix.pch"; sourceTree = "<group>"; };
+		4D20DDD21345FA0500344114 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4D20DDD51345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		4D20DDD71345FA0500344114 /* CNSApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNSApp.h; sourceTree = "<group>"; };
+		4D20DDD81345FA0500344114 /* CNSApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNSApp.m; sourceTree = "<group>"; };
+		4D20DDDB1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApp.xib; sourceTree = "<group>"; };
+		4D20DDDE1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		4D20DEC61345FC1100344114 /* CNSClassUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSClassUtils.h; sourceTree = "<group>"; };
+		4D20DEC71345FC1100344114 /* CNSClassUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSClassUtils.m; sourceTree = "<group>"; };
+		4D20DEC81345FC1100344114 /* CNSConnectionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConnectionHelper.h; sourceTree = "<group>"; };
+		4D20DEC91345FC1100344114 /* CNSConnectionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSConnectionHelper.m; sourceTree = "<group>"; };
+		4D20DECA1345FC1100344114 /* CNSLogHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSLogHelper.h; sourceTree = "<group>"; };
+		4D20DECB1345FC1100344114 /* CNSLogHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSLogHelper.m; sourceTree = "<group>"; };
+		4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSApplicationDelegate.h; sourceTree = "<group>"; };
+		4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSApplicationDelegate.m; sourceTree = "<group>"; };
+		4D20DF4C134609FE00344114 /* NSString+CNSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CNSStringAdditions.h"; sourceTree = "<group>"; };
+		4D20DF4D134609FE00344114 /* NSString+CNSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CNSStringAdditions.m"; sourceTree = "<group>"; };
+		4D20DF501346160400344114 /* EMKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMKeychainItem.h; sourceTree = "<group>"; };
+		4D20DF511346160400344114 /* EMKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMKeychainItem.m; sourceTree = "<group>"; };
+		4D20DF55134616D600344114 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4D20DF5713461D0700344114 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Icon.icns; path = ../Icon.icns; sourceTree = "<group>"; };
+		4D3EA83813471E0400B664DB /* NSFileHandle+CNSAvailableData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+CNSAvailableData.h"; sourceTree = "<group>"; };
+		4D3EA83913471E0400B664DB /* NSFileHandle+CNSAvailableData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+CNSAvailableData.m"; sourceTree = "<group>"; };
+		4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Vendor/Sparkle.framework; sourceTree = "<group>"; };
+		4D4D07E513B277B30063E405 /* CNSArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSArchive.h; sourceTree = "<group>"; };
+		4D4D07E613B277B30063E405 /* CNSArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSArchive.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D20DDBE1345FA0500344114 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D20DF56134616D600344114 /* Security.framework in Frameworks */,
+				4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */,
+				4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D20DDB61345FA0500344114 = {
+			isa = PBXGroup;
+			children = (
+				4D20DDCB1345FA0500344114 /* HockeyApp */,
+				4D20DDC41345FA0500344114 /* Frameworks */,
+				4D20DDC21345FA0500344114 /* Products */,
+				4D20DDF71345FC1100344114 /* Vendor */,
+			);
+			sourceTree = "<group>";
+		};
+		4D20DDC21345FA0500344114 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDC11345FA0500344114 /* HockeyApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4D20DDC41345FA0500344114 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */,
+				4D20DF55134616D600344114 /* Security.framework */,
+				4D20DDC51345FA0500344114 /* Cocoa.framework */,
+				4D20DDC71345FA0500344114 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4D20DDC71345FA0500344114 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDC81345FA0500344114 /* AppKit.framework */,
+				4D20DDC91345FA0500344114 /* CoreData.framework */,
+				4D20DDCA1345FA0500344114 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		4D20DDCB1345FA0500344114 /* HockeyApp */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDD71345FA0500344114 /* CNSApp.h */,
+				4D20DDD81345FA0500344114 /* CNSApp.m */,
+				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
+				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
+				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
+				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
+				4D20DDDA1345FA0500344114 /* CNSApp.xib */,
+				4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */,
+				4D20DDDD1345FA0500344114 /* MainMenu.xib */,
+				4D20DDCC1345FA0500344114 /* Supporting Files */,
+				4D4D07E513B277B30063E405 /* CNSArchive.h */,
+				4D4D07E613B277B30063E405 /* CNSArchive.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		4D20DDCC1345FA0500344114 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDCD1345FA0500344114 /* HockeyApp-Info.plist */,
+				4D20DF5713461D0700344114 /* Icon.icns */,
+				4D20DDCE1345FA0500344114 /* InfoPlist.strings */,
+				4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */,
+				4D20DDD21345FA0500344114 /* main.m */,
+				4D20DDD41345FA0500344114 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4D20DDF71345FC1100344114 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDF81345FC1100344114 /* CNSKit */,
+				4D20DF4F1346160400344114 /* EMKeychain */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		4D20DDF81345FC1100344114 /* CNSKit */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DEB51345FC1100344114 /* Classes */,
+			);
+			path = CNSKit;
+			sourceTree = "<group>";
+		};
+		4D20DEB51345FC1100344114 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DF4B134609FE00344114 /* Categories */,
+				4D20DEC51345FC1100344114 /* Helpers */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		4D20DEC51345FC1100344114 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DEC61345FC1100344114 /* CNSClassUtils.h */,
+				4D20DEC71345FC1100344114 /* CNSClassUtils.m */,
+				4D20DEC81345FC1100344114 /* CNSConnectionHelper.h */,
+				4D20DEC91345FC1100344114 /* CNSConnectionHelper.m */,
+				4D20DECA1345FC1100344114 /* CNSLogHelper.h */,
+				4D20DECB1345FC1100344114 /* CNSLogHelper.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		4D20DF4B134609FE00344114 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DF4C134609FE00344114 /* NSString+CNSStringAdditions.h */,
+				4D20DF4D134609FE00344114 /* NSString+CNSStringAdditions.m */,
+				4D3EA83813471E0400B664DB /* NSFileHandle+CNSAvailableData.h */,
+				4D3EA83913471E0400B664DB /* NSFileHandle+CNSAvailableData.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		4D20DF4F1346160400344114 /* EMKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DF501346160400344114 /* EMKeychainItem.h */,
+				4D20DF511346160400344114 /* EMKeychainItem.m */,
+			);
+			path = EMKeychain;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D20DDC01345FA0500344114 /* HockeyApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyApp" */;
+			buildPhases = (
+				4D4337FE13B3B07E00B8ADE2 /* CopyFiles */,
+				4D20DDBD1345FA0500344114 /* Sources */,
+				4D20DDBE1345FA0500344114 /* Frameworks */,
+				4D20DDBF1345FA0500344114 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HockeyApp;
+			productName = HockeyApp;
+			productReference = 4D20DDC11345FA0500344114 /* HockeyApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4D20DDB81345FA0500344114 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4D20DDB61345FA0500344114;
+			productRefGroup = 4D20DDC21345FA0500344114 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4D20DDC01345FA0500344114 /* HockeyApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4D20DDBF1345FA0500344114 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D20DDD01345FA0500344114 /* InfoPlist.strings in Resources */,
+				4D20DDD61345FA0500344114 /* Credits.rtf in Resources */,
+				4D20DDDC1345FA0500344114 /* CNSApp.xib in Resources */,
+				4D20DDDF1345FA0500344114 /* MainMenu.xib in Resources */,
+				4D20DF5813461D0700344114 /* Icon.icns in Resources */,
+				4D1C7F0E13AA7C0500E2C048 /* CNSPreferencesView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D20DDBD1345FA0500344114 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D20DDD31345FA0500344114 /* main.m in Sources */,
+				4D20DDD91345FA0500344114 /* CNSApp.m in Sources */,
+				4D20DF411345FC1100344114 /* CNSClassUtils.m in Sources */,
+				4D20DF421345FC1100344114 /* CNSConnectionHelper.m in Sources */,
+				4D20DF431345FC1100344114 /* CNSLogHelper.m in Sources */,
+				4D20DF4A1345FCF900344114 /* CNSApplicationDelegate.m in Sources */,
+				4D20DF4E134609FE00344114 /* NSString+CNSStringAdditions.m in Sources */,
+				4D20DF531346160400344114 /* EMKeychainItem.m in Sources */,
+				4D3EA83A13471E0400B664DB /* NSFileHandle+CNSAvailableData.m in Sources */,
+				4D1C7F0C13AA7BD100E2C048 /* CNSPreferencesViewController.m in Sources */,
+				4D4D07E713B277B30063E405 /* CNSArchive.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4D20DDCE1345FA0500344114 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D20DDCF1345FA0500344114 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4D20DDD41345FA0500344114 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D20DDD51345FA0500344114 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		4D20DDDA1345FA0500344114 /* CNSApp.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D20DDDB1345FA0500344114 /* en */,
+			);
+			name = CNSApp.xib;
+			sourceTree = "<group>";
+		};
+		4D20DDDD1345FA0500344114 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D20DDDE1345FA0500344114 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4D20DDE01345FA0500344114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4D20DDE11345FA0500344114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4D20DDE31345FA0500344114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
+				INFOPLIST_FILE = "Classes/HockeyApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4D20DDE41345FA0500344114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
+				INFOPLIST_FILE = "Classes/HockeyApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D20DDE01345FA0500344114 /* Debug */,
+				4D20DDE11345FA0500344114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D20DDE31345FA0500344114 /* Debug */,
+				4D20DDE41345FA0500344114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4D20DDB81345FA0500344114 /* Project object */;
+}

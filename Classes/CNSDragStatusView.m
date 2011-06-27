@@ -6,6 +6,8 @@
 @synthesize delegate;
 @synthesize highlight;
 
+#pragma mark - Initialization Methods
+
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
@@ -14,6 +16,8 @@
   
   return self;
 }
+
+#pragma mark - Memory Management Methods
 
 - (void)dealloc {
   self.delegate = nil;
@@ -24,9 +28,7 @@
   [super dealloc];
 }
 
-- (void)mouseDown:(NSEvent *)event {
-  [CNSClassUtils checkDelegate:delegate performSelector:@selector(dragStatusViewWasClicked:) withObject:self];
-}
+#pragma mark - Helper Methods
 
 - (void)setNormalImage:(NSImage *)newNormalImage highlightedImage:(NSImage *)newHighlightedImage {
   [newNormalImage retain];
@@ -38,6 +40,12 @@
   highlightedImage = newHighlightedImage;
   
   [self setNeedsDisplay:YES];
+}
+
+#pragma mark NSView Methods
+
+- (void)mouseDown:(NSEvent *)event {
+  [CNSClassUtils checkDelegate:delegate performSelector:@selector(dragStatusViewWasClicked:) withObject:self];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {

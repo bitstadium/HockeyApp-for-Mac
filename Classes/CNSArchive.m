@@ -19,7 +19,7 @@
 @synthesize ipaCreated;
 @synthesize ipaPath;
 
-#pragma mark - NSDocument
+#pragma mark - NSDocument Methods
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
   return YES;

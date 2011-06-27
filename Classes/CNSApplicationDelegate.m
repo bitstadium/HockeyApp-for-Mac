@@ -10,6 +10,8 @@
 
 @implementation CNSApplicationDelegate
 
+#pragma mark - Initialization Methods
+
 - (id)init {
   self = [super init];
   if (self) {
@@ -17,6 +19,8 @@
   
   return self;
 }
+
+#pragma mark - NSApplicationDelegate Methods
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender {
   return NO;
@@ -37,6 +41,8 @@
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:NULL];
   return YES;
 }
+
+#pragma mark - Private Helper Methods
 
 - (void)createStatusItem {
   statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
@@ -66,6 +72,8 @@
   [statusItem setView:dragStatusView];
 }
 
+#pragma mark - Action Methods
+
 - (void)dragStatusViewWasClicked:(id)dragView {
   [statusItem popUpStatusItemMenu:[statusItem menu]];
 }
@@ -82,6 +90,8 @@
   [preferencesViewController.window makeKeyAndOrderFront:self];
 }
 
+#pragma mark - NSMenuDelegate Methods
+
 - (void)menuWillOpen:(NSMenu *)menu {
   [statusItem drawStatusBarBackgroundInRect:dragStatusView.bounds withHighlight:YES];
   dragStatusView.highlight = YES;
@@ -93,6 +103,8 @@
   dragStatusView.highlight = NO;
   [dragStatusView setNeedsDisplay:YES];
 }
+
+#pragma mark - Memory Management Methods
 
 - (void)dealloc {
   [dragStatusView release], dragStatusView = nil;  

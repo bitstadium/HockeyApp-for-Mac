@@ -25,7 +25,7 @@
 @synthesize uploadSheet;
 @synthesize window;
 
-#pragma mark - Initialization
+#pragma mark - Initialization Methods
 
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
@@ -45,7 +45,7 @@
   [self.window setTitle:[self.fileURL lastPathComponent]];
 }
 
-#pragma mark - NSDocument
+#pragma mark - NSDocument Methods
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
   if (outError) {

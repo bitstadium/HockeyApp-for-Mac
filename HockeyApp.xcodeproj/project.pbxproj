@@ -8,14 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4D1C7F0C13AA7BD100E2C048 /* CNSPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */; };
-		4D1C7F0E13AA7C0500E2C048 /* CNSPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */; };
 		4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D20DDC51345FA0500344114 /* Cocoa.framework */; };
-		4D20DDD01345FA0500344114 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDCE1345FA0500344114 /* InfoPlist.strings */; };
 		4D20DDD31345FA0500344114 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DDD21345FA0500344114 /* main.m */; };
-		4D20DDD61345FA0500344114 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDD41345FA0500344114 /* Credits.rtf */; };
 		4D20DDD91345FA0500344114 /* CNSApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DDD81345FA0500344114 /* CNSApp.m */; };
-		4D20DDDC1345FA0500344114 /* CNSApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDDA1345FA0500344114 /* CNSApp.xib */; };
-		4D20DDDF1345FA0500344114 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DDDD1345FA0500344114 /* MainMenu.xib */; };
 		4D20DF411345FC1100344114 /* CNSClassUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DEC71345FC1100344114 /* CNSClassUtils.m */; };
 		4D20DF421345FC1100344114 /* CNSConnectionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DEC91345FC1100344114 /* CNSConnectionHelper.m */; };
 		4D20DF431345FC1100344114 /* CNSLogHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DECB1345FC1100344114 /* CNSLogHelper.m */; };
@@ -23,7 +18,6 @@
 		4D20DF4E134609FE00344114 /* NSString+CNSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DF4D134609FE00344114 /* NSString+CNSStringAdditions.m */; };
 		4D20DF531346160400344114 /* EMKeychainItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D20DF511346160400344114 /* EMKeychainItem.m */; };
 		4D20DF56134616D600344114 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D20DF55134616D600344114 /* Security.framework */; };
-		4D20DF5813461D0700344114 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D20DF5713461D0700344114 /* Icon.icns */; };
 		4D3EA83A13471E0400B664DB /* NSFileHandle+CNSAvailableData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3EA83913471E0400B664DB /* NSFileHandle+CNSAvailableData.m */; };
 		4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
 		4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */; };
@@ -31,6 +25,11 @@
 		4D4E7AFA13B8D39A002F0439 /* MenuIconNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7AF913B8D39A002F0439 /* MenuIconNormal.png */; };
 		4D4E7B0213B912FC002F0439 /* CNSDragStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */; };
 		4D4E7B0413B91C8F002F0439 /* MenuIconHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */; };
+		4D4E7B0D13B920C4002F0439 /* CNSApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0513B920C4002F0439 /* CNSApp.xib */; };
+		4D4E7B0E13B920C4002F0439 /* CNSPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0713B920C4002F0439 /* CNSPreferencesView.xib */; };
+		4D4E7B0F13B920C4002F0439 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0913B920C4002F0439 /* InfoPlist.strings */; };
+		4D4E7B1013B920C4002F0439 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B0B13B920C4002F0439 /* MainMenu.xib */; };
+		4D4E7B1713B921B8002F0439 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D4E7B1613B921B8002F0439 /* Icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,21 +48,15 @@
 /* Begin PBXFileReference section */
 		4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSPreferencesViewController.h; sourceTree = "<group>"; };
 		4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSPreferencesViewController.m; sourceTree = "<group>"; };
-		4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CNSPreferencesView.xib; sourceTree = "<group>"; };
 		4D20DDC11345FA0500344114 /* HockeyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HockeyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D20DDC51345FA0500344114 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4D20DDC81345FA0500344114 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		4D20DDC91345FA0500344114 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4D20DDCA1345FA0500344114 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		4D20DDCD1345FA0500344114 /* HockeyApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HockeyApp-Info.plist"; sourceTree = "<group>"; };
-		4D20DDCF1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HockeyApp-Prefix.pch"; sourceTree = "<group>"; };
 		4D20DDD21345FA0500344114 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4D20DDD51345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		4D20DDD71345FA0500344114 /* CNSApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNSApp.h; sourceTree = "<group>"; };
 		4D20DDD81345FA0500344114 /* CNSApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNSApp.m; sourceTree = "<group>"; };
-		4D20DDDB1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApp.xib; sourceTree = "<group>"; };
-		4D20DDDE1345FA0500344114 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4D20DEC61345FC1100344114 /* CNSClassUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSClassUtils.h; sourceTree = "<group>"; };
 		4D20DEC71345FC1100344114 /* CNSClassUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSClassUtils.m; sourceTree = "<group>"; };
 		4D20DEC81345FC1100344114 /* CNSConnectionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConnectionHelper.h; sourceTree = "<group>"; };
@@ -77,7 +70,6 @@
 		4D20DF501346160400344114 /* EMKeychainItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMKeychainItem.h; sourceTree = "<group>"; };
 		4D20DF511346160400344114 /* EMKeychainItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMKeychainItem.m; sourceTree = "<group>"; };
 		4D20DF55134616D600344114 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		4D20DF5713461D0700344114 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Icon.icns; path = ../Icon.icns; sourceTree = "<group>"; };
 		4D3EA83813471E0400B664DB /* NSFileHandle+CNSAvailableData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+CNSAvailableData.h"; sourceTree = "<group>"; };
 		4D3EA83913471E0400B664DB /* NSFileHandle+CNSAvailableData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+CNSAvailableData.m"; sourceTree = "<group>"; };
 		4D4337FB13B3AA4F00B8ADE2 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Vendor/Sparkle.framework; sourceTree = "<group>"; };
@@ -87,6 +79,12 @@
 		4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSDragStatusView.h; sourceTree = "<group>"; };
 		4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSDragStatusView.m; sourceTree = "<group>"; };
 		4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuIconHighlighted.png; sourceTree = "<group>"; };
+		4D4E7B0613B920C4002F0439 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApp.xib; sourceTree = "<group>"; };
+		4D4E7B0813B920C4002F0439 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSPreferencesView.xib; sourceTree = "<group>"; };
+		4D4E7B0A13B920C4002F0439 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4D4E7B0C13B920C4002F0439 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		4D4E7B1113B920DA002F0439 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4D4E7B1613B921B8002F0439 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +104,7 @@
 		4D20DDB61345FA0500344114 = {
 			isa = PBXGroup;
 			children = (
-				4D20DDCB1345FA0500344114 /* Classes */,
+				4D20DDCB1345FA0500344114 /* Code */,
 				4D20DDC41345FA0500344114 /* Frameworks */,
 				4D20DDC21345FA0500344114 /* Products */,
 				4D4E7AF813B8D39A002F0439 /* Resources */,
@@ -143,36 +141,21 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		4D20DDCB1345FA0500344114 /* Classes */ = {
+		4D20DDCB1345FA0500344114 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				4D20DDD71345FA0500344114 /* CNSApp.h */,
-				4D20DDD81345FA0500344114 /* CNSApp.m */,
-				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
-				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
-				4D4D07E513B277B30063E405 /* CNSArchive.h */,
-				4D4D07E613B277B30063E405 /* CNSArchive.m */,
-				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
-				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
-				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
-				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
-				4D20DDDA1345FA0500344114 /* CNSApp.xib */,
-				4D1C7F0D13AA7C0500E2C048 /* CNSPreferencesView.xib */,
-				4D20DDDD1345FA0500344114 /* MainMenu.xib */,
+				4D4E7B1313B9211E002F0439 /* Classes */,
 				4D20DDCC1345FA0500344114 /* Supporting Files */,
 			);
+			name = Code;
 			path = Classes;
 			sourceTree = "<group>";
 		};
 		4D20DDCC1345FA0500344114 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4D20DDCD1345FA0500344114 /* HockeyApp-Info.plist */,
-				4D20DF5713461D0700344114 /* Icon.icns */,
-				4D20DDCE1345FA0500344114 /* InfoPlist.strings */,
 				4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */,
 				4D20DDD21345FA0500344114 /* main.m */,
-				4D20DDD41345FA0500344114 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -239,10 +222,33 @@
 		4D4E7AF813B8D39A002F0439 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4D4E7B0513B920C4002F0439 /* CNSApp.xib */,
+				4D4E7B0713B920C4002F0439 /* CNSPreferencesView.xib */,
+				4D4E7B1613B921B8002F0439 /* Icon.icns */,
+				4D4E7B1113B920DA002F0439 /* Info.plist */,
+				4D4E7B0913B920C4002F0439 /* InfoPlist.strings */,
+				4D4E7B0B13B920C4002F0439 /* MainMenu.xib */,
 				4D4E7B0313B91C8F002F0439 /* MenuIconHighlighted.png */,
 				4D4E7AF913B8D39A002F0439 /* MenuIconNormal.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		4D4E7B1313B9211E002F0439 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DDD71345FA0500344114 /* CNSApp.h */,
+				4D20DDD81345FA0500344114 /* CNSApp.m */,
+				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
+				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
+				4D4D07E513B277B30063E405 /* CNSArchive.h */,
+				4D4D07E613B277B30063E405 /* CNSArchive.m */,
+				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
+				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
+				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
+				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,14 +299,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D20DDD01345FA0500344114 /* InfoPlist.strings in Resources */,
-				4D20DDD61345FA0500344114 /* Credits.rtf in Resources */,
-				4D20DDDC1345FA0500344114 /* CNSApp.xib in Resources */,
-				4D20DDDF1345FA0500344114 /* MainMenu.xib in Resources */,
-				4D20DF5813461D0700344114 /* Icon.icns in Resources */,
-				4D1C7F0E13AA7C0500E2C048 /* CNSPreferencesView.xib in Resources */,
 				4D4E7AFA13B8D39A002F0439 /* MenuIconNormal.png in Resources */,
 				4D4E7B0413B91C8F002F0439 /* MenuIconHighlighted.png in Resources */,
+				4D4E7B0D13B920C4002F0439 /* CNSApp.xib in Resources */,
+				4D4E7B0E13B920C4002F0439 /* CNSPreferencesView.xib in Resources */,
+				4D4E7B0F13B920C4002F0439 /* InfoPlist.strings in Resources */,
+				4D4E7B1013B920C4002F0439 /* MainMenu.xib in Resources */,
+				4D4E7B1713B921B8002F0439 /* Icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,34 +334,34 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		4D20DDCE1345FA0500344114 /* InfoPlist.strings */ = {
+		4D4E7B0513B920C4002F0439 /* CNSApp.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				4D20DDCF1345FA0500344114 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4D20DDD41345FA0500344114 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4D20DDD51345FA0500344114 /* en */,
-			);
-			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		4D20DDDA1345FA0500344114 /* CNSApp.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4D20DDDB1345FA0500344114 /* en */,
+				4D4E7B0613B920C4002F0439 /* en */,
 			);
 			name = CNSApp.xib;
 			sourceTree = "<group>";
 		};
-		4D20DDDD1345FA0500344114 /* MainMenu.xib */ = {
+		4D4E7B0713B920C4002F0439 /* CNSPreferencesView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				4D20DDDE1345FA0500344114 /* en */,
+				4D4E7B0813B920C4002F0439 /* en */,
+			);
+			name = CNSPreferencesView.xib;
+			sourceTree = "<group>";
+		};
+		4D4E7B0913B920C4002F0439 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D4E7B0A13B920C4002F0439 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4D4E7B0B13B920C4002F0439 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D4E7B0C13B920C4002F0439 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -409,7 +414,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
-				INFOPLIST_FILE = "Classes/HockeyApp-Info.plist";
+				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -428,7 +433,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
-				INFOPLIST_FILE = "Classes/HockeyApp-Info.plist";
+				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

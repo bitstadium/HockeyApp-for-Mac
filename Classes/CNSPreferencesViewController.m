@@ -6,14 +6,7 @@
 NSString *const CNSUserDefaultsHost = @"CNSUserDefaultsHost";
 NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 
-//- (IBAction)keychainButtonWasClicked:(id)sender {
-//	NSString *email = [emailField stringValue];
-//	NSString *host = [[hostField stringValue] stringByReplacingOccurrencesOfString:@"https://" withString:@""];
-//	
-//	EMInternetKeychainItem *keychainItem = [EMInternetKeychainItem internetKeychainItemForServer:host withUsername:email path:nil port:0 protocol:kSecProtocolTypeAny];
-//	[passwordField setStringValue:keychainItem.password];	
-//	[[NSUserDefaults standardUserDefaults] setValue:keychainItem.password forKey:CNSUserDefaultsPassword];
-//}
+#pragma mark NSControl Action Methods
 
 - (IBAction)hostFieldWasChanged:(id)sender {
 	[[NSUserDefaults standardUserDefaults] setValue:[hostField stringValue] forKey:CNSUserDefaultsHost];
@@ -22,6 +15,8 @@ NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 - (IBAction)tokenFieldWasChanged:(id)sender {
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
 }	
+
+#pragma mark Helper Methods
 
 - (NSString *)stringForUserDefaultKey:(NSString *)key ifEmpty:(NSString *)fallback {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

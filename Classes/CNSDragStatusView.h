@@ -1,4 +1,6 @@
 @interface CNSDragStatusView : NSView {
+  BOOL highlight;
+  id delegate;
   NSImage *highlightedImage;
   NSImage *normalImage;
 }

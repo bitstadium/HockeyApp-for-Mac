@@ -4,7 +4,7 @@
 
 @interface CNSApplicationDelegate ()
 
-- (void)createStatusItem;
+- (void)setIconStyle;
 
 @end
 
@@ -27,7 +27,8 @@
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
-  [self createStatusItem];
+  [self setIconStyle];
+  
 	if ([[[NSUserDefaults standardUserDefaults] valueForKey:CNSUserDefaultsToken] length] == 0) {
 		[self showPreferencesView:self];
 	}
@@ -56,6 +57,8 @@
   [preferencesItem setEnabled:YES];
   [menu addItem:preferencesItem];
   
+  [menu addItem:[NSMenuItem separatorItem]];
+  
   NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quitApplication:) keyEquivalent:@""];
   [quitItem setTarget:self];
   [quitItem setEnabled:YES];
@@ -72,6 +75,34 @@
   [statusItem setView:dragStatusView];
 }
 
+- (void)setIconStyle {
+  NSString *style = [CNSPreferencesViewController stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Menu"];
+  
+  if ([style isEqualToString:@"Only Menu"]) {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToUIElementApplication);
+    
+    if (!statusItem) {
+      [self createStatusItem];
+    }
+  }
+  else if ([style isEqualToString:@"Only Dock"]) {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    
+    [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
+    [statusItem release], statusItem = nil;
+  }
+  else {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    
+    if (!statusItem) {
+      [self createStatusItem];
+    }
+  }
+}
+
 #pragma mark - Action Methods
 
 - (void)dragStatusViewWasClicked:(id)dragView {
@@ -85,6 +116,7 @@
 - (IBAction)showPreferencesView:(id)sender {
 	if (!preferencesViewController) {
 		preferencesViewController = [[CNSPreferencesViewController alloc] init];
+    preferencesViewController.delegate = self;
 	}
 	[preferencesViewController showWindow:self];
   [preferencesViewController.window makeKeyAndOrderFront:self];

@@ -1,6 +1,7 @@
 #import "CNSApp.h"
 #import "CNSConnectionHelper.h"
 #import "CNSPreferencesViewController.h"
+#import "JSON.h"
 #import "NSFileHandle+CNSAvailableData.h"
 
 @interface CNSApp ()
@@ -167,6 +168,7 @@
   [request setHTTPBody:body];
   
   self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil];
+  self.progressIndicator.hidden = NO;
 }
 
 #pragma mark - CNSConnectionHelper Delegate Methods
@@ -175,10 +177,24 @@
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
   NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
-  NSLog(@"%@", result);
   
-  self.statusLabel.stringValue = @"Failed!";
+  NSString *errorMessage = nil;
+  if ([result length] == 0) {
+    errorMessage = @"Failed: Server did not respond. Please check your network connection.";
+  }
+  else {
+    NSDictionary *json = [result JSONValue];
+    NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
+    NSDictionary *errors = [json valueForKey:@"errors"];
+    for (NSString *attribute in errors) {
+      [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+    }
+    errorMessage = [NSString stringWithFormat:@"Failed. Server response: %@", serverMessage];
+  }
+  
+  self.statusLabel.stringValue = errorMessage;
   self.progressIndicator.doubleValue = 0;
+  self.progressIndicator.hidden = YES;
   [self.cancelButton setTitle:@"Done"];
   
   [pool drain];
@@ -198,10 +214,6 @@
 
 - (void)parseVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-  // TODO: Do something with the result!
-  NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
-  NSLog(@"%@", result);
   
   if (aConnectionHelper.statusCode != 201) {
     [self connectionHelperDidFail:aConnectionHelper];

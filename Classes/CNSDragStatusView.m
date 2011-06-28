@@ -55,10 +55,10 @@
   }
   
   if (highlight) {
-    [highlightedImage drawAtPoint:CGPointMake(4, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+    [highlightedImage drawAtPoint:NSMakePoint(4, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
   }
   else {
-    [normalImage drawAtPoint:CGPointMake(4, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+    [normalImage drawAtPoint:NSMakePoint(4, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
   }
 }
 

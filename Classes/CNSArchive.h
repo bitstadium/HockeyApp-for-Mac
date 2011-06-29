@@ -25,6 +25,7 @@
   BOOL dsymCreated;
   BOOL ipaCreated;
   NSDictionary *info;
+  NSMutableArray *tempDirectoryPaths;
   NSString *dsymPath;
   NSString *ipaPath;
 }

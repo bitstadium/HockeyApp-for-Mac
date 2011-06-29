@@ -45,6 +45,20 @@
   return YES;
 }
 
+#pragma mark - NSWindowDelegate Methods
+
+- (void)windowWillClose:(NSNotification *)notification {
+  // Cleanup temp directories
+  if (tempDirectoryPaths) {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    for (NSString *tempDirectoryPath in tempDirectoryPaths) {
+      [fileManager removeItemAtPath:tempDirectoryPath error:NULL];
+    }
+    
+    [tempDirectoryPaths release], tempDirectoryPaths = nil;
+  }
+}
+
 #pragma mark - Private Helper Methods
 
 - (NSString *)bundleIdentifier {
@@ -89,6 +103,11 @@
   NSString *tempDirectoryPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:tempDirectoryNameCString length:strlen(result)];
   free(tempDirectoryNameCString);
 
+  if (!tempDirectoryPaths) {
+    tempDirectoryPaths = [[NSMutableArray alloc] init];
+  }
+  [tempDirectoryPaths addObject:tempDirectoryPath];
+  
   return tempDirectoryPath;
 }
 
@@ -257,6 +276,9 @@
   self.dsymPath = nil;
   self.info = nil;
   self.ipaPath = nil;
+  
+  [tempDirectoryPaths release], tempDirectoryPaths = nil;
+  
   [super dealloc];
 }
 

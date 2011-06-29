@@ -22,7 +22,7 @@
 
 @class CNSConnectionHelper;
 
-@interface CNSApp : NSDocument {
+@interface CNSApp : NSDocument <NSWindowDelegate> {
 @private
   CNSConnectionHelper *connectionHelper;
   NSButton *cancelButton;

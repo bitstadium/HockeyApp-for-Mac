@@ -16,6 +16,18 @@ The upload is shown with a progress bar and there is some minimal error handling
 6. You need to enter your HockeyApp API token. If you don't have one, then create one [here](https://beta.hockeyapp.net/manage/auth_tokens).
 7. Close the dialog and you're ready to go.
 
+## INTEGRATION WITH XCODE 4
+
+1. Open your project.
+2. Select Product > Edit Scheme.
+3. Expand Archive.
+4. Select Post-actions.![Post-actions](http://f.cl.ly/items/0z2L3J3T2A33012e0G2f/XcodePostActions.png)
+5. Click the + in the lower left corner of the right pane and select New Run Script Action.
+6. Select your project for the build settings and enter the following command below:<pre>open -a HockeyApp "${ARCHIVE_PATH}"</pre>![Post-action for HockeyMac](http://f.cl.ly/items/2R0L0X3E1V0i0m2L4336/XcodePostActionsForHockeyMac.png)
+7. Confirm with OK.
+
+If you now build your product with Build & Archive and the build was successful, the .xcarchive is automatically opened with HockeyMac. You can enter your release notes and then HockeyMac creates and uploads both the .ipa and the .dSYM file. Please note that you have to configure the correct provisioning profile for AdHoc distribution in the build configuration that you use for Build & Archive.
+
 ## BUGS OR QUESTION
 
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!

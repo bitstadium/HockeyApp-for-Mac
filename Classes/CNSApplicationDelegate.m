@@ -53,6 +53,12 @@
 	if ([[[NSUserDefaults standardUserDefaults] valueForKey:CNSUserDefaultsToken] length] == 0) {
 		[self showPreferencesView:self];
 	}
+
+#if defined (CONFIGURATION_Release)
+  [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"67503a7926431872c4b6c1549f5bd6b1"];
+  [[BWQuincyManager sharedQuincyManager] setCompanyName:@"Codenauts UG"];
+  [[BWQuincyManager sharedQuincyManager] setDelegate:self];  
+#endif
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -62,6 +68,11 @@
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:NULL];
   return YES;
+}
+
+#pragma mark - BWQuincyManagerDelegate Methods
+
+- (void)showMainApplicationWindow {
 }
 
 #pragma mark - Private Helper Methods

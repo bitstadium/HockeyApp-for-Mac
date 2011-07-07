@@ -108,7 +108,7 @@
 }
 
 - (void)setIconStyle {
-  NSString *style = [CNSPreferencesViewController stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Menu"];
+  NSString *style = [CNSPreferencesViewController stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Dock"];
   
   if ([style isEqualToString:@"Only Menu"]) {
     if (CNS_LION_OR_GREATER) {

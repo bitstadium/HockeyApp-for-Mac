@@ -18,10 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "BWQuincyManager.h"
+
 @class CNSDragStatusView;
 @class CNSPreferencesViewController;
 
-@interface CNSApplicationDelegate : NSObject <NSMenuDelegate> {
+@interface CNSApplicationDelegate : NSObject <BWQuincyManagerDelegate, NSMenuDelegate> {
 @private
 	IBOutlet CNSPreferencesViewController *preferencesViewController;
 

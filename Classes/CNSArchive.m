@@ -135,8 +135,65 @@
   [self.progressIndicator setHidden:NO];
 }
 
-- (NSString *)createIPAFromFileWrapper:(NSFileWrapper *)fileWrapper {
+- (void)loadInfoWithFileWrapper:(NSFileWrapper *)fileWrapper {
+  NSDictionary *appContents = [fileWrapper fileWrappers];
+  
+  if ([appContents valueForKey:@"Info.plist"]) {
+    NSFileWrapper *infoWrapper = [appContents valueForKey:@"Info.plist"];
+    self.info = [NSPropertyListSerialization propertyListFromData:[infoWrapper regularFileContents] mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+  }
+  else {
+    if ([appContents valueForKey:@"Contents"]) {
+      NSFileWrapper *contentWrapper = [appContents valueForKey:@"Contents"];
+      NSDictionary *contentContents = [contentWrapper fileWrappers];
+      
+      if ([contentContents valueForKey:@"Info.plist"]) {
+        NSFileWrapper *infoWrapper = [contentContents valueForKey:@"Info.plist"];
+        self.info = [NSPropertyListSerialization propertyListFromData:[infoWrapper regularFileContents] mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+      }
+    }
+  }
+}
+
+- (BOOL)copyAndZipPayloadForKey:(NSString *)appKey {
   NSFileManager *fileManager = [NSFileManager defaultManager];
+
+  NSString *tempDirectoryPath = [self tempDirectoryPath];
+  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Products/Applications/%@", [[self fileURL] absoluteURL], appKey]];
+
+  if ([self isMacApp:self.info]) {
+    [fileManager createDirectoryAtPath:tempDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL];
+    NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", tempDirectoryPath, appKey]];
+    
+    NSError *error = nil;
+    [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+    if (error) {
+      return NO;
+    }
+    
+    self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [appKey stringByReplacingOccurrencesOfString:@".app" withString:@".app.zip"]];
+    self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:appKey toFilename:self.ipaPath] != nil);
+  }
+  else {
+    NSString *payloadPath = [NSString stringWithFormat:@"%@/Payload", tempDirectoryPath];
+    [fileManager createDirectoryAtPath:payloadPath withIntermediateDirectories:YES attributes:nil error:NULL];
+    
+    NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", payloadPath, appKey]];
+    
+    NSError *error = nil;
+    [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+    if (error) {
+      return NO;
+    }
+    
+    self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"]];
+    self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:@"Payload" toFilename:self.ipaPath] != nil);
+  }
+  
+  return YES;
+}
+
+- (NSString *)createIPAFromFileWrapper:(NSFileWrapper *)fileWrapper {
   NSString *appKey = nil;
   
   NSDictionary *contents = [fileWrapper fileWrappers];
@@ -158,59 +215,10 @@
       
       if (appKey) {
         NSFileWrapper *appWrapper = [applicationContents valueForKey:appKey];
-        NSDictionary *appContents = [appWrapper fileWrappers];
+        [self loadInfoWithFileWrapper:appWrapper];
         
-        // Read the info plist
-        // TODO: Refactor into method
-        if ([appContents valueForKey:@"Info.plist"]) {
-          NSFileWrapper *infoWrapper = [appContents valueForKey:@"Info.plist"];
-          self.info = [NSPropertyListSerialization propertyListFromData:[infoWrapper regularFileContents] mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-        }
-        else {
-          if ([appContents valueForKey:@"Contents"]) {
-            NSFileWrapper *contentWrapper = [appContents valueForKey:@"Contents"];
-            NSDictionary *contentContents = [contentWrapper fileWrappers];
-            
-            if ([contentContents valueForKey:@"Info.plist"]) {
-              NSFileWrapper *infoWrapper = [contentContents valueForKey:@"Info.plist"];
-              self.info = [NSPropertyListSerialization propertyListFromData:[infoWrapper regularFileContents] mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-            }
-          }
-        }
-        
-        // TODO: Refactor into method
-        if (self.info) {
-          NSString *tempDirectoryPath = [self tempDirectoryPath];
-          NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Products/Applications/%@", [[self fileURL] absoluteURL], appKey]];
-          
-          if ([self isMacApp:self.info]) {
-            [fileManager createDirectoryAtPath:tempDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL];
-            NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", tempDirectoryPath, appKey]];
-            
-            NSError *error = nil;
-            [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
-            if (error) {
-              return NO;
-            }
-            
-            self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [appKey stringByReplacingOccurrencesOfString:@".app" withString:@".app.zip"]];
-            self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:appKey toFilename:self.ipaPath] != nil);
-          }
-          else {
-            NSString *payloadPath = [NSString stringWithFormat:@"%@/Payload", tempDirectoryPath];
-            [fileManager createDirectoryAtPath:payloadPath withIntermediateDirectories:YES attributes:nil error:NULL];
-            
-            NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", payloadPath, appKey]];
-            
-            NSError *error = nil;
-            [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
-            if (error) {
-              return NO;
-            }
-            
-            self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"]];
-            self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:@"Payload" toFilename:self.ipaPath] != nil);
-          }
+        if ((!self.info) || (![self copyAndZipPayloadForKey:appKey])) {
+          appKey = nil;
         }
       }
     }
@@ -219,9 +227,25 @@
   return appKey;
 }
 
-- (void)createDSYMFromFileWrapper:(NSFileWrapper *)fileWrapper withAppKey:(NSString *)appKey {
+- (void)copyAndZipDSYMForKey:(NSString *)dsymKey {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   
+  NSString *tempDirectoryPath = [self tempDirectoryPath];
+  NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
+  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@dSYMs/%@", [[self fileURL] absoluteURL], dsymKey]];
+  NSURL *targetURL = [NSURL fileURLWithPath:targetPath];
+  
+  NSError *error = nil;
+  [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+  if (error) {
+    return;
+  }
+  
+  self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [dsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"]];
+  self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath source:dsymKey toFilename:self.dsymPath] != nil);
+}
+
+- (void)createDSYMFromFileWrapper:(NSFileWrapper *)fileWrapper withAppKey:(NSString *)appKey {
   NSDictionary *contents = [fileWrapper fileWrappers];
   if ([contents valueForKey:@"dSYMs"]) {
     NSString *dsymKey = nil;
@@ -236,21 +260,8 @@
       }
     }
     
-    // TODO: Refactor into method
     if (dsymKey) {
-      NSString *tempDirectoryPath = [self tempDirectoryPath];
-      NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
-      NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@dSYMs/%@", [[self fileURL] absoluteURL], dsymKey]];
-      NSURL *targetURL = [NSURL fileURLWithPath:targetPath];
-      
-      NSError *error = nil;
-      [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
-      if (error) {
-        return;
-      }
-      
-      self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [dsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"]];
-      self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath source:dsymKey toFilename:self.dsymPath] != nil);
+      [self copyAndZipDSYMForKey:dsymKey];
     }
   }
 }

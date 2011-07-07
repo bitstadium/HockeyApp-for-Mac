@@ -40,6 +40,8 @@
 		4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3113B9DEA7002F0439 /* SBJsonTokeniser.m */; };
 		4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */; };
 		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
+		4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */; };
+		4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -116,6 +118,9 @@
 		4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		4D589CAA13C5C219007ED5E1 /* CNSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConstants.h; sourceTree = "<group>"; };
 		4D589CAB13C5C219007ED5E1 /* CNSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSConstants.m; sourceTree = "<group>"; };
+		4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BWQuincyMain.nib; sourceTree = "<group>"; };
+		4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
+		4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +202,7 @@
 				4D20DDF81345FC1100344114 /* CNSKit */,
 				4D20DF4F1346160400344114 /* EMKeychain */,
 				4D4E7B2013B9DEA7002F0439 /* SBJSON */,
+				4D62589613C5D401005F2B75 /* QuincyKit */,
 			);
 			path = Vendor;
 			sourceTree = "<group>";
@@ -312,6 +318,16 @@
 			path = SBJSON/Classes;
 			sourceTree = "<group>";
 		};
+		4D62589613C5D401005F2B75 /* QuincyKit */ = {
+			isa = PBXGroup;
+			children = (
+				4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */,
+				4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */,
+				4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */,
+			);
+			path = QuincyKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -368,6 +384,7 @@
 				4D4E7B0F13B920C4002F0439 /* InfoPlist.strings in Resources */,
 				4D4E7B1013B920C4002F0439 /* MainMenu.xib in Resources */,
 				4D4E7B1713B921B8002F0439 /* Icon.icns in Resources */,
+				4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +433,7 @@
 				4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */,
 				4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */,
 				4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */,
+				4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,11 +498,14 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DCONFIGURATION_$(CONFIGURATION)";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -497,6 +518,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
+					"\"$(SRCROOT)/Vendor/QuincyKit\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -512,11 +534,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
+					"\"$(SRCROOT)/Vendor/QuincyKit\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

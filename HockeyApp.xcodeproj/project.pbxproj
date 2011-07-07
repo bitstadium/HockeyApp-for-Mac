@@ -39,6 +39,7 @@
 		4D4E7B3A13B9DEA7002F0439 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B2F13B9DEA7002F0439 /* SBJsonStreamWriterState.m */; };
 		4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3113B9DEA7002F0439 /* SBJsonTokeniser.m */; };
 		4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */; };
+		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -113,6 +114,8 @@
 		4D4E7B3113B9DEA7002F0439 /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonTokeniser.m; sourceTree = "<group>"; };
 		4D4E7B3213B9DEA7002F0439 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		4D589CAA13C5C219007ED5E1 /* CNSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConstants.h; sourceTree = "<group>"; };
+		4D589CAB13C5C219007ED5E1 /* CNSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSConstants.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +279,8 @@
 				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
 				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
 				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
+				4D589CAA13C5C219007ED5E1 /* CNSConstants.h */,
+				4D589CAB13C5C219007ED5E1 /* CNSConstants.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyApp" */;
 			buildPhases = (
+				4DAD9F7013BB84BD00D634BB /* ShellScript */,
 				4D4337FE13B3B07E00B8ADE2 /* CopyFiles */,
 				4D20DDBD1345FA0500344114 /* Sources */,
 				4D20DDBE1345FA0500344114 /* Frameworks */,
@@ -367,6 +373,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DAD9F7013BB84BD00D634BB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n# Increases the build number with every build\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" Resources/Info.plist)\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" Resources/Info.plist\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4D20DDBD1345FA0500344114 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -393,6 +415,7 @@
 				4D4E7B3A13B9DEA7002F0439 /* SBJsonStreamWriterState.m in Sources */,
 				4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */,
 				4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */,
+				4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

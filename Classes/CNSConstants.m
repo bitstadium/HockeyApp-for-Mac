@@ -18,27 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@interface CNSPreferencesViewController : NSWindowController <NSWindowDelegate> {
-	IBOutlet NSPopUpButton *iconMenu;
-	IBOutlet NSTextField *hostField;
-	IBOutlet NSTextField *menuLabel;
-	IBOutlet NSTextField *tokenField;
-  
-  BOOL isVisible;
-  id delegate;
-}
+#import "CNSConstants.h"
 
-extern NSString *const CNSUserDefaultsHost;
-extern NSString *const CNSUserDefaultsIcon;
-extern NSString *const CNSUserDefaultsToken;
-
-@property (assign) id delegate;
-
-+ (NSString *)stringForUserDefaultKey:(NSString *)key;
-+ (NSString *)stringForUserDefaultKey:(NSString *)key ifEmpty:(NSString *)fallback;
-
-- (IBAction)iconMenuWasChanged:(id)sender;
-- (IBAction)hostFieldWasChanged:(id)sender;
-- (IBAction)tokenFieldWasChanged:(id)sender;
+@implementation CNSConstants
 
 @end

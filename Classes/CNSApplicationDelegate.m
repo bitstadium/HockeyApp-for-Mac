@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #import "CNSApplicationDelegate.h"
+#import "CNSConstants.h"
 #import "CNSDragStatusView.h"
 #import "CNSPreferencesViewController.h"
 
@@ -99,9 +100,10 @@
   NSString *style = [CNSPreferencesViewController stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Menu"];
   
   if ([style isEqualToString:@"Only Menu"]) {
-    // Works only on ROARDACTED, deactivated for now
-    //ProcessSerialNumber psn = { 0, kCurrentProcess };
-    //TransformProcessType(&psn, kProcessTransformToUIElementApplication);
+    if (CNS_LION_OR_GREATER) {
+      ProcessSerialNumber psn = { 0, kCurrentProcess };
+      TransformProcessType(&psn, kProcessTransformToUIElementApplication);
+    }
     
     if (!statusItem) {
       [self createStatusItem];

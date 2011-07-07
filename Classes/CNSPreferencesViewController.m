@@ -84,8 +84,7 @@ NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 
 - (void)loadDefaults {
 	[tokenField setStringValue:[[self class] stringForUserDefaultKey:CNSUserDefaultsToken]];
-	[hostField setStringValue:[[self class] stringForUserDefaultKey:CNSUserDefaultsHost ifEmpty:@"https://beta.hockeyapp.net"]];
-  [iconMenu selectItemWithTitle:[[self class] stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Menu"]];
+  [iconMenu selectItemWithTitle:[[self class] stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Dock"]];
 }
 
 - (void)showWindow:(id)sender {
@@ -93,13 +92,17 @@ NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
     [NSBundle loadNibNamed:@"CNSPreferencesView" owner:self];
     isVisible = YES;
   }
+
+  if (CNS_LION_OR_GREATER) {
+    [menuLabel setHidden:YES];
+  }
   
   self.window.delegate = self;
   [self loadDefaults];
 }
 
 - (BOOL)windowShouldClose:(id)sender {
-	[[NSUserDefaults standardUserDefaults] setValue:[hostField stringValue] forKey:CNSUserDefaultsHost];
+	[[NSUserDefaults standardUserDefaults] setValue:@"https://beta.hockeyapp.net" forKey:CNSUserDefaultsHost];
 	[[NSUserDefaults standardUserDefaults] setValue:[iconMenu titleOfSelectedItem] forKey:CNSUserDefaultsIcon];
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
   [[NSUserDefaults standardUserDefaults] synchronize];

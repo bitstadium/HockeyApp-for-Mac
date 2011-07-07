@@ -18,27 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@interface CNSPreferencesViewController : NSWindowController <NSWindowDelegate> {
-	IBOutlet NSPopUpButton *iconMenu;
-	IBOutlet NSTextField *hostField;
-	IBOutlet NSTextField *menuLabel;
-	IBOutlet NSTextField *tokenField;
-  
-  BOOL isVisible;
-  id delegate;
+@interface CNSConstants : NSObject {
 }
 
-extern NSString *const CNSUserDefaultsHost;
-extern NSString *const CNSUserDefaultsIcon;
-extern NSString *const CNSUserDefaultsToken;
-
-@property (assign) id delegate;
-
-+ (NSString *)stringForUserDefaultKey:(NSString *)key;
-+ (NSString *)stringForUserDefaultKey:(NSString *)key ifEmpty:(NSString *)fallback;
-
-- (IBAction)iconMenuWasChanged:(id)sender;
-- (IBAction)hostFieldWasChanged:(id)sender;
-- (IBAction)tokenFieldWasChanged:(id)sender;
+#ifndef kCFCoreFoundationVersionNumber10_7
+#define kCFCoreFoundationVersionNumber10_7 600
+#endif
+#define CNS_LION_OR_GREATER (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_7)
 
 @end

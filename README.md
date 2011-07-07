@@ -21,7 +21,7 @@ The upload is shown with a progress bar and there is some minimal error handling
 1. Open your project.
 2. Select Product > Edit Scheme.
 3. Expand Archive.
-4. Select Post-actions.![Post-actions](http://f.cl.ly/items/0y2T0b3A3L0s09230d2o/XcodePostActions.png)
+4. Select Post-actions.
 5. Click the + in the lower left corner of the right pane and select New Run Script Action.
 6. Select your project for the build settings and enter the following command below:<pre>open -a HockeyApp "${ARCHIVE_PATH}"</pre>![Post-action for HockeyMac](http://f.cl.ly/items/0k0B0h1Q1z1e373k0440/XcodePostActionsForHockeyMac.png)
 7. Confirm with OK.

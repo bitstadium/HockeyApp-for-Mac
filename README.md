@@ -10,17 +10,17 @@ The upload is shown with a progress bar and there is some minimal error handling
 
 ## INSTALLATION
 
-1. Download the latest version from "here":https://beta.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1?format=zip
+1. Download the latest version from [here](https://beta.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1?format=zip)
 2. Extract the .zip archive.
 3. Copy HockeyApp to your Application folder.
 4. Start HockeyApp.
 5. If this is your first start, the app automatically shows the Preferences dialog: ![Preferences](http://f.cl.ly/items/1Z0V1l1O371O0R3f1n0R/HockeyAppStart.png)
-6. You need to enter your HockeyApp API token. If you don't have one, then create one "here":https://beta.hockeyapp.net/manage/auth_tokens
+6. You need to enter your HockeyApp API token. If you don't have one, then create one [here](https://beta.hockeyapp.net/manage/auth_tokens)
 7. Close the dialog and you're ready to go.
 
 ## BUGS OR QUESTION
 
-If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our "support forums":http://support.hockeyapp.net. We appreciate any feedback!
+If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support] forums"(http://support.hockeyapp.net). We appreciate any feedback!
 
 ## LICENCE
 

@@ -23,7 +23,7 @@ The upload is shown with a progress bar and there is some minimal error handling
 3. Expand Archive.
 4. Select Post-actions.![Post-actions](http://f.cl.ly/items/0z2L3J3T2A33012e0G2f/XcodePostActions.png)
 5. Click the + in the lower left corner of the right pane and select New Run Script Action.
-6. Select your project right for the build settings and enter the following command:<pre>open -a HockeyApp "${ARCHIVE_PATH}"</pre>![Post-action for HockeyMac](http://cl.ly/1c2k1H2j3E3002130Y2I/XcodePostActionsForHockeyMac.png)
+6. Select your project right for the build settings and enter the following command:<pre>open -a HockeyApp "${ARCHIVE_PATH}"</pre>![Post-action for HockeyMac](http://f.cl.ly/items/2R0L0X3E1V0i0m2L4336/XcodePostActionsForHockeyMac.png)
 7. Confirm with OK.
 
 If you now build your product with Build & Archive and the build was successful, the .xcarchive is automatically opened with HockeyMac. You can enter your release notes and then HockeyMac creates and uploads both the .ipa and the .dSYM file. Please note that you have to configure the correct provisioning profile for AdHoc distribution in the build configuration that you use for Build & Archive.

@@ -20,6 +20,7 @@
 
 #import "CNSPreferencesViewController.h"
 #import "CNSClassUtils.h"
+#import "CNSConstants.h"
 #import "EMKeychainItem.h"
 
 @interface CNSPreferencesViewController ()

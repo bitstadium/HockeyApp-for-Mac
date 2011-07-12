@@ -124,8 +124,10 @@
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
-    [statusItem release], statusItem = nil;
+    if (statusItem) {
+      [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
+      [statusItem release], statusItem = nil;
+    }
   }
   else {
     ProcessSerialNumber psn = { 0, kCurrentProcess };

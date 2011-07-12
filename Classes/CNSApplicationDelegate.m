@@ -113,7 +113,7 @@
   if ([style isEqualToString:@"Only Menu"]) {
     if (CNS_LION_OR_GREATER) {
       ProcessSerialNumber psn = { 0, kCurrentProcess };
-      TransformProcessType(&psn, kProcessTransformToUIElementApplication);
+      TransformProcessType(&psn, 4); // kProcessTransformToUIElementApplication
     }
     
     if (!statusItem) {

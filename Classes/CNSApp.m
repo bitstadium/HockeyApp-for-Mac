@@ -35,6 +35,12 @@
 
 @implementation CNSApp
 
+@synthesize bundleIdentifier;
+@synthesize bundleIdentifierLabel;
+@synthesize bundleShortVersion;
+@synthesize bundleShortVersionLabel;
+@synthesize bundleVersion;
+@synthesize bundleVersionLabel;
 @synthesize cancelButton;
 @synthesize connectionHelper;
 @synthesize downloadButton;
@@ -62,6 +68,9 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {
   [super windowControllerDidLoadNib:aController];
   
+  self.bundleIdentifierLabel.stringValue = self.bundleIdentifier;
+  self.bundleShortVersionLabel.stringValue = self.bundleShortVersion;
+  self.bundleVersionLabel.stringValue = self.bundleVersion;
   self.statusLabel.stringValue = @"";
   [self.window setTitle:[self.fileURL lastPathComponent]];
 }
@@ -79,6 +88,9 @@
   if (outError) {
     *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
   }
+  
+  [self bundleIdentifier];
+  
   return YES;
 }
 
@@ -92,9 +104,8 @@
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
-  NSString *bundleIdentifier = [self bundleIdentifier];
-  if (bundleIdentifier) {
-    [self postMultiPartRequestWithBundleIdentifier:[self bundleIdentifier]];
+  if (self.bundleIdentifier) {
+    [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier];
   }
   else {
     self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
@@ -111,6 +122,10 @@
 #pragma mark - Private Helper Methods
 
 - (NSString *)bundleIdentifier {
+  if (bundleIdentifier) {
+    return bundleIdentifier;
+  }
+  
   NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   [fileManager createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:NULL];
@@ -121,7 +136,12 @@
   
   NSData *data = [self unzipFileAtPath:targetFilename extractFilename:[NSString stringWithFormat:@"Payload/*/Info.plist"]];
   NSDictionary *info = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-  return [info valueForKey:@"CFBundleIdentifier"];
+  
+  self.bundleIdentifier = [info valueForKey:@"CFBundleIdentifier"];
+  self.bundleVersion = [info valueForKey:@"CFBundleVersion"];
+  self.bundleShortVersion = [info valueForKey:@"CFBundleShortVersionString"];
+  
+  return bundleIdentifier;
 }
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename {
@@ -169,7 +189,7 @@
   
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"ipa\"; filename=\%@\"\r\n", [ipaURL lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
+  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"ipa\"; filename=\"%@\"\r\n", [ipaURL lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[NSData dataWithContentsOfURL:ipaURL]];
 
@@ -178,8 +198,14 @@
 
 - (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier {
   NSString *boundary = @"HOCKEYAPP1234567890";
+
+  NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+
+#if (DEVELOPMENT == 1)
+  baseURL = @"http://hockeyapp.dev";
+#endif
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost]]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
   
@@ -263,6 +289,12 @@
 #pragma mark - Memory Management Mehtods
 
 - (void)dealloc {
+  self.bundleIdentifier = nil;
+  self.bundleIdentifierLabel = nil;
+  self.bundleVersion = nil;
+  self.bundleVersionLabel = nil;
+  self.bundleShortVersion = nil;
+  self.bundleShortVersionLabel = nil;
   self.cancelButton = nil;
   self.connectionHelper = nil;
 	self.downloadButton = nil;

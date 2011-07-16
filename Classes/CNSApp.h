@@ -28,8 +28,14 @@
   NSButton *cancelButton;
 	NSButton *downloadButton;
   NSButton *uploadButton;
+  NSString *bundleIdentifier;
+  NSString *bundleShortVersion;
+  NSString *bundleVersion;
   NSMatrix *notesTypeMatrix;
   NSProgressIndicator *progressIndicator;
+  NSTextField *bundleIdentifierLabel;
+  NSTextField *bundleVersionLabel;
+  NSTextField *bundleShortVersionLabel;
   NSTextField *statusLabel;
   NSTextView *releaseNotesField;
   NSWindow *uploadSheet;
@@ -39,6 +45,9 @@
 @property (assign) IBOutlet NSButton *cancelButton;
 @property (assign) IBOutlet NSButton *downloadButton;
 @property (assign) IBOutlet NSButton *uploadButton;
+@property (assign) IBOutlet NSTextField *bundleIdentifierLabel;
+@property (assign) IBOutlet NSTextField *bundleShortVersionLabel;
+@property (assign) IBOutlet NSTextField *bundleVersionLabel;
 @property (assign) IBOutlet NSTextField *statusLabel;
 @property (assign) IBOutlet NSTextView *releaseNotesField;
 @property (assign) IBOutlet NSProgressIndicator *progressIndicator;
@@ -47,6 +56,10 @@
 @property (assign) IBOutlet NSWindow *window;
 
 @property (retain) CNSConnectionHelper *connectionHelper;
+
+@property (nonatomic, copy) NSString *bundleIdentifier;
+@property (nonatomic, copy) NSString *bundleShortVersion;
+@property (nonatomic, copy) NSString *bundleVersion;
 
 - (IBAction)uploadButtonWasClicked:(id)sender;
 - (IBAction)cancelButtonWasClicked:(id)sender;

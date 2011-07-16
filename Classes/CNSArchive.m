@@ -20,8 +20,10 @@
 
 #import "CNSArchive.h"
 #import "CNSConnectionHelper.h"
+#import "CNSConstants.h"
 #import "CNSPreferencesViewController.h"
 #import "NSFileHandle+CNSAvailableData.h"
+#import "NSString+CNSStringAdditions.h"
 
 @interface CNSArchive ()
 
@@ -113,8 +115,14 @@
 
 - (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier {
   NSString *boundary = @"HOCKEYAPP1234567890";
+
+  NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost]]]];
+#if (DEVELOPMENT == 1)
+  baseURL = @"http://hockeyapp.dev";
+#endif
+
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
   
@@ -123,7 +131,7 @@
   if (self.dsymCreated) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"dsym\"; filename=\%@\"\r\n", [self.dsymPath lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"dsym\"; filename=\"%@\"\r\n", [self.dsymPath lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:self.dsymPath]]];
   }
@@ -159,7 +167,8 @@
   NSFileManager *fileManager = [NSFileManager defaultManager];
 
   NSString *tempDirectoryPath = [self tempDirectoryPath];
-  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Products/Applications/%@", [[self fileURL] absoluteURL], appKey]];
+  NSString *urlEncodedKey = [appKey URLEncodedString];
+  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Products/Applications/%@", [[self fileURL] absoluteURL], urlEncodedKey]];
 
   if ([self isMacApp:self.info]) {
     [fileManager createDirectoryAtPath:tempDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL];
@@ -186,7 +195,8 @@
       return NO;
     }
     
-    self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"]];
+    NSString *filename = [[appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];
     self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:@"Payload" toFilename:self.ipaPath] != nil);
   }
   
@@ -208,7 +218,7 @@
       for (NSString *key in applicationContents) {
         // We take the first thing which ends in .app
         if ([key hasSuffix:@".app"]) {
-          appKey = 	key;
+          appKey = key;
           break;
         }
       }
@@ -232,7 +242,9 @@
   
   NSString *tempDirectoryPath = [self tempDirectoryPath];
   NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
-  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@dSYMs/%@", [[self fileURL] absoluteURL], dsymKey]];
+
+  NSString *urlEncodedKey = [dsymKey URLEncodedString];
+  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@dSYMs/%@", [[self fileURL] absoluteURL], urlEncodedKey]];
   NSURL *targetURL = [NSURL fileURLWithPath:targetPath];
   
   NSError *error = nil;
@@ -240,8 +252,9 @@
   if (error) {
     return;
   }
-  
-  self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, [dsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"]];
+
+  NSString *filename = [[dsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+  self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];
   self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath source:dsymKey toFilename:self.dsymPath] != nil);
 }
 

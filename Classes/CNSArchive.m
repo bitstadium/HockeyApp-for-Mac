@@ -67,6 +67,14 @@
   return [self.info valueForKey:@"CFBundleIdentifier"];
 }
 
+- (NSString *)bundleShortVersion {
+  return [self.info valueForKey:@"CFBundleShortVersionString"];
+}
+
+- (NSString *)bundleVersion {
+  return [self.info valueForKey:@"CFBundleVersion"];
+}
+
 - (NSData *)zipFilesAtPath:(NSString *)sourcePath source:(NSString *)source toFilename:(NSString *)filename {
   NSTask *zip = [[[NSTask alloc] init] autorelease];
   NSPipe *aPipe = [NSPipe pipe];

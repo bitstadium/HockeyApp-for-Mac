@@ -68,9 +68,9 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {
   [super windowControllerDidLoadNib:aController];
   
-  self.bundleIdentifierLabel.stringValue = self.bundleIdentifier;
-  self.bundleShortVersionLabel.stringValue = self.bundleShortVersion;
-  self.bundleVersionLabel.stringValue = self.bundleVersion;
+  self.bundleIdentifierLabel.stringValue = (self.bundleIdentifier ?: @"unknown");
+  self.bundleShortVersionLabel.stringValue = (self.bundleShortVersion ?: @"not set");
+  self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
   self.statusLabel.stringValue = @"";
   [self.window setTitle:[self.fileURL lastPathComponent]];
 }

@@ -85,6 +85,7 @@
 #pragma mark -
 #pragma mark Connection Delegate Methods
 
+#ifdef DEBUG
 - (BOOL)connection:(NSURLConnection *)aConnection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space {
   return [[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
@@ -94,6 +95,7 @@
     [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
   }
 }  
+#endif
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)response {
   statusCode = [response statusCode];

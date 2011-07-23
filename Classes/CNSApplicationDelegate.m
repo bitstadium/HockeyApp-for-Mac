@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #import "CNSApplicationDelegate.h"
+#import <Sparkle/Sparkle.h>
 #import "CNSConstants.h"
 #import "CNSDragStatusView.h"
 #import "CNSPreferencesViewController.h"
@@ -77,6 +78,10 @@
 
 #pragma mark - Private Helper Methods
 
+- (void)checkForUpdates:(id)sender {
+  [sparkleUpdater checkForUpdates:sender];
+}
+
 - (void)createStatusItem {
   statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
   [statusItem setHighlightMode:YES];
@@ -89,6 +94,12 @@
   [preferencesItem setEnabled:YES];
   [menu addItem:preferencesItem];
   [preferencesItem release];
+  
+  NSMenuItem *sparkleItem = [[NSMenuItem alloc] initWithTitle:@"Check for Updates..." action:@selector(checkForUpdates:) keyEquivalent:@""];
+  [sparkleItem setTarget:self];
+  [sparkleItem setEnabled:YES];
+  [menu addItem:sparkleItem];
+  [sparkleItem release];
   
   [menu addItem:[NSMenuItem separatorItem]];
   

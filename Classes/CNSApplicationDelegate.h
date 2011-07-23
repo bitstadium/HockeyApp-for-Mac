@@ -22,10 +22,12 @@
 
 @class CNSDragStatusView;
 @class CNSPreferencesViewController;
+@class SUUpdater;
 
 @interface CNSApplicationDelegate : NSObject <BWQuincyManagerDelegate, NSMenuDelegate> {
 @private
 	IBOutlet CNSPreferencesViewController *preferencesViewController;
+  IBOutlet SUUpdater *sparkleUpdater;
 
   CNSDragStatusView *dragStatusView;
   NSStatusItem *statusItem;

@@ -88,6 +88,7 @@
   [preferencesItem setTarget:self];
   [preferencesItem setEnabled:YES];
   [menu addItem:preferencesItem];
+  [preferencesItem release];
   
   [menu addItem:[NSMenuItem separatorItem]];
   

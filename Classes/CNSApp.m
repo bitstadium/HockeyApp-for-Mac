@@ -213,7 +213,7 @@
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
-  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil];
+  self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil] autorelease];
   [self.progressIndicator setHidden:NO];
 }
 

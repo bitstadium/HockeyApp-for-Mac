@@ -40,7 +40,7 @@ NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 #pragma mark - Initialization Methods
 
 - (id)init {
-	if ([super initWithWindowNibName:@"CNSPreferencesView"]) {
+	if ((self = [super initWithWindowNibName:@"CNSPreferencesView"])) {
     [self loadDefaults];
     isVisible = NO;
 	}

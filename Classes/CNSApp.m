@@ -134,7 +134,7 @@
   NSURL *targetURL = [NSURL fileURLWithPath:targetFilename];
   [[NSFileManager defaultManager] copyItemAtURL:self.fileURL toURL:targetURL error:NULL];
   
-  NSData *data = [self unzipFileAtPath:targetFilename extractFilename:[NSString stringWithFormat:@"Payload/*/Info.plist"]];
+  NSData *data = [self unzipFileAtPath:targetFilename extractFilename:[NSString stringWithFormat:@"Payload/*.app/Info.plist"]];
   NSDictionary *info = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
   
   self.bundleIdentifier = [info valueForKey:@"CFBundleIdentifier"];

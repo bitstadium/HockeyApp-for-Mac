@@ -103,7 +103,7 @@ NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 }
 
 - (BOOL)windowShouldClose:(id)sender {
-	[[NSUserDefaults standardUserDefaults] setValue:@"https://beta.hockeyapp.net" forKey:CNSUserDefaultsHost];
+	[[NSUserDefaults standardUserDefaults] setValue:@"https://rink.hockeyapp.net" forKey:CNSUserDefaultsHost];
 	[[NSUserDefaults standardUserDefaults] setValue:[iconMenu titleOfSelectedItem] forKey:CNSUserDefaultsIcon];
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
   [[NSUserDefaults standardUserDefaults] synchronize];

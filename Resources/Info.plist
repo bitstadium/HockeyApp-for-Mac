@@ -70,6 +70,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://beta.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1</string>
+	<string>https://rink.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1</string>
 </dict>
 </plist>

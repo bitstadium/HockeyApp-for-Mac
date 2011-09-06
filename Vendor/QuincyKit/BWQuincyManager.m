@@ -131,7 +131,7 @@ const CGFloat kDetailsHeight = 285;
         _appIdentifier = [anAppIdentifier copy];
     }
     
-    [self setSubmissionURL:[NSString stringWithFormat:@"https://beta.hockeyapp.net/api/2/apps/%@/crashes", anAppIdentifier]];
+    [self setSubmissionURL:[NSString stringWithFormat:@"https://rink.hockeyapp.net/api/2/apps/%@/crashes", anAppIdentifier]];
 }
 
 #pragma mark -

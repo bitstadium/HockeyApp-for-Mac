@@ -73,6 +73,10 @@
   self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
   self.statusLabel.stringValue = @"";
   [self.window setTitle:[self.fileURL lastPathComponent]];
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
+    [self uploadButtonWasClicked:nil];
+  }
 }
 
 #pragma mark - NSDocument Methods
@@ -273,6 +277,10 @@
       [NSApp endSheet:self.uploadSheet];
       [self.window performClose:self];
       [self close];
+      
+      if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
+          [NSApp terminate:nil];
+      }
     });
   }
   

@@ -28,7 +28,21 @@ The upload is shown with a progress bar and there is some minimal error handling
 
 If you now build your product with Build & Archive and the build was successful, the .xcarchive is automatically opened with HockeyMac. You can enter your release notes and then HockeyMac creates and uploads both the .ipa and the .dSYM file. Please note that you have to configure the correct provisioning profile for AdHoc distribution in the build configuration that you use for Build & Archive.
 
-## BUGS OR QUESTION
+## COMMAND LINE OPTIONS
+
+You can specify the following command line options:
+
+* autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
+* notifyOn - the checkbox "Notify" will be set to on after the file was opened
+* downloadOff - the checkbox "Notify" will be set to off after the file was opened
+
+Example:
+
+<pre>open -a HockeyApp MyApp.xcarchive --args autoSubmit notifyOn</pre>
+
+HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archive and notify all testers.
+
+## BUGS OR QUESTIONS
 
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 

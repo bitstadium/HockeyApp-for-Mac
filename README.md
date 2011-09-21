@@ -46,6 +46,35 @@ HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archiv
 
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 
+## RELEASE NOTES
+
+### Version 1.0a4 - 21/Sep/2011
+
+* Added checkbox to notify testers.
+* Added command line option “autoSubmit” to automatically start the upload and stop HockeyApp after it was successfully completed.
+* Added command line options “notifyOn” and “downloadOff” to change the default values of the corresponding check boxes.
+
+### Version 1.0a3 - 06/Sep/2011
+
+* Changed URL to https://rink.hockeyapp.net.
+* Added "Check for Updates…" menu item to menubar icon menu.
+* Added Cmd-Enter as shortcut for Upload button.
+* Fixed bug when ipa contained more than one Info.plist.
+* Fixed memory warning / leaks.
+
+### Version 1.0a2 - 19/Jul/2011
+
+* Added information about bundle identifier, version and short version to upload dialog.
+* Fixed bug when executable name did include spaces.
+* Fixed spelling bug on preference page.
+
+### Version 1.0a1 - 07/Jul/2011
+
+* Integrated QuincyKit.
+* New menu bar icon.
+* Refactored code for archive handling.
+* Hide and show menu icon when running under Lion.
+
 ## LICENCE
 
 ### App

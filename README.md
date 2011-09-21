@@ -33,8 +33,8 @@ If you now build your product with Build & Archive and the build was successful,
 You can specify the following command line options:
 
 * autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
-* notifyOn - the checkbox "Notify" will be set to on after the file was opened
-* downloadOff - the checkbox "Notify" will be set to off after the file was opened
+* notifyOn - the checkbox "Notify" will be set to on after the file was opened.
+* downloadOff - the checkbox "Download" will be set to off after the file was opened.
 
 Example:
 

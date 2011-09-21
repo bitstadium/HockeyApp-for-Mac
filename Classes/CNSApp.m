@@ -300,7 +300,7 @@
       [self close];
       
       if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
-          [NSApp terminate:nil];
+        [NSApp terminate:nil];
       }
     });
   }

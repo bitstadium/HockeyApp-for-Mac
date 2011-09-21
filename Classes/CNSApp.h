@@ -27,6 +27,7 @@
   CNSConnectionHelper *connectionHelper;
   NSButton *cancelButton;
 	NSButton *downloadButton;
+  NSButton *notifyButton;
   NSButton *uploadButton;
   NSString *bundleIdentifier;
   NSString *bundleShortVersion;
@@ -44,6 +45,7 @@
 
 @property (assign) IBOutlet NSButton *cancelButton;
 @property (assign) IBOutlet NSButton *downloadButton;
+@property (assign) IBOutlet NSButton *notifyButton;
 @property (assign) IBOutlet NSButton *uploadButton;
 @property (assign) IBOutlet NSTextField *bundleIdentifierLabel;
 @property (assign) IBOutlet NSTextField *bundleShortVersionLabel;
@@ -61,8 +63,9 @@
 @property (nonatomic, copy) NSString *bundleShortVersion;
 @property (nonatomic, copy) NSString *bundleVersion;
 
-- (IBAction)uploadButtonWasClicked:(id)sender;
 - (IBAction)cancelButtonWasClicked:(id)sender;
+- (IBAction)downloadButtonWasClicked:(id)sender;
+- (IBAction)uploadButtonWasClicked:(id)sender;
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary;
 

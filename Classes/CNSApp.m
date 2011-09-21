@@ -45,6 +45,7 @@
 @synthesize connectionHelper;
 @synthesize downloadButton;
 @synthesize notesTypeMatrix;
+@synthesize notifyButton;
 @synthesize progressIndicator;
 @synthesize releaseNotesField;
 @synthesize statusLabel;
@@ -74,6 +75,15 @@
   self.statusLabel.stringValue = @"";
   [self.window setTitle:[self.fileURL lastPathComponent]];
   
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"notifyOn"]) {
+    self.notifyButton.state = NSOnState;
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"downloadOff"]) {
+    self.downloadButton.state = NSOffState;
+    [self.notifyButton setEnabled:NO];
+  }
+  
   if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
     [self uploadButtonWasClicked:nil];
   }
@@ -100,6 +110,17 @@
 
 #pragma mark - NSControl Action Methods
 
+- (IBAction)cancelButtonWasClicked:(id)sender {
+  [self.connectionHelper cancelConnection];
+  [self.uploadButton setEnabled:YES];
+  [self.uploadSheet orderOut:self];
+  [NSApp endSheet:self.uploadSheet];
+}
+
+- (IBAction)downloadButtonWasClicked:(id)sender {
+  [self.notifyButton setEnabled:(self.downloadButton.state == NSOnState)];
+}
+
 - (IBAction)uploadButtonWasClicked:(id)sender {
   self.statusLabel.stringValue = @"Initializing...";
   self.progressIndicator.doubleValue = 0;
@@ -114,13 +135,6 @@
   else {
     self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
   }
-}
-
-- (IBAction)cancelButtonWasClicked:(id)sender {
-  [self.connectionHelper cancelConnection];
-  [self.uploadButton setEnabled:YES];
-  [self.uploadSheet orderOut:self];
-  [NSApp endSheet:self.uploadSheet];
 }
 
 #pragma mark - Private Helper Methods
@@ -174,10 +188,17 @@
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary {
   NSMutableData *body = [NSMutableData dataWithCapacity:0];
   
+  BOOL downloadOn = ([self.downloadButton state] == NSOnState);
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"status\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"%d\r\n", ([self.downloadButton state] == NSOnState ? 2 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+  [body appendData:[[NSString stringWithFormat:@"%d\r\n", (downloadOn ? 2 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+  
+  BOOL notifyOn = ([self.notifyButton state] == NSOnState);
+  [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notify\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+  [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((downloadOn && notifyOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
   
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];

@@ -61,7 +61,6 @@
   return self;
 }
 
-
 - (NSString *)windowNibName {
   return @"CNSApp";
 }

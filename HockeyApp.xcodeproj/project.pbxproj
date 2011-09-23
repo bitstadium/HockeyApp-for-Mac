@@ -42,6 +42,8 @@
 		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
 		4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */; };
 		4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */; };
+		4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE69FB9142CE9E100307A1F /* CNSApk.m */; };
+		4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE69FBC142CEBB100307A1F /* CNSApk.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -121,6 +123,9 @@
 		4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BWQuincyMain.nib; sourceTree = "<group>"; };
 		4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
 		4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
+		4DE69FB8142CE9E100307A1F /* CNSApk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSApk.h; sourceTree = "<group>"; };
+		4DE69FB9142CE9E100307A1F /* CNSApk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSApk.m; sourceTree = "<group>"; };
+		4DE69FBD142CEBB100307A1F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApk.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +265,7 @@
 		4D4E7AF813B8D39A002F0439 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4DE69FBC142CEBB100307A1F /* CNSApk.xib */,
 				4D4E7B0513B920C4002F0439 /* CNSApp.xib */,
 				4D4E7B0713B920C4002F0439 /* CNSPreferencesView.xib */,
 				4D4E7B1613B921B8002F0439 /* Icon.icns */,
@@ -287,6 +293,8 @@
 				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
 				4D589CAA13C5C219007ED5E1 /* CNSConstants.h */,
 				4D589CAB13C5C219007ED5E1 /* CNSConstants.m */,
+				4DE69FB8142CE9E100307A1F /* CNSApk.h */,
+				4DE69FB9142CE9E100307A1F /* CNSApk.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -385,6 +393,7 @@
 				4D4E7B1013B920C4002F0439 /* MainMenu.xib in Resources */,
 				4D4E7B1713B921B8002F0439 /* Icon.icns in Resources */,
 				4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */,
+				4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +443,7 @@
 				4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */,
 				4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */,
 				4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */,
+				4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +480,14 @@
 				4D4E7B0C13B920C4002F0439 /* en */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		4DE69FBC142CEBB100307A1F /* CNSApk.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4DE69FBD142CEBB100307A1F /* en */,
+			);
+			name = CNSApk.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -29,8 +29,6 @@
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
 
-- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier;
-
 @end
 
 @implementation CNSApp
@@ -44,6 +42,7 @@
 @synthesize cancelButton;
 @synthesize connectionHelper;
 @synthesize downloadButton;
+@synthesize fileTypeMenu;
 @synthesize notesTypeMatrix;
 @synthesize notifyButton;
 @synthesize progressIndicator;
@@ -71,7 +70,12 @@
   self.bundleIdentifierLabel.stringValue = (self.bundleIdentifier ?: @"unknown");
   self.bundleShortVersionLabel.stringValue = (self.bundleShortVersion ?: @"not set");
   self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
+  
   self.statusLabel.stringValue = @"";
+
+  [self.fileTypeMenu selectItemAtIndex:1];
+  [self.fileTypeMenu setEnabled:NO];
+
   [self.window setTitle:[self.fileURL lastPathComponent]];
   
   if ([[[NSProcessInfo processInfo] arguments] containsObject:@"notifyOn"]) {
@@ -118,6 +122,21 @@
 
 - (IBAction)downloadButtonWasClicked:(id)sender {
   [self.notifyButton setEnabled:(self.downloadButton.state == NSOnState)];
+}
+
+- (IBAction)fileTypeMenuWasChanged:(id)sender {
+  switch ([self.fileTypeMenu indexOfSelectedItem]) {
+    case 0:
+    case 1:
+      [self.downloadButton setEnabled:YES];
+      [self.notifyButton setEnabled:YES];
+      break;
+    case 2:
+      [self.downloadButton setEnabled:NO];
+      [self.notifyButton setEnabled:NO];
+    default:
+      break;
+  }
 }
 
 - (IBAction)uploadButtonWasClicked:(id)sender {
@@ -184,20 +203,24 @@
   return nil;
 }
 
-- (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary {
+- (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform {
   NSMutableData *body = [NSMutableData dataWithCapacity:0];
   
   BOOL downloadOn = ([self.downloadButton state] == NSOnState);
-  [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"status\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"%d\r\n", (downloadOn ? 2 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+  if ([self.downloadButton isEnabled]) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"status\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (downloadOn ? 2 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
   
   BOOL notifyOn = ([self.notifyButton state] == NSOnState);
-  [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notify\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((downloadOn && notifyOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+  if ([self.notifyButton isEnabled]) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notify\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((downloadOn && notifyOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
   
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -210,12 +233,20 @@
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notes_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"%@\r\n", notesType] dataUsingEncoding:NSUTF8StringEncoding]];
+
+  if (platform) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"platform\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%@\r\n", platform] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
   
-  [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"ipa\"; filename=\"%@\"\r\n", [ipaURL lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[[NSString stringWithFormat:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-  [body appendData:[NSData dataWithContentsOfURL:ipaURL]];
+  if (ipaURL) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"ipa\"; filename=\"%@\"\r\n", [ipaURL lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[NSData dataWithContentsOfURL:ipaURL]];
+  }
 
   return body;
 }
@@ -233,7 +264,7 @@
   [request setHTTPMethod:@"POST"];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
   
-  NSMutableData *body = [self createPostBodyWithURL:self.fileURL boundary:boundary];
+  NSMutableData *body = [self createPostBodyWithURL:self.fileURL boundary:boundary platform:nil];
   [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
@@ -326,6 +357,7 @@
   self.cancelButton = nil;
   self.connectionHelper = nil;
 	self.downloadButton = nil;
+  self.fileTypeMenu = nil;
   self.notesTypeMatrix = nil;
   self.progressIndicator = nil;
   self.releaseNotesField = nil;

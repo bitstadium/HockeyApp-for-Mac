@@ -31,6 +31,10 @@
 
 - (NSData *)zipFilesAtPath:(NSString *)sourcePath source:(NSString *)source toFilename:(NSString *)filename;
 
+- (NSString *)createIPAFromFileWrapper:(NSFileWrapper *)fileWrapper;
+
+- (void)createDSYMFromFileWrapper:(NSFileWrapper *)fileWrapper withAppKey:(NSString *)appKey;
+
 @end
 
 @implementation CNSArchive
@@ -41,10 +45,34 @@
 @synthesize ipaCreated;
 @synthesize ipaPath;
 
+#pragma mark - Initialization Methods
+
+- (void)windowControllerDidLoadNib:(NSWindowController *)aController {
+  [super windowControllerDidLoadNib:aController];
+  
+  [self.fileTypeMenu setEnabled:(self.dsymCreated || self.ipaCreated)];
+  [[self.fileTypeMenu itemAtIndex:0] setEnabled:(self.dsymCreated && self.ipaCreated)];
+  [[self.fileTypeMenu itemAtIndex:1] setEnabled:self.ipaCreated];
+  [[self.fileTypeMenu itemAtIndex:2] setEnabled:self.dsymCreated];
+  [self.fileTypeMenu selectItemAtIndex:(self.dsymCreated && !self.ipaCreated ? 2 : (self.ipaCreated && !self.dsymCreated ? 1 : 0))];
+  [self fileTypeMenuWasChanged:self.fileTypeMenu];
+}
+
 #pragma mark - NSDocument Methods
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
   return YES;
+}
+
+- (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper ofType:(NSString *)typeName error:(NSError **)outError {
+  self.info = nil;
+  self.dsymCreated = NO;
+  self.ipaCreated = NO;
+  
+  NSString *appKey = [self createIPAFromFileWrapper:fileWrapper];
+  [self createDSYMFromFileWrapper:fileWrapper withAppKey:appKey];
+  
+  return (self.info != nil);
 }
 
 #pragma mark - NSWindowDelegate Methods
@@ -133,10 +161,16 @@
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+
+  NSString *platform = nil;
+  if ([self.fileTypeMenu indexOfSelectedItem] == 2) {
+    platform = ((([self.info valueForKey:@"LSMinimumSystemVersion"]) || ([self.info valueForKey:@"NSPrincipalClass"])) ? @"Mac OS" : @"iOS");
+  }
+
+  NSURL *ipaURL = [NSURL fileURLWithPath:self.ipaPath];
+  NSMutableData *body = [self createPostBodyWithURL:([self.fileTypeMenu indexOfSelectedItem] < 2 ? ipaURL : nil) boundary:boundary platform:platform];
   
-  NSMutableData *body = [self createPostBodyWithURL:[NSURL fileURLWithPath:self.ipaPath] boundary:boundary];
-  
-  if (self.dsymCreated) {
+  if ((self.dsymCreated) && ([self.fileTypeMenu indexOfSelectedItem] != 1)) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"dsym\"; filename=\"%@\"\r\n", [self.dsymPath lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -289,17 +323,6 @@
 
 - (BOOL)isMacApp:(NSDictionary *)infos {
   return ([infos valueForKey:@"LSMinimumSystemVersion"]) || ([infos valueForKey:@"NSPrincipalClass"]);
-}
-
-- (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper ofType:(NSString *)typeName error:(NSError **)outError {
-  self.info = nil;
-  self.dsymCreated = NO;
-  self.ipaCreated = NO;
-  
-  NSString *appKey = [self createIPAFromFileWrapper:fileWrapper];
-  [self createDSYMFromFileWrapper:fileWrapper withAppKey:appKey];
-
-  return (self.info != nil);
 }
 
 #pragma mark - Memory Management Mehtods

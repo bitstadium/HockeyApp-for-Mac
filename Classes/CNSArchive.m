@@ -55,6 +55,14 @@
   [[self.fileTypeMenu itemAtIndex:1] setEnabled:self.ipaCreated];
   [[self.fileTypeMenu itemAtIndex:2] setEnabled:self.dsymCreated];
   [self.fileTypeMenu selectItemAtIndex:(self.dsymCreated && !self.ipaCreated ? 2 : (self.ipaCreated && !self.dsymCreated ? 1 : 0))];
+  
+  if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyIPA"]) && (self.ipaCreated)) {
+    [self.fileTypeMenu selectItemAtIndex:1];
+  }
+  else if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyDSYM"]) && (self.dsymCreated)) {
+    [self.fileTypeMenu selectItemAtIndex:2];
+  }
+
   [self fileTypeMenuWasChanged:self.fileTypeMenu];
 }
 

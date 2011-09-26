@@ -92,6 +92,13 @@
   }
 }
 
+#pragma mark - NSWindowDelegate Methods
+
+- (BOOL)windowShouldClose:(id)sender {
+  [self close];
+  return YES;
+}
+
 #pragma mark - NSDocument Methods
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {

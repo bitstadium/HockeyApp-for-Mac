@@ -35,6 +35,8 @@ You can specify the following command line options:
 * autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
 * notifyOn - the checkbox "Notify" will be set to on after the file was opened.
 * downloadOff - the checkbox "Download" will be set to off after the file was opened.
+* onlyIPA - only for .xcarchive files; uploads only the .ipa file
+* onlyDSYM - only for .xcarchive files; uploads only the .dSYM.zip file
 
 Example:
 
@@ -47,6 +49,15 @@ HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archiv
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 
 ## RELEASE NOTES
+
+### Version 1.0a5 - 30/Sep/2011
+
+* Added popup menu to upload .ipa & dSYM.zip, only .ipa or only .dSYM.zip from the .xcarchive bundle
+* Added command line option “onlyIPA” to only upload the .ipa file
+* Added command line option “onlyDSYM” to only upload the .dSYM.zip file
+* Added handling of .apk files, i.e. you can now upload packages for Android as well
+* Improved display of error message from server
+* Increased timeout on HTTP connection to prevent errors on large files
 
 ### Version 1.0a4 - 21/Sep/2011
 

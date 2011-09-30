@@ -162,12 +162,9 @@
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
   
-#if (DEVELOPMENT == 1)
-  baseURL = @"http://hockeyapp.dev";
-#endif
-
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
+  [request setTimeoutInterval:300];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
 
   NSString *platform = nil;
@@ -191,6 +188,8 @@
   
   self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil] autorelease];
   [self.progressIndicator setHidden:NO];
+  [self.errorLabel setHidden:YES];
+  [self.statusLabel setHidden:NO];
 }
 
 - (void)loadInfoWithFileWrapper:(NSFileWrapper *)fileWrapper {

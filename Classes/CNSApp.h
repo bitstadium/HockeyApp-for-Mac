@@ -51,6 +51,7 @@
 @property (assign) IBOutlet NSTextField *bundleIdentifierLabel;
 @property (assign) IBOutlet NSTextField *bundleShortVersionLabel;
 @property (assign) IBOutlet NSTextField *bundleVersionLabel;
+@property (assign) IBOutlet NSTextField *errorLabel;
 @property (assign) IBOutlet NSTextField *statusLabel;
 @property (assign) IBOutlet NSTextView *releaseNotesField;
 @property (assign) IBOutlet NSPopUpButton *fileTypeMenu;

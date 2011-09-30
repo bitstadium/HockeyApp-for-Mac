@@ -26,6 +26,4 @@
 #endif
 #define CNS_LION_OR_GREATER (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_7)
 
-#define DEVELOPMENT 0
-
 @end

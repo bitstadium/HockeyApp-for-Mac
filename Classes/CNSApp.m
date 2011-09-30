@@ -42,6 +42,7 @@
 @synthesize cancelButton;
 @synthesize connectionHelper;
 @synthesize downloadButton;
+@synthesize errorLabel;
 @synthesize fileTypeMenu;
 @synthesize notesTypeMatrix;
 @synthesize notifyButton;
@@ -263,12 +264,9 @@
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
 
-#if (DEVELOPMENT == 1)
-  baseURL = @"http://hockeyapp.dev";
-#endif
-  
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
+  [request setTimeoutInterval:300];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
   
   NSMutableData *body = [self createPostBodyWithURL:self.fileURL boundary:boundary platform:nil];
@@ -277,6 +275,8 @@
   
   self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil] autorelease];
   [self.progressIndicator setHidden:NO];
+  [self.errorLabel setHidden:YES];
+  [self.statusLabel setHidden:NO];
 }
 
 #pragma mark - CNSConnectionHelper Delegate Methods
@@ -297,13 +297,21 @@
     for (NSString *attribute in errors) {
       [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
     }
-    errorMessage = [NSString stringWithFormat:@"Failed. Server response: %@", serverMessage];
+    if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
+      [serverMessage setString:@"No reason specified."];
+    }
+    errorMessage = [NSString stringWithFormat:@"Failed. Status code: %d. Server response: %@", aConnectionHelper.statusCode, serverMessage];
   }
   
-  self.statusLabel.stringValue = errorMessage;
+  [self.errorLabel setHidden:NO];
+  self.errorLabel.stringValue = errorMessage;
+  
+  [self.statusLabel setHidden:YES];
+  
   self.progressIndicator.doubleValue = 0;
   [self.progressIndicator setHidden:YES];
   [self.cancelButton setTitle:@"Done"];
+  
   
   [pool drain];
 }
@@ -364,6 +372,7 @@
   self.cancelButton = nil;
   self.connectionHelper = nil;
 	self.downloadButton = nil;
+  self.errorLabel = nil;
   self.fileTypeMenu = nil;
   self.notesTypeMatrix = nil;
   self.progressIndicator = nil;

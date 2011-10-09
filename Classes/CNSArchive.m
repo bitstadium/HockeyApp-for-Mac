@@ -62,6 +62,11 @@
   else if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyDSYM"]) && (self.dsymCreated)) {
     [self.fileTypeMenu selectItemAtIndex:2];
   }
+  
+  if ([self isMacApp:self.info]) {
+    [[self.fileTypeMenu itemAtIndex:0] setTitle:@".app.zip & dSYM.zip"];
+    [[self.fileTypeMenu itemAtIndex:1] setTitle:@"Only .app.zip"];
+  }
 
   [self fileTypeMenuWasChanged:self.fileTypeMenu];
 }
@@ -79,7 +84,7 @@
   
   NSString *appKey = [self createIPAFromFileWrapper:fileWrapper];
   [self createDSYMFromFileWrapper:fileWrapper withAppKey:appKey];
-  
+
   return (self.info != nil);
 }
 
@@ -169,7 +174,7 @@
 
   NSString *platform = nil;
   if ([self.fileTypeMenu indexOfSelectedItem] == 2) {
-    platform = ((([self.info valueForKey:@"LSMinimumSystemVersion"]) || ([self.info valueForKey:@"NSPrincipalClass"])) ? @"Mac OS" : @"iOS");
+    platform = (([self isMacApp:self.info]) ? @"Mac OS" : @"iOS");
   }
 
   NSURL *ipaURL = [NSURL fileURLWithPath:self.ipaPath];
@@ -329,7 +334,10 @@
 }
 
 - (BOOL)isMacApp:(NSDictionary *)infos {
-  return ([infos valueForKey:@"LSMinimumSystemVersion"]) || ([infos valueForKey:@"NSPrincipalClass"]);
+  BOOL requiresIPhoneOS = [[infos valueForKey:@"LSRequiresIPhoneOS"] boolValue];
+  NSString *minimumSystemVersion = [infos valueForKey:@"LSMinimumSystemVersion"];
+  NSString *pricipalClass = [infos valueForKey:@"NSPrincipalClass"];
+  return (!requiresIPhoneOS) && (minimumSystemVersion || pricipalClass);
 }
 
 #pragma mark - Memory Management Mehtods

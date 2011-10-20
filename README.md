@@ -50,6 +50,15 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
+### Version 1.0a8
+
+* Added last selection of Textile/Markdown to user defaults
+* Changed API endpoint for more stable handling of big uploads
+
+### Version 1.0a7
+
+_Released only internally._
+
 ### Version 1.0a6 - 09/Oct/2011
 
 * Fixed wrong detection of iPhone apps as Mac apps.

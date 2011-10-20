@@ -28,6 +28,8 @@
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
+- (void)readNotesType;
+- (void)storeNotesType;
 
 @end
 
@@ -76,6 +78,8 @@
 
   [self.fileTypeMenu selectItemAtIndex:1];
   [self.fileTypeMenu setEnabled:NO];
+  
+  [self readNotesType];
 
   [self.window setTitle:[self.fileURL lastPathComponent]];
   
@@ -152,6 +156,8 @@
   self.progressIndicator.doubleValue = 0;
   [self.cancelButton setTitle:@"Cancel"];
   [self.uploadButton setEnabled:NO];
+  
+  [self storeNotesType];
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
@@ -275,6 +281,20 @@
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
+}
+
+- (void)readNotesType {
+  NSUInteger selected = [[NSUserDefaults standardUserDefaults] integerForKey:CNSUserDefaultsNotesType];
+  if (selected < [self.notesTypeMatrix numberOfColumns]) {
+    [self.notesTypeMatrix selectCellAtRow:0 column:selected];
+  }
+}
+
+- (void)storeNotesType {
+  NSArray *cellArray = [self.notesTypeMatrix cells];
+  NSInteger notesType = ([[cellArray objectAtIndex:0] intValue] == 1 ? 0 : 1);
+  [[NSUserDefaults standardUserDefaults] setInteger:notesType forKey:CNSUserDefaultsNotesType];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - CNSConnectionHelper Delegate Methods

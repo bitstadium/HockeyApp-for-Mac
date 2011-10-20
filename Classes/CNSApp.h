@@ -38,6 +38,7 @@
   NSTextField *bundleIdentifierLabel;
   NSTextField *bundleVersionLabel;
   NSTextField *bundleShortVersionLabel;
+  NSTextField *errorLabel;
   NSTextField *statusLabel;
   NSTextView *releaseNotesField;
   NSWindow *uploadSheet;

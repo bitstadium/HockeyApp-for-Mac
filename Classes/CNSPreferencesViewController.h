@@ -31,6 +31,7 @@
 extern NSString *const CNSUserDefaultsHost;
 extern NSString *const CNSUserDefaultsIcon;
 extern NSString *const CNSUserDefaultsToken;
+extern NSString *const CNSUserDefaultsNotesType;
 
 @property (assign) id delegate;
 

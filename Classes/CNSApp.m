@@ -50,6 +50,7 @@
 @synthesize notifyButton;
 @synthesize progressIndicator;
 @synthesize releaseNotesField;
+@synthesize releaseTypeMenu;
 @synthesize statusLabel;
 @synthesize uploadButton;
 @synthesize uploadSheet;
@@ -250,6 +251,13 @@
     [body appendData:[[NSString stringWithFormat:@"%@\r\n", platform] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
+  NSInteger releaseType = [self.releaseTypeMenu indexOfSelectedItem];
+  if (releaseType > 0) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 0 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
+  
   if (ipaURL) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"ipa\"; filename=\"%@\"\r\n", [ipaURL lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -395,6 +403,7 @@
   self.notesTypeMatrix = nil;
   self.progressIndicator = nil;
   self.releaseNotesField = nil;
+  self.releaseTypeMenu = nil;
   self.statusLabel = nil;
   self.uploadButton = nil;
   self.uploadSheet = nil;

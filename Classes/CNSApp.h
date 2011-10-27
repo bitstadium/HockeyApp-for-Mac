@@ -34,6 +34,7 @@
   NSString *bundleVersion;
   NSMatrix *notesTypeMatrix;
   NSPopUpButton *fileTypeMenu;
+  NSPopUpButton *releaseTypeMenu;
   NSProgressIndicator *progressIndicator;
   NSTextField *bundleIdentifierLabel;
   NSTextField *bundleVersionLabel;
@@ -56,6 +57,7 @@
 @property (assign) IBOutlet NSTextField *statusLabel;
 @property (assign) IBOutlet NSTextView *releaseNotesField;
 @property (assign) IBOutlet NSPopUpButton *fileTypeMenu;
+@property (assign) IBOutlet NSPopUpButton *releaseTypeMenu;
 @property (assign) IBOutlet NSProgressIndicator *progressIndicator;
 @property (assign) IBOutlet NSMatrix *notesTypeMatrix;
 @property (assign) IBOutlet NSWindow *uploadSheet;

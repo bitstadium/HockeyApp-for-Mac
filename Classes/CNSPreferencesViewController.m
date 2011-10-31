@@ -35,6 +35,7 @@ NSString *const CNSUserDefaultsHost = @"CNSUserDefaultsHost";
 NSString *const CNSUserDefaultsIcon = @"CNSUserDefaultsIcon";
 NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
 NSString *const CNSUserDefaultsNotesType = @"CNSUserDefaultsNotesType";
+NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUploadSelection";
 
 @synthesize delegate;
 

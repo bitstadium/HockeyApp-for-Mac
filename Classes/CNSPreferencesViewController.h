@@ -32,6 +32,7 @@ extern NSString *const CNSUserDefaultsHost;
 extern NSString *const CNSUserDefaultsIcon;
 extern NSString *const CNSUserDefaultsToken;
 extern NSString *const CNSUserDefaultsNotesType;
+extern NSString *const CNSUserDefaultsAfterUploadSelection;
 
 @property (assign) id delegate;
 

@@ -28,13 +28,16 @@
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
+- (void)readAfterUploadSelection;
 - (void)readNotesType;
 - (void)storeNotesType;
+- (void)storeAfterUploadSelection;
 
 @end
 
 @implementation CNSApp
 
+@synthesize afterUploadMenu;
 @synthesize bundleIdentifier;
 @synthesize bundleIdentifierLabel;
 @synthesize bundleShortVersion;
@@ -81,6 +84,7 @@
   [self.fileTypeMenu setEnabled:NO];
   
   [self readNotesType];
+  [self readAfterUploadSelection];
 
   [self.window setTitle:[self.fileURL lastPathComponent]];
   
@@ -159,6 +163,7 @@
   [self.uploadButton setEnabled:NO];
   
   [self storeNotesType];
+  [self storeAfterUploadSelection];
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
@@ -274,8 +279,13 @@
   NSString *boundary = @"HOCKEYAPP1234567890";
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
-  
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
+
+  // FIXME
+  baseURL = @"http://localhost:3000";
+
+  // FIXME
+  //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setCachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData];
   [request setTimeoutInterval:300];
@@ -302,6 +312,18 @@
   NSArray *cellArray = [self.notesTypeMatrix cells];
   NSInteger notesType = ([[cellArray objectAtIndex:0] intValue] == 1 ? 0 : 1);
   [[NSUserDefaults standardUserDefaults] setInteger:notesType forKey:CNSUserDefaultsNotesType];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)readAfterUploadSelection {
+  NSUInteger selected = [[NSUserDefaults standardUserDefaults] integerForKey:CNSUserDefaultsAfterUploadSelection];
+  if (selected < [self.afterUploadMenu numberOfItems]) {
+    [self.afterUploadMenu selectItemAtIndex:selected];
+  }
+}
+
+- (void)storeAfterUploadSelection {
+  [[NSUserDefaults standardUserDefaults] setInteger:[self.afterUploadMenu indexOfSelectedItem] forKey:CNSUserDefaultsAfterUploadSelection];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -361,6 +383,9 @@
     [self connectionHelperDidFail:aConnectionHelper];
   }
   else {
+    NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
+    NSDictionary *json = [result JSONValue];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       self.statusLabel.stringValue = @"Successful!";
       self.progressIndicator.doubleValue = 0;
@@ -369,6 +394,16 @@
       [NSApp endSheet:self.uploadSheet];
       [self.window performClose:self];
       [self close];
+
+      if (([self.afterUploadMenu indexOfSelectedItem] == 1) && ([json valueForKey:@"public_url"])) {
+        NSURL *publicURL = [NSURL URLWithString:[json valueForKey:@"public_url"]];
+        [[NSWorkspace sharedWorkspace] openURL:publicURL];
+      }
+      
+      if (([self.afterUploadMenu indexOfSelectedItem] == 2) && ([json valueForKey:@"config_url"])) {
+        NSURL *configURL = [NSURL URLWithString:[json valueForKey:@"config_url"]];
+        [[NSWorkspace sharedWorkspace] openURL:configURL];
+      }
       
       if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
         [NSApp terminate:nil];
@@ -389,6 +424,7 @@
 #pragma mark - Memory Management Mehtods
 
 - (void)dealloc {
+  self.afterUploadMenu = nil;
   self.bundleIdentifier = nil;
   self.bundleIdentifierLabel = nil;
   self.bundleVersion = nil;

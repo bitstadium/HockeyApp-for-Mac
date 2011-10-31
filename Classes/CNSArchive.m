@@ -166,13 +166,8 @@
   NSString *boundary = @"HOCKEYAPP1234567890";
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
-
-  // FIXME
-  baseURL = @"http://localhost:3000";
   
-  // FIXME
-  //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setTimeoutInterval:300];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];

@@ -30,6 +30,7 @@
 - (NSString *)bundleIdentifier;
 - (void)readAfterUploadSelection;
 - (void)readNotesType;
+- (void)readProcessArguments;
 - (void)storeNotesType;
 - (void)storeAfterUploadSelection;
 
@@ -85,21 +86,9 @@
   
   [self readNotesType];
   [self readAfterUploadSelection];
+  [self readProcessArguments];
 
   [self.window setTitle:[self.fileURL lastPathComponent]];
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"notifyOn"]) {
-    self.notifyButton.state = NSOnState;
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"downloadOff"]) {
-    self.downloadButton.state = NSOffState;
-    [self.notifyButton setEnabled:NO];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
-    [self uploadButtonWasClicked:nil];
-  }
 }
 
 #pragma mark - NSWindowDelegate Methods
@@ -280,12 +269,7 @@
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
 
-  // FIXME
-  baseURL = @"http://localhost:3000";
-
-  // FIXME
-  //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
   [request setHTTPMethod:@"POST"];
   [request setCachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData];
   [request setTimeoutInterval:300];
@@ -325,6 +309,41 @@
 - (void)storeAfterUploadSelection {
   [[NSUserDefaults standardUserDefaults] setInteger:[self.afterUploadMenu indexOfSelectedItem] forKey:CNSUserDefaultsAfterUploadSelection];
   [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)readProcessArguments {
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"notifyOn"]) {
+    self.notifyButton.state = NSOnState;
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"downloadOff"]) {
+    self.downloadButton.state = NSOffState;
+    [self.notifyButton setEnabled:NO];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
+    [self uploadButtonWasClicked:nil];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"setBeta"]) {
+    [self.releaseTypeMenu selectItemAtIndex:1];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"setLive"]) {
+    [self.releaseTypeMenu selectItemAtIndex:2];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openNoPage"]) {
+    [self.afterUploadMenu selectItemAtIndex:0];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openDownloadPage"]) {
+    [self.afterUploadMenu selectItemAtIndex:1];
+  }
+  
+  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openVersionPage"]) {
+    [self.afterUploadMenu selectItemAtIndex:2];
+  }
 }
 
 #pragma mark - CNSConnectionHelper Delegate Methods

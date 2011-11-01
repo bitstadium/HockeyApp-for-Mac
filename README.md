@@ -37,10 +37,15 @@ You can specify the following command line options:
 * downloadOff - the checkbox "Download" will be set to off after the file was opened.
 * onlyIPA - only for .xcarchive files; uploads only the .ipa file
 * onlyDSYM - only for .xcarchive files; uploads only the .dSYM.zip file
+* setLive - set release type to 'live'
+* setBeta - set release type to 'beta'
+* openNoPage - do nothing after upload was successful
+* openDownloadPage - open the download page after upload was successful
+* openVersionPage - open the version page after upload was successful
 
 Example:
 
-<pre>open -a HockeyApp MyApp.xcarchive --args autoSubmit notifyOn</pre>
+<pre>open -a HockeyApp MyApp.xcarchive --args autoSubmit notifyOn openDownloadPage</pre>
 
 HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archive and notify all testers.
 
@@ -50,7 +55,18 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
-### Version 1.0a8
+### Version 1.0a9 - 01/Nov/2011
+
+* Added popup menu to select the release type of the app
+* Added command line option "setLive" to set the release type to "live"
+* Added command line option "setBeta" to set the release type to "beta"
+* Added popup menu to open the download or version page after the upload was successful; the last selected option is saved
+* Added command line option "openNoPage" to do nothing after upload was successful
+* Added command line option "openDownloadPage" to open the download page after upload was successful
+* Added command line option "openVersionPage" to open the version page after upload was successful
+* Fixed layout when window is resized
+
+### Version 1.0a8 - 20/Oct/2011
 
 * Added last selection of Textile/Markdown to user defaults
 * Changed API endpoint for more stable handling of big uploads

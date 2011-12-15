@@ -122,7 +122,7 @@
   [zip setStandardOutput:aPipe];
   [zip setCurrentDirectoryPath:sourcePath];
   [zip setLaunchPath:@"/usr/bin/zip"];
-  [zip setArguments:[NSArray arrayWithObjects:@"-r", filename, source, nil]];
+  [zip setArguments:[NSArray arrayWithObjects:@"-r", @"-y", filename, source, nil]];
   [zip launch];
   
   NSMutableData *dataOut = [NSMutableData data];

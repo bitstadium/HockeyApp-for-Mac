@@ -33,8 +33,9 @@ If you now build your product with Build & Archive and the build was successful,
 You can specify the following command line options:
 
 * autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
-* notifyOn - the checkbox "Notify" will be set to on after the file was opened.
 * downloadOff - the checkbox "Download" will be set to off after the file was opened.
+* notes - absolute path to release notes file
+* notifyOn - the checkbox "Notify" will be set to on after the file was opened.
 * onlyIPA - only for .xcarchive files; uploads only the .ipa file
 * onlyDSYM - only for .xcarchive files; uploads only the .dSYM.zip file
 * setLive - set release type to 'live'
@@ -42,6 +43,8 @@ You can specify the following command line options:
 * openNoPage - do nothing after upload was successful
 * openDownloadPage - open the download page after upload was successful
 * openVersionPage - open the version page after upload was successful
+
+Please note that the command line options are passed to the app only at the first start. If the HockeyMac is already running, it will not consider any new arguments.
 
 Example:
 
@@ -54,6 +57,12 @@ HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archiv
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 
 ## RELEASE NOTES
+
+### Version 1.0 - 05/Jan/2012
+
+* Added comand line option "notes" to load notes from a text field
+* Added drag & drop of files to the release notes text field
+* Fixed behavior when zip file contained symbolic links (thanks to Nikita Zhuk!) 
 
 ### Version 1.0a9 - 01/Nov/2011
 

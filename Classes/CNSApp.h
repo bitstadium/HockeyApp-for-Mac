@@ -24,6 +24,7 @@
 
 @interface CNSApp : NSDocument <NSWindowDelegate> {
 @private
+  BOOL ignoreNotesFile;
   CNSConnectionHelper *connectionHelper;
   NSButton *cancelButton;
 	NSButton *downloadButton;

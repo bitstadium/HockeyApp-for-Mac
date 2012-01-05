@@ -311,38 +311,46 @@
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)loadReleaseNotesFile:(NSString *)filename {
+  NSError *error = nil;
+  NSString *contents = [NSString stringWithContentsOfFile:filename encoding:NSUTF8StringEncoding error:&error];
+  if (!error) {
+    [self.releaseNotesField setString:contents];
+  }
+}
+
 - (void)readProcessArguments {
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"notifyOn"]) {
-    self.notifyButton.state = NSOnState;
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"downloadOff"]) {
-    self.downloadButton.state = NSOffState;
-    [self.notifyButton setEnabled:NO];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
-    [self uploadButtonWasClicked:nil];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"setBeta"]) {
-    [self.releaseTypeMenu selectItemAtIndex:1];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"setLive"]) {
-    [self.releaseTypeMenu selectItemAtIndex:2];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openNoPage"]) {
-    [self.afterUploadMenu selectItemAtIndex:0];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openDownloadPage"]) {
-    [self.afterUploadMenu selectItemAtIndex:1];
-  }
-  
-  if ([[[NSProcessInfo processInfo] arguments] containsObject:@"openVersionPage"]) {
-    [self.afterUploadMenu selectItemAtIndex:2];
+  NSArray *arguments = [[NSProcessInfo processInfo] arguments];
+  for (NSString *argument in arguments) {
+    if ([argument isEqualToString:@"notifyOn"]) {
+      self.notifyButton.state = NSOnState;
+    }
+    else if ([argument isEqualToString:@"downloadOff"]) {
+      self.downloadButton.state = NSOffState;
+      [self.notifyButton setEnabled:NO];
+    }
+    else if ([argument isEqualToString:@"autoSubmit"]) {
+      [self uploadButtonWasClicked:nil];
+    }
+    else if ([argument isEqualToString:@"setBeta"]) {
+      [self.releaseTypeMenu selectItemAtIndex:1];
+    }
+    else if ([argument isEqualToString:@"setLive"]) {
+      [self.releaseTypeMenu selectItemAtIndex:2];
+    }
+    else if ([argument isEqualToString:@"openNoPage"]) {
+      [self.afterUploadMenu selectItemAtIndex:0];
+    }
+    else if ([argument isEqualToString:@"openDownloadPage"]) {
+      [self.afterUploadMenu selectItemAtIndex:1];
+    }
+    else if ([argument isEqualToString:@"openVersionPage"]) {
+      [self.afterUploadMenu selectItemAtIndex:2];
+    }
+    else if (([argument hasPrefix:@"notes="]) && (!ignoreNotesFile)) {
+      [self loadReleaseNotesFile:[[argument componentsSeparatedByString:@"="] lastObject]];
+      ignoreNotesFile = YES;
+    }
   }
 }
 

@@ -42,6 +42,7 @@
 		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
 		4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */; };
 		4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */; };
+		4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB47C5614B5F5D800793D09 /* CNSTextView.m */; };
 		4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE69FB9142CE9E100307A1F /* CNSApk.m */; };
 		4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE69FBC142CEBB100307A1F /* CNSApk.xib */; };
 /* End PBXBuildFile section */
@@ -123,6 +124,8 @@
 		4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BWQuincyMain.nib; sourceTree = "<group>"; };
 		4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
 		4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
+		4DB47C5514B5F5D800793D09 /* CNSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSTextView.h; sourceTree = "<group>"; };
+		4DB47C5614B5F5D800793D09 /* CNSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSTextView.m; sourceTree = "<group>"; };
 		4DE69FB8142CE9E100307A1F /* CNSApk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSApk.h; sourceTree = "<group>"; };
 		4DE69FB9142CE9E100307A1F /* CNSApk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSApk.m; sourceTree = "<group>"; };
 		4DE69FBD142CEBB100307A1F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApk.xib; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
 				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
 				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
+				4DB47C5514B5F5D800793D09 /* CNSTextView.h */,
+				4DB47C5614B5F5D800793D09 /* CNSTextView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -444,6 +449,7 @@
 				4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */,
 				4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */,
 				4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */,
+				4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

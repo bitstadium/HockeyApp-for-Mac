@@ -162,12 +162,12 @@
   return tempDirectoryPath;
 }
 
-- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier {
+- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID {
   NSString *boundary = @"HOCKEYAPP1234567890";
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions", baseURL, publicID]]];
   [request setHTTPMethod:@"POST"];
   [request setTimeoutInterval:300];
   [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];

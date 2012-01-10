@@ -25,6 +25,7 @@
 #import "NSFileHandle+CNSAvailableData.h"
 
 @interface CNSApp ()
+@property(nonatomic, retain) NSMutableArray *appIDsAndNames;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -33,7 +34,7 @@
 - (void)readProcessArguments;
 - (void)storeNotesType;
 - (void)storeAfterUploadSelection;
-
+- (void)fetchAppNames;
 @end
 
 @implementation CNSApp
@@ -55,15 +56,18 @@
 @synthesize progressIndicator;
 @synthesize releaseNotesField;
 @synthesize releaseTypeMenu;
+@synthesize appNameMenu;
 @synthesize statusLabel;
 @synthesize uploadButton;
 @synthesize uploadSheet;
 @synthesize window;
+@synthesize appIDsAndNames;
 
 #pragma mark - Initialization Methods
 
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
+	  [self fetchAppNames];
   }
   return self;
 }
@@ -156,8 +160,10 @@
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
+  NSString *publicID = ([self.appNameMenu indexOfSelectedItem] == -1) ? @"" : [[self.appIDsAndNames objectAtIndex:[self.appNameMenu indexOfSelectedItem]] objectAtIndex:1];
+	
   if (self.bundleIdentifier) {
-    [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier];
+    [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
   }
   else {
     self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
@@ -264,7 +270,7 @@
   return body;
 }
 
-- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier {
+- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID {
   NSString *boundary = @"HOCKEYAPP1234567890";
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
@@ -317,6 +323,15 @@
   if (!error) {
     [self.releaseNotesField setString:contents];
   }
+}
+
+- (void)fetchAppNames {
+	NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
+	[request setHTTPMethod:@"GET"];
+	[request setTimeoutInterval:300];
+	
+	self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil] autorelease];
 }
 
 - (void)readProcessArguments {
@@ -403,6 +418,41 @@
   }
 }
 
+- (void)parseAppListResponse:(CNSConnectionHelper *)aConnectionHelper {
+	if (aConnectionHelper.statusCode != 200) {
+		[self connectionHelperDidFail:aConnectionHelper];
+	}
+	else {
+		NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
+		NSDictionary *json = [result JSONValue];
+		self.appIDsAndNames = [NSMutableArray array];
+		
+		// Include only those apps which have the selected Bundle ID
+		for (NSDictionary *appDict in [json objectForKey:@"apps"]) {
+			if(![[appDict objectForKey:@"bundle_identifier"] isEqualToString:self.bundleIdentifier])
+				continue;
+			
+			NSString *appName = [appDict objectForKey:@"title"];
+			NSString *publicID = [appDict objectForKey:@"public_identifier"];
+			
+			if([appName length] > 0 && [publicID length] > 0) {
+				[self.appIDsAndNames addObject:[NSArray arrayWithObjects:appName, publicID, nil]];
+			}
+		}
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self.appNameMenu removeAllItems];
+			
+			for (NSArray *appIDsAndName in self.appIDsAndNames)
+			{
+				[self.appNameMenu addItemWithTitle:[appIDsAndName objectAtIndex:0]];
+			}
+			
+			[self.appNameMenu selectItemAtIndex:0];
+		});
+	}
+}
+
 - (void)parseVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
@@ -467,10 +517,12 @@
   self.progressIndicator = nil;
   self.releaseNotesField = nil;
   self.releaseTypeMenu = nil;
+  self.appNameMenu = nil;
   self.statusLabel = nil;
   self.uploadButton = nil;
   self.uploadSheet = nil;
   self.window = nil;
+  self.appIDsAndNames = nil;
   
   [super dealloc];
 }

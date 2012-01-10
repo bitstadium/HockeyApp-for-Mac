@@ -34,9 +34,11 @@
   NSString *bundleShortVersion;
   NSString *bundleVersion;
   NSMatrix *notesTypeMatrix;
+  NSMutableArray *appIDsAndNames;
   NSPopUpButton *afterUploadMenu;
   NSPopUpButton *fileTypeMenu;
   NSPopUpButton *releaseTypeMenu;
+  NSPopUpButton *appNameMenu;
   NSProgressIndicator *progressIndicator;
   NSTextField *bundleIdentifierLabel;
   NSTextField *bundleVersionLabel;
@@ -60,6 +62,7 @@
 @property (assign) IBOutlet NSTextView *releaseNotesField;
 @property (assign) IBOutlet NSPopUpButton *afterUploadMenu;
 @property (assign) IBOutlet NSPopUpButton *fileTypeMenu;
+@property (assign) IBOutlet NSPopUpButton *appNameMenu;
 @property (assign) IBOutlet NSPopUpButton *releaseTypeMenu;
 @property (assign) IBOutlet NSProgressIndicator *progressIndicator;
 @property (assign) IBOutlet NSMatrix *notesTypeMatrix;
@@ -79,6 +82,6 @@
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;
 
-- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier;
+- (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID;
 
 @end

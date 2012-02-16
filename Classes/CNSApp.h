@@ -48,6 +48,8 @@
   NSTextView *releaseNotesField;
   NSWindow *uploadSheet;
   NSWindow *window;
+
+  NSString* apiToken;
 }
 
 @property (assign) IBOutlet NSButton *cancelButton;
@@ -74,6 +76,7 @@
 @property (nonatomic, copy) NSString *bundleIdentifier;
 @property (nonatomic, copy) NSString *bundleShortVersion;
 @property (nonatomic, copy) NSString *bundleVersion;
+@property (nonatomic, copy) NSString* apiToken;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)downloadButtonWasClicked:(id)sender;

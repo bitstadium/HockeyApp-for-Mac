@@ -62,6 +62,7 @@
 @synthesize uploadSheet;
 @synthesize window;
 @synthesize appIDsAndNames;
+@synthesize apiToken;
 
 #pragma mark - Initialization Methods
 
@@ -285,7 +286,7 @@
   [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
-  self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil] autorelease];
+    self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken] autorelease];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
@@ -331,7 +332,7 @@
 	[request setHTTPMethod:@"GET"];
 	[request setTimeoutInterval:300];
 	
-	self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil] autorelease];
+	self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken] autorelease];
 }
 
 - (void)readProcessArguments {
@@ -365,6 +366,9 @@
     else if (([argument hasPrefix:@"notes="]) && (!ignoreNotesFile)) {
       [self loadReleaseNotesFile:[[argument componentsSeparatedByString:@"="] lastObject]];
       ignoreNotesFile = YES;
+    }
+    else if ([argument hasPrefix:@"token="]) {
+        self.apiToken = [[argument componentsSeparatedByString:@"="] lastObject];
     }
   }
 }
@@ -523,6 +527,7 @@
   self.uploadSheet = nil;
   self.window = nil;
   self.appIDsAndNames = nil;
+  self.apiToken = nil;
   
   [super dealloc];
 }

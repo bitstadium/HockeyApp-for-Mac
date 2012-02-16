@@ -33,7 +33,7 @@
 
 @property (assign, readonly) NSInteger statusCode;
 
-- (id)initWithRequest:(NSMutableURLRequest *)request delegate:(id)aDelegate selector:(SEL)aSelector identifier:(NSString *)anIdentifier;
+- (id)initWithRequest:(NSMutableURLRequest *)request delegate:(id)aDelegate selector:(SEL)aSelector identifier:(NSString *)anIdentifier token:(NSString*)token;
 - (void)cancelConnection;
 
 @end

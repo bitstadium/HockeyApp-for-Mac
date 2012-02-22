@@ -38,7 +38,7 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id)initWithRequest:(NSMutableURLRequest *)request delegate:(id)aDelegate selector:(SEL)aSelector identifier:(NSString *)anIdentifier {
+- (id)initWithRequest:(NSMutableURLRequest *)request delegate:(id)aDelegate selector:(SEL)aSelector identifier:(NSString *)anIdentifier token:(NSString*)token {
   if ((self = [super init])) {
     delegate = [aDelegate retain];
     selector = aSelector;
@@ -46,8 +46,10 @@
     data = [[NSMutableData alloc] init];
     identifier = [anIdentifier retain];
     
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *token	= [defaults valueForKey:CNSUserDefaultsToken];
+    if (token == nil) {
+      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+      token	= [defaults valueForKey:CNSUserDefaultsToken];
+    }
     [request addValue:token	forHTTPHeaderField:@"X-HockeyAppToken"];
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];  

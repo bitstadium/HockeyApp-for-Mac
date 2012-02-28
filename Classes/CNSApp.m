@@ -68,6 +68,7 @@
 
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
+      [self readProcessArguments];
 	  [self fetchAppNames];
   }
   return self;
@@ -91,7 +92,6 @@
   
   [self readNotesType];
   [self readAfterUploadSelection];
-  [self readProcessArguments];
 
   [self.window setTitle:[self.fileURL lastPathComponent]];
 }

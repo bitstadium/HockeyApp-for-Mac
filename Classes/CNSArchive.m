@@ -223,14 +223,15 @@
 
   NSString *tempDirectoryPath = [self tempDirectoryPath];
   NSString *urlEncodedKey = [appKey URLEncodedString];
-  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@Products/Applications/%@", [[self fileURL] absoluteURL], urlEncodedKey]];
-
+  NSString *basePath = [[self fileURL] path];
+  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"Products/Applications/%@", urlEncodedKey]];
+  
   if ([self isMacApp:self.info]) {
     [fileManager createDirectoryAtPath:tempDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL];
-    NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", tempDirectoryPath, appKey]];
+    NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, appKey];
     
     NSError *error = nil;
-    [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+    [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];
     if (error) {
       return NO;
     }
@@ -242,10 +243,10 @@
     NSString *payloadPath = [NSString stringWithFormat:@"%@/Payload", tempDirectoryPath];
     [fileManager createDirectoryAtPath:payloadPath withIntermediateDirectories:YES attributes:nil error:NULL];
     
-    NSURL *targetURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", payloadPath, appKey]];
+    NSString *targetPath = [NSString stringWithFormat:@"%@/%@", payloadPath, appKey];
     
     NSError *error = nil;
-    [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+    [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];
     if (error) {
       return NO;
     }

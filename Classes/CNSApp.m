@@ -249,7 +249,7 @@
   if (releaseType > 0) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 0 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 2 : (releaseType == 2 ? 0 : 1))] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
   if (ipaURL) {
@@ -333,10 +333,10 @@
       [self uploadButtonWasClicked:nil];
     }
     else if ([argument isEqualToString:@"setBeta"]) {
-      [self.releaseTypeMenu selectItemAtIndex:1];
+      [self.releaseTypeMenu selectItemAtIndex:2];
     }
     else if ([argument isEqualToString:@"setLive"]) {
-      [self.releaseTypeMenu selectItemAtIndex:2];
+      [self.releaseTypeMenu selectItemAtIndex:3];
     }
     else if ([argument isEqualToString:@"openNoPage"]) {
       [self.afterUploadMenu selectItemAtIndex:0];

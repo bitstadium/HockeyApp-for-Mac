@@ -42,7 +42,7 @@
   
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
-  [self postMultiPartRequestWithBundleIdentifier:nil];
+  [self postMultiPartRequestWithBundleIdentifier:nil publicID:nil];
 }
 
 #pragma mark - Private Helper Methods

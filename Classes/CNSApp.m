@@ -275,8 +275,15 @@
   NSString *boundary = @"HOCKEYAPP1234567890";
 
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+  NSString *uploadURL = nil;
+  if (publicID) {
+    uploadURL = [NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions", baseURL, publicID];
+  }
+  else {
+    uploadURL = [NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL];
+  }
 
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL]]];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:uploadURL]];
   [request setHTTPMethod:@"POST"];
   [request setCachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData];
   [request setTimeoutInterval:300];

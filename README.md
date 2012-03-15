@@ -58,6 +58,11 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
+### Version 1.0.1 - 15/Mar/2012
+
+* Added release type "Alpha".
+* Fixed bug when .xcarchive could not be uploaded when opened via File > Open.
+
 ### Version 1.0 - 05/Jan/2012
 
 * Added comand line option "notes" to load notes from a text field

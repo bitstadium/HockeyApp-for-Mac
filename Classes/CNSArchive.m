@@ -300,11 +300,11 @@
   NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
 
   NSString *urlEncodedKey = [dsymKey URLEncodedString];
-  NSURL *sourceURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@dSYMs/%@", [[self fileURL] absoluteURL], urlEncodedKey]];
-  NSURL *targetURL = [NSURL fileURLWithPath:targetPath];
+  NSString *basePath = [[self fileURL] path];
+  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", urlEncodedKey]];
   
   NSError *error = nil;
-  [fileManager copyItemAtURL:sourceURL toURL:targetURL error:&error];
+  [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];
   if (error) {
     return;
   }

@@ -222,9 +222,8 @@
   NSFileManager *fileManager = [NSFileManager defaultManager];
 
   NSString *tempDirectoryPath = [self tempDirectoryPath];
-  NSString *urlEncodedKey = [appKey URLEncodedString];
   NSString *basePath = [[self fileURL] path];
-  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"Products/Applications/%@", urlEncodedKey]];
+  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"Products/Applications/%@", appKey]];
   
   if ([self isMacApp:self.info]) {
     [fileManager createDirectoryAtPath:tempDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL];
@@ -299,9 +298,8 @@
   NSString *tempDirectoryPath = [self tempDirectoryPath];
   NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
 
-  NSString *urlEncodedKey = [dsymKey URLEncodedString];
   NSString *basePath = [[self fileURL] path];
-  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", urlEncodedKey]];
+  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", dsymKey]];
   
   NSError *error = nil;
   [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];

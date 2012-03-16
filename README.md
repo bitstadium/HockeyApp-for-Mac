@@ -58,6 +58,10 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
+### Version 1.0.2 - 16/Mar/2012
+
+* Fixed a problem where upload failed when app name contains a space.
+
 ### Version 1.0.1 - 15/Mar/2012
 
 * Added release type "Alpha".

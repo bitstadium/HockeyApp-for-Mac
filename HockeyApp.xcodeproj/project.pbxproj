@@ -39,6 +39,8 @@
 		4D4E7B3A13B9DEA7002F0439 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B2F13B9DEA7002F0439 /* SBJsonStreamWriterState.m */; };
 		4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3113B9DEA7002F0439 /* SBJsonTokeniser.m */; };
 		4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */; };
+		4D55CE701517766D00538A5C /* CNSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D55CE6F1517766D00538A5C /* CNSDevice.m */; };
+		4D55CE731517772C00538A5C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D55CE721517772C00538A5C /* IOKit.framework */; };
 		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
 		4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */; };
 		4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */; };
@@ -119,6 +121,9 @@
 		4D4E7B3113B9DEA7002F0439 /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonTokeniser.m; sourceTree = "<group>"; };
 		4D4E7B3213B9DEA7002F0439 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		4D4E7B3313B9DEA7002F0439 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		4D55CE6E1517766D00538A5C /* CNSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSDevice.h; sourceTree = "<group>"; };
+		4D55CE6F1517766D00538A5C /* CNSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSDevice.m; sourceTree = "<group>"; };
+		4D55CE721517772C00538A5C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4D589CAA13C5C219007ED5E1 /* CNSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConstants.h; sourceTree = "<group>"; };
 		4D589CAB13C5C219007ED5E1 /* CNSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSConstants.m; sourceTree = "<group>"; };
 		4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BWQuincyMain.nib; sourceTree = "<group>"; };
@@ -136,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D55CE731517772C00538A5C /* IOKit.framework in Frameworks */,
 				4D20DF56134616D600344114 /* Security.framework in Frameworks */,
 				4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */,
 				4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */,
@@ -148,6 +154,7 @@
 		4D20DDB61345FA0500344114 = {
 			isa = PBXGroup;
 			children = (
+				4D55CE721517772C00538A5C /* IOKit.framework */,
 				4D20DDCB1345FA0500344114 /* Code */,
 				4D20DDC41345FA0500344114 /* Frameworks */,
 				4D20DDC21345FA0500344114 /* Products */,
@@ -294,6 +301,8 @@
 				4D4D07E613B277B30063E405 /* CNSArchive.m */,
 				4D589CAA13C5C219007ED5E1 /* CNSConstants.h */,
 				4D589CAB13C5C219007ED5E1 /* CNSConstants.m */,
+				4D55CE6E1517766D00538A5C /* CNSDevice.h */,
+				4D55CE6F1517766D00538A5C /* CNSDevice.m */,
 				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
 				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
 				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
@@ -450,6 +459,7 @@
 				4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */,
 				4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */,
 				4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */,
+				4D55CE701517766D00538A5C /* CNSDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

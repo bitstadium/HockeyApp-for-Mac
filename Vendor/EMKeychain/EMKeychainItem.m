@@ -259,12 +259,14 @@ static BOOL _logsErrors;
 	
 	SecKeychainItemRef item = nil;
 	OSStatus returnStatus = SecKeychainFindGenericPassword(NULL, (UInt32)strlen(serviceNameCString), serviceNameCString, (UInt32)strlen(usernameCString), usernameCString, &passwordLength, (void **)&password, &item);
-	if (returnStatus != noErr || !item)
+	if (returnStatus != noErr)
 	{
-		if (_logsErrors)
+		if (_logsErrors) {
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+    }
 		return nil;
 	}
+
 	NSString *passwordString = [[[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding] autorelease];
 	SecKeychainItemFreeContent(NULL, password);
 	
@@ -287,10 +289,12 @@ static BOOL _logsErrors;
 	
 	if (returnStatus != noErr || !item)
 	{
-		if (_logsErrors)
+		if (_logsErrors) {
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+    }
 		return nil;
 	}
+  
 	return [EMGenericKeychainItem _genericKeychainItemWithCoreKeychainItem:item forServiceName:serviceName username:username password:password];
 }
 
@@ -401,10 +405,11 @@ static BOOL _logsErrors;
 		returnStatus = SecKeychainFindInternetPassword(NULL, (UInt32)strlen(serverCString), serverCString, 0, NULL, (UInt32)strlen(usernameCString), usernameCString, (UInt32)strlen(pathCString), pathCString, port, protocol, 0, &passwordLength, (void **)&password, &item);
 	}
 	
-	if (returnStatus != noErr || !item)
+	if (returnStatus != noErr)
 	{
-		if (_logsErrors)
+		if (_logsErrors) {
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+    }
 		return nil;
 	}
 	NSString *passwordString = [[[NSString alloc] initWithData:[NSData dataWithBytes:password length:passwordLength] encoding:NSUTF8StringEncoding] autorelease];

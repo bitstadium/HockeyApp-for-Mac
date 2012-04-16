@@ -120,7 +120,6 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
 - (void)dealloc {
   self.delegate = nil;
   
-  [super dealloc];
 }
 
 @end

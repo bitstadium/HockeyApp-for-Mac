@@ -20,7 +20,7 @@
 
 @interface CNSDragStatusView : NSView {
   BOOL highlight;
-  id delegate;
+  id __unsafe_unretained delegate;
   NSImage *highlightedImage;
   NSImage *normalImage;
 }
@@ -28,6 +28,6 @@
 - (void)setNormalImage:(NSImage *)normalImage highlightedImage:(NSImage *)highlightedImage;
 
 @property (assign) BOOL highlight;
-@property (assign) id delegate;
+@property (unsafe_unretained) id delegate;
 
 @end

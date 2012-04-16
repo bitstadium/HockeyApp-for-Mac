@@ -25,7 +25,7 @@
 	IBOutlet NSTextField *tokenField;
   
   BOOL isVisible;
-  id delegate;
+  id __unsafe_unretained delegate;
 }
 
 extern NSString *const CNSUserDefaultsHost;
@@ -34,7 +34,7 @@ extern NSString *const CNSUserDefaultsToken;
 extern NSString *const CNSUserDefaultsNotesType;
 extern NSString *const CNSUserDefaultsAfterUploadSelection;
 
-@property (assign) id delegate;
+@property (unsafe_unretained) id delegate;
 
 + (NSString *)stringForUserDefaultKey:(NSString *)key;
 + (NSString *)stringForUserDefaultKey:(NSString *)key ifEmpty:(NSString *)fallback;

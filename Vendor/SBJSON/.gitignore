@@ -1,12 +1,8 @@
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
-/build
-*.pbxuser
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-target/*
+*.xcworkspace/*
+*.xcworkspace/xcuserdata
+!*.xcworkspace/contents.xcworkspacedata
 .DS_Store
-profile
-*.svn
-/.svn/*
+.idea/*
+build/*

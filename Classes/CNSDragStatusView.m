@@ -42,21 +42,16 @@
 - (void)dealloc {
   self.delegate = nil;
   
-  [highlightedImage release], highlightedImage = nil;
-  [normalImage release], normalImage = nil;
+  highlightedImage = nil;
+  normalImage = nil;
   
-  [super dealloc];
 }
 
 #pragma mark - Helper Methods
 
 - (void)setNormalImage:(NSImage *)newNormalImage highlightedImage:(NSImage *)newHighlightedImage {
-  [newNormalImage retain];
-  [normalImage release];
   normalImage = newNormalImage;
   
-  [newHighlightedImage retain];
-  [highlightedImage release];
   highlightedImage = newHighlightedImage;
   
   [self setNeedsDisplay:YES];

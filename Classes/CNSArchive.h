@@ -30,9 +30,9 @@
   NSString *ipaPath;
 }
 
-@property (nonatomic, retain) NSDictionary *info;
-@property (nonatomic, retain) NSString *dsymPath;
-@property (nonatomic, retain) NSString *ipaPath;
+@property (nonatomic) NSDictionary *info;
+@property (nonatomic) NSString *dsymPath;
+@property (nonatomic) NSString *ipaPath;
 
 @property (nonatomic, assign) BOOL dsymCreated;
 @property (nonatomic, assign) BOOL ipaCreated;

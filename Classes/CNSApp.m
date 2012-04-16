@@ -21,11 +21,11 @@
 #import "CNSApp.h"
 #import "CNSConnectionHelper.h"
 #import "CNSPreferencesViewController.h"
-#import "JSON.h"
+#import "SBJSON.h"
 #import "NSFileHandle+CNSAvailableData.h"
 
 @interface CNSApp ()
-@property(nonatomic, retain) NSMutableArray *appIDsAndNames;
+@property(nonatomic) NSMutableArray *appIDsAndNames;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -197,7 +197,7 @@
 }
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename {
-  NSTask *unzip = [[[NSTask alloc] init] autorelease];
+  NSTask *unzip = [[NSTask alloc] init];
   NSPipe *aPipe = [NSPipe pipe];
   [unzip setStandardOutput:aPipe];
   [unzip setLaunchPath:@"/usr/bin/unzip"];
@@ -293,7 +293,7 @@
   [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
-    self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken] autorelease];
+  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
@@ -339,7 +339,7 @@
 	[request setHTTPMethod:@"GET"];
 	[request setTimeoutInterval:300];
 	
-	self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken] autorelease];
+	self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken];
 }
 
 - (void)readProcessArguments {
@@ -383,38 +383,38 @@
 #pragma mark - CNSConnectionHelper Delegate Methods
 
 - (void)connectionHelperDidFail:(CNSConnectionHelper *)aConnectionHelper {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
   
-  NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
-  
-  NSString *errorMessage = nil;
-  if ([result length] == 0) {
-    errorMessage = @"Failed: Server did not respond. Please check your network connection.";
-  }
-  else {
-    NSDictionary *json = [result JSONValue];
-    NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
-    NSDictionary *errors = [json valueForKey:@"errors"];
-    for (NSString *attribute in errors) {
-      [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+    NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
+    
+    NSString *errorMessage = nil;
+    if ([result length] == 0) {
+      errorMessage = @"Failed: Server did not respond. Please check your network connection.";
     }
-    if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
-      [serverMessage setString:@"No reason specified."];
+    else {
+      NSDictionary *json = [result JSONValue];
+      NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
+      NSDictionary *errors = [json valueForKey:@"errors"];
+      for (NSString *attribute in errors) {
+        [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+      }
+      if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
+        [serverMessage setString:@"No reason specified."];
+      }
+      errorMessage = [NSString stringWithFormat:@"Failed. Status code: %d. Server response: %@", aConnectionHelper.statusCode, serverMessage];
     }
-    errorMessage = [NSString stringWithFormat:@"Failed. Status code: %d. Server response: %@", aConnectionHelper.statusCode, serverMessage];
+    
+    [self.errorLabel setHidden:NO];
+    self.errorLabel.stringValue = errorMessage;
+    
+    [self.statusLabel setHidden:YES];
+    
+    self.progressIndicator.doubleValue = 0;
+    [self.progressIndicator setHidden:YES];
+    [self.cancelButton setTitle:@"Done"];
+  
+  
   }
-  
-  [self.errorLabel setHidden:NO];
-  self.errorLabel.stringValue = errorMessage;
-  
-  [self.statusLabel setHidden:YES];
-  
-  self.progressIndicator.doubleValue = 0;
-  [self.progressIndicator setHidden:YES];
-  [self.cancelButton setTitle:@"Done"];
-  
-  
-  [pool drain];
 }
 
 - (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didProgress:(NSNumber*)progress {
@@ -434,7 +434,7 @@
 		[self connectionHelperDidFail:aConnectionHelper];
 	}
 	else {
-		NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
+		NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
 		NSDictionary *json = [result JSONValue];
 		self.appIDsAndNames = [NSMutableArray array];
 		
@@ -465,41 +465,41 @@
 }
 
 - (void)parseVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
   
-  if (aConnectionHelper.statusCode != 201) {
-    [self connectionHelperDidFail:aConnectionHelper];
-  }
-  else {
-    NSString *result = [[[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding] autorelease];
-    NSDictionary *json = [result JSONValue];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-      self.statusLabel.stringValue = @"Successful!";
-      self.progressIndicator.doubleValue = 0;
-      [self.uploadButton setEnabled:YES];
-      [self.uploadSheet orderOut:self];
-      [NSApp endSheet:self.uploadSheet];
-      [self.window performClose:self];
-      [self close];
+    if (aConnectionHelper.statusCode != 201) {
+      [self connectionHelperDidFail:aConnectionHelper];
+    }
+    else {
+      NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
+      NSDictionary *json = [result JSONValue];
+      
+      dispatch_async(dispatch_get_main_queue(), ^{
+        self.statusLabel.stringValue = @"Successful!";
+        self.progressIndicator.doubleValue = 0;
+        [self.uploadButton setEnabled:YES];
+        [self.uploadSheet orderOut:self];
+        [NSApp endSheet:self.uploadSheet];
+        [self.window performClose:self];
+        [self close];
 
-      if (([self.afterUploadMenu indexOfSelectedItem] == 1) && ([json valueForKey:@"public_url"])) {
-        NSURL *publicURL = [NSURL URLWithString:[json valueForKey:@"public_url"]];
-        [[NSWorkspace sharedWorkspace] openURL:publicURL];
-      }
-      
-      if (([self.afterUploadMenu indexOfSelectedItem] == 2) && ([json valueForKey:@"config_url"])) {
-        NSURL *configURL = [NSURL URLWithString:[json valueForKey:@"config_url"]];
-        [[NSWorkspace sharedWorkspace] openURL:configURL];
-      }
-      
-      if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
-        [NSApp terminate:nil];
-      }
-    });
-  }
+        if (([self.afterUploadMenu indexOfSelectedItem] == 1) && ([json valueForKey:@"public_url"])) {
+          NSURL *publicURL = [NSURL URLWithString:[json valueForKey:@"public_url"]];
+          [[NSWorkspace sharedWorkspace] openURL:publicURL];
+        }
+        
+        if (([self.afterUploadMenu indexOfSelectedItem] == 2) && ([json valueForKey:@"config_url"])) {
+          NSURL *configURL = [NSURL URLWithString:[json valueForKey:@"config_url"]];
+          [[NSWorkspace sharedWorkspace] openURL:configURL];
+        }
+        
+        if ([[[NSProcessInfo processInfo] arguments] containsObject:@"autoSubmit"]) {
+          [NSApp terminate:nil];
+        }
+      });
+    }
   
-  [pool drain];
+  }
 }
 
 #pragma mark - NSApp Delegate Methods
@@ -513,14 +513,10 @@
 
 - (void)dealloc {
   self.afterUploadMenu = nil;
-  self.bundleIdentifier = nil;
   self.bundleIdentifierLabel = nil;
-  self.bundleVersion = nil;
   self.bundleVersionLabel = nil;
-  self.bundleShortVersion = nil;
   self.bundleShortVersionLabel = nil;
   self.cancelButton = nil;
-  self.connectionHelper = nil;
 	self.downloadButton = nil;
   self.errorLabel = nil;
   self.fileTypeMenu = nil;
@@ -533,10 +529,7 @@
   self.uploadButton = nil;
   self.uploadSheet = nil;
   self.window = nil;
-  self.appIDsAndNames = nil;
-  self.apiToken = nil;
   
-  [super dealloc];
 }
 
 @end

@@ -98,7 +98,7 @@
       [fileManager removeItemAtPath:tempDirectoryPath error:NULL];
     }
     
-    [tempDirectoryPaths release], tempDirectoryPaths = nil;
+    tempDirectoryPaths = nil;
   }
 }
 
@@ -117,7 +117,7 @@
 }
 
 - (NSData *)zipFilesAtPath:(NSString *)sourcePath source:(NSString *)source toFilename:(NSString *)filename {
-  NSTask *zip = [[[NSTask alloc] init] autorelease];
+  NSTask *zip = [[NSTask alloc] init];
   NSPipe *aPipe = [NSPipe pipe];
   [zip setStandardOutput:aPipe];
   [zip setCurrentDirectoryPath:sourcePath];
@@ -148,7 +148,7 @@
 
   char *result = mkdtemp(tempDirectoryNameCString);
   if (!result) {
-    return NO;
+    return nil;
   }
   
   NSString *tempDirectoryPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:tempDirectoryNameCString length:strlen(result)];
@@ -199,7 +199,7 @@
   [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
-  self.connectionHelper = [[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken] autorelease];
+  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
@@ -349,13 +349,9 @@
 #pragma mark - Memory Management Mehtods
 
 - (void)dealloc {
-  self.dsymPath = nil;
-  self.info = nil;
-  self.ipaPath = nil;
   
-  [tempDirectoryPaths release], tempDirectoryPaths = nil;
+  tempDirectoryPaths = nil;
   
-  [super dealloc];
 }
 
 @end

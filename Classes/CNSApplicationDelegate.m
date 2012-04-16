@@ -83,7 +83,7 @@
 }
 
 - (void)createStatusItem {
-  statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+  statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
   [statusItem setHighlightMode:YES];
 
   NSMenu *menu = [[NSMenu alloc] init];
@@ -93,13 +93,11 @@
   [preferencesItem setTarget:self];
   [preferencesItem setEnabled:YES];
   [menu addItem:preferencesItem];
-  [preferencesItem release];
   
   NSMenuItem *sparkleItem = [[NSMenuItem alloc] initWithTitle:@"Check for Updates..." action:@selector(checkForUpdates:) keyEquivalent:@""];
   [sparkleItem setTarget:self];
   [sparkleItem setEnabled:YES];
   [menu addItem:sparkleItem];
-  [sparkleItem release];
   
   [menu addItem:[NSMenuItem separatorItem]];
   
@@ -108,10 +106,8 @@
   [quitItem setEnabled:YES];
   [menu addItem:quitItem];
   
-  [quitItem release];
   
   [statusItem setMenu:menu];
-  [menu release];
   
   dragStatusView = [[CNSDragStatusView alloc] initWithFrame:NSMakeRect(0, 0, 24, 20)];
   [dragStatusView setDelegate:self];
@@ -138,7 +134,7 @@
     
     if (statusItem) {
       [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
-      [statusItem release], statusItem = nil;
+      statusItem = nil;
     }
   }
   else {
@@ -187,9 +183,8 @@
 #pragma mark - Memory Management Methods
 
 - (void)dealloc {
-  [dragStatusView release], dragStatusView = nil;  
-	[preferencesViewController release], preferencesViewController = nil;
-  [super dealloc];
+  dragStatusView = nil;  
+	preferencesViewController = nil;
 }
 
 @end

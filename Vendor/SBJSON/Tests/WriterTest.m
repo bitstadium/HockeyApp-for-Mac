@@ -29,7 +29,7 @@
 
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <JSON/JSON.h>
+#import <SBJson/SBJson.h>
 
 @interface WriterTest : SenTestCase {
 	SBJsonWriter * writer;
@@ -42,33 +42,34 @@
     writer = [SBJsonWriter new];
 }
 
-- (void)tearDown {
-    [writer release];
-}
-
 - (void)testInfinity {
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithDouble:0.0]]], nil);
     STAssertEqualObjects(@"[-0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithDouble:-0.0]]], nil);
     
-    STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.0]]], nil);
-    STAssertEqualObjects(@"[-0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithFloat:-0.0]]], nil);
+    STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithFloat:(float)0.0]]], nil);
+    STAssertEqualObjects(@"[-0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithFloat:(float)-0.0]]], nil);
     
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithInt:0]]], nil);
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSNumber numberWithInt:-0]]], nil);
-		
-	/** TODO: I cannot get these tests to pass for the libjsontests target.
-	 
+			 
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSDecimalNumber numberWithDouble:0]]], nil);
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSDecimalNumber numberWithDouble:-0]]], nil);
 	
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSDecimalNumber numberWithFloat:0]]], nil);
     STAssertEqualObjects(@"[0]", [writer stringWithObject:[NSArray arrayWithObject:[NSDecimalNumber numberWithFloat:-0]]], nil);    
-	 */
+}
+
+- (void)testTimeInterval {
+	NSTimeInterval interval = 319670801.45073098; // seconds since epoc
+	NSNumber *number = [NSNumber numberWithDouble:interval];
+	NSArray *array = [NSArray arrayWithObject:number];
+
+	STAssertEqualObjects(@"[319670801.45073098]", [writer stringWithObject:array], nil);
 }
 
 
 - (void)testWriteToStream {
-	SBJsonStreamWriter *streamWriter = [[[SBJsonStreamWriter alloc] init] autorelease];
+	SBJsonStreamWriter *streamWriter = [[SBJsonStreamWriter alloc] init];
 	
 	STAssertTrue([streamWriter writeArray:[NSArray array]], nil);
 	

@@ -32,7 +32,7 @@
 
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <JSON/JSON.h>
+#import <SBJson/SBJson.h>
 
 @interface StreamParserIntegrationTest : SenTestCase < SBJsonStreamParserAdapterDelegate> {
 	SBJsonStreamParser *parser;
@@ -51,7 +51,7 @@
 	
 	parser = [SBJsonStreamParser new];
 	parser.delegate = adapter;
-	parser.multi = YES;
+	parser.supportMultipleDocuments = YES;
 	
 	arrayCount = objectCount = 0u;
 
@@ -78,8 +78,7 @@
 	NSString *fileName;
     while ((fileName = [files nextObject])) {
 		NSString *file = [path stringByAppendingPathComponent:fileName];
-		NSLog(@"Parsing file: %@", file);
-		
+
 		NSData *data = [NSData dataWithContentsOfMappedFile:file];
 		STAssertNotNil(data, nil);
 	
@@ -108,14 +107,14 @@
 }
 
 - (void)testSkipArray {
-	adapter.skip = 1;
+	adapter.levelsToSkip = 1;
 	[self parseArrayOfObjects];
 	STAssertEquals(arrayCount, (NSUInteger)0, nil);
 	STAssertEquals(objectCount, (NSUInteger)100, nil);	
 }
 
 - (void)testSkipArrayAndObject {
-	adapter.skip = 2;
+	adapter.levelsToSkip = 2;
 	[self parseArrayOfObjects];
 	STAssertEquals(arrayCount, (NSUInteger)200, nil);
 	STAssertEquals(objectCount, (NSUInteger)0, nil);	

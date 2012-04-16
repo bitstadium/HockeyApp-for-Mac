@@ -148,6 +148,7 @@
 
   char *result = mkdtemp(tempDirectoryNameCString);
   if (!result) {
+    free(tempDirectoryNameCString);
     return NO;
   }
   

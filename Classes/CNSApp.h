@@ -34,7 +34,7 @@
   NSString *bundleShortVersion;
   NSString *bundleVersion;
   NSMatrix *__unsafe_unretained notesTypeMatrix;
-  NSMutableArray *appIDsAndNames;
+  NSMutableDictionary *appIDsAndNames;
   NSPopUpButton *__unsafe_unretained afterUploadMenu;
   NSPopUpButton *__unsafe_unretained fileTypeMenu;
   NSPopUpButton *__unsafe_unretained releaseTypeMenu;

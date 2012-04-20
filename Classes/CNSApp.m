@@ -164,18 +164,7 @@
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
   NSString *publicID = @"";
-    NSInteger selectedReleaseType = 0;
-    switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
-        case 1:
-            selectedReleaseType = 2;
-            break;
-        case 2:
-            selectedReleaseType = 0;
-            break;
-        case 3:
-            selectedReleaseType = 1;
-            break;
-    }
+  NSInteger selectedReleaseType = [self currentSelectedReleaseType];
   if ([self.appNameMenu indexOfSelectedItem] != -1 || selectedReleaseType != 0) {
     NSString *selectedItemTitle = [self.appNameMenu selectedItem].title;
     for (NSNumber *releaseType in self.appIDsAndNames) {
@@ -203,6 +192,22 @@
 }
 
 #pragma mark - Private Helper Methods
+
+- (NSInteger)currentSelectedReleaseType {
+  NSInteger selectedReleaseType = 0;
+  switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
+    case 1:
+      selectedReleaseType = 2;
+      break;
+    case 2:
+      selectedReleaseType = 0;
+      break;
+    case 3:
+      selectedReleaseType = 1;
+      break;
+  }
+  return selectedReleaseType;
+}
 
 - (NSString *)bundleIdentifier {
   if (bundleIdentifier) {
@@ -283,11 +288,10 @@
     [body appendData:[[NSString stringWithFormat:@"%@\r\n", platform] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
-  NSInteger releaseType = [self.releaseTypeMenu indexOfSelectedItem];
-  if (releaseType > 0) {
+  if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 2 : (releaseType == 2 ? 0 : 1))] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
   if (ipaURL) {

@@ -24,8 +24,15 @@
 #import "SBJSON.h"
 #import "NSFileHandle+CNSAvailableData.h"
 
+enum CNSHockeyAppReleaseType {
+  CNSHockeyAppReleaseTypeBeta,
+  CNSHockeyAppReleaseTypeLive,
+  CNSHockeyAppReleaseTypeAlpha,
+  CNSHockeyAppReleaseTypeAuto = 0x100
+};
+
 @interface CNSApp ()
-@property(nonatomic) NSMutableDictionary *appIDsAndNames;
+@property(nonatomic) NSMutableDictionary *appsByReleaseType;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -35,6 +42,9 @@
 - (void)storeNotesType;
 - (void)storeAfterUploadSelection;
 - (void)fetchAppNames;
+- (NSInteger)currentSelectedReleaseType;
+- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType;
+
 @end
 
 @implementation CNSApp
@@ -61,7 +71,7 @@
 @synthesize uploadButton;
 @synthesize uploadSheet;
 @synthesize window;
-@synthesize appIDsAndNames;
+@synthesize appsByReleaseType;
 @synthesize apiToken;
 
 #pragma mark - Initialization Methods
@@ -163,26 +173,13 @@
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
-  NSString *publicID = @"";
-  NSInteger selectedReleaseType = [self currentSelectedReleaseType];
-  if ([self.appNameMenu indexOfSelectedItem] != -1 || selectedReleaseType != 0) {
-    NSString *selectedItemTitle = [self.appNameMenu selectedItem].title;
-    for (NSNumber *releaseType in self.appIDsAndNames) {
-      NSDictionary *appDict = [self.appIDsAndNames objectForKey:releaseType];
-      NSString *appName = [appDict objectForKey:@"title"];
-      if ([appName isEqualToString:selectedItemTitle]) {
-        if (selectedReleaseType == 0) { 
-            publicID = [appDict objectForKey:@"public_identifier"];
-            break;
-        }
-        else if ([releaseType integerValue] == selectedReleaseType) {
-            publicID = [appDict objectForKey:@"public_identifier"];
-            break;
-        }
-      }
-    }
+  NSString *publicID = nil;
+  NSInteger releaseType = [self currentSelectedReleaseType];
+  if (([self.appNameMenu indexOfSelectedItem] > -1) && (releaseType != CNSHockeyAppReleaseTypeAuto)) {
+    NSDictionary *appDictionary = [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
+    publicID = [appDictionary valueForKey:@"public_identifier"];
   }
-	
+
   if (self.bundleIdentifier) {
     [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
   }
@@ -193,18 +190,30 @@
 
 #pragma mark - Private Helper Methods
 
+- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType {
+  for (NSNumber *releaseType in self.appsByReleaseType) {
+    NSArray *appDictionaries = [self.appsByReleaseType objectForKey:releaseType];
+    for (NSDictionary *appDictionary in appDictionaries) {
+      if (([[appDictionary valueForKey:@"title"] isEqualToString:aTitle]) && 
+          (([releaseType integerValue] == aReleaseType) || (aReleaseType == CNSHockeyAppReleaseTypeAuto))) { // if releaseType auto return first app with matching name
+        return appDictionary;
+      }
+    }
+  }
+  return nil;
+}
+
 - (NSInteger)currentSelectedReleaseType {
   NSInteger selectedReleaseType = 0;
   switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
+    case 0:
+      return CNSHockeyAppReleaseTypeAuto;
     case 1:
-      selectedReleaseType = 2;
-      break;
+      return CNSHockeyAppReleaseTypeAlpha;
     case 2:
-      selectedReleaseType = 0;
-      break;
+      return CNSHockeyAppReleaseTypeBeta;
     case 3:
-      selectedReleaseType = 1;
-      break;
+      return CNSHockeyAppReleaseTypeLive;
   }
   return selectedReleaseType;
 }
@@ -288,7 +297,7 @@
     [body appendData:[[NSString stringWithFormat:@"%@\r\n", platform] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
-  if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
+  if ([self currentSelectedReleaseType] != CNSHockeyAppReleaseTypeAuto) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"%d\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -369,12 +378,12 @@
 }
 
 - (void)fetchAppNames {
-	NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
-	[request setHTTPMethod:@"GET"];
-	[request setTimeoutInterval:300];
-	
-	self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken];
+  NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps", baseURL]]];
+  [request setHTTPMethod:@"GET"];
+  [request setTimeoutInterval:300];
+
+  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken];
 }
 
 - (void)readProcessArguments {
@@ -468,37 +477,42 @@
 }
 
 - (void)parseAppListResponse:(CNSConnectionHelper *)aConnectionHelper {
-	if (aConnectionHelper.statusCode != 200) {
-		[self connectionHelperDidFail:aConnectionHelper];
-	}
-	else {
-		NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
-		NSDictionary *json = [result JSONValue];
-		self.appIDsAndNames = [NSMutableDictionary dictionary];
+  if (aConnectionHelper.statusCode != 200) {
+    [self connectionHelperDidFail:aConnectionHelper];
+  }
+  else {
+    NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
+    NSDictionary *json = [result JSONValue];
+    self.appsByReleaseType = [NSMutableDictionary dictionary];
 		
-		// Include only those apps which have the selected Bundle ID
-		for (NSDictionary *appDict in [json objectForKey:@"apps"]) {
-			if(![[appDict objectForKey:@"bundle_identifier"] isEqualToString:self.bundleIdentifier])
-				continue;
+    // Include only those apps which have the selected Bundle ID
+    for (NSDictionary *appDict in [json objectForKey:@"apps"]) {
+      if(![[appDict objectForKey:@"bundle_identifier"] isEqualToString:self.bundleIdentifier])
+        continue;
 			
-			NSString *appName = [appDict objectForKey:@"title"];
-			NSString *publicID = [appDict objectForKey:@"public_identifier"];
-            NSNumber *releaseType = [appDict objectForKey:@"release_type"];
-			
-			if([appName length] > 0 && [publicID length] > 0) {
-				[self.appIDsAndNames setObject:appDict forKey:releaseType];
-			}
-		}
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.appNameMenu removeAllItems];
-            [self.appIDsAndNames enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary *appDict, BOOL *stop) {
-				[self.appNameMenu addItemWithTitle:[appDict objectForKey:@"title"]];
-			}];
-			
-			[self.appNameMenu selectItemAtIndex:0];
-		});
-	}
+      NSString *appName = [appDict objectForKey:@"title"];
+      NSString *publicID = [appDict objectForKey:@"public_identifier"];
+      NSNumber *releaseType = [appDict objectForKey:@"release_type"];
+
+      if([appName length] > 0 && [publicID length] > 0) {
+        if (!([self.appsByReleaseType objectForKey:releaseType])) {
+          [self.appsByReleaseType setObject:[NSMutableArray arrayWithCapacity:0] forKey:releaseType];
+        }
+        [[self.appsByReleaseType objectForKey:releaseType] addObject:appDict];
+      }
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.appNameMenu removeAllItems];
+      [self.appsByReleaseType enumerateKeysAndObjectsUsingBlock:^(id key, NSArray *apps, BOOL *stop) {
+        [apps enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+          [self.appNameMenu addItemWithTitle:[obj objectForKey:@"title"]];
+        }];
+      }];
+
+      [self.appNameMenu selectItemAtIndex:0];
+    });
+  }
 }
 
 - (void)parseVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
@@ -554,7 +568,7 @@
   self.bundleVersionLabel = nil;
   self.bundleShortVersionLabel = nil;
   self.cancelButton = nil;
-	self.downloadButton = nil;
+  self.downloadButton = nil;
   self.errorLabel = nil;
   self.fileTypeMenu = nil;
   self.notesTypeMatrix = nil;

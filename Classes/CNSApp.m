@@ -287,7 +287,7 @@
   if (releaseType > 0) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 0 : 1)] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", (releaseType == 1 ? 2 : (releaseType == 2 ? 0 : 1))] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
   if (ipaURL) {

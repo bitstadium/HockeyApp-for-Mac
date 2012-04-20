@@ -25,7 +25,7 @@
 #import "NSFileHandle+CNSAvailableData.h"
 
 @interface CNSApp ()
-@property(nonatomic) NSMutableArray *appIDsAndNames;
+@property(nonatomic) NSMutableDictionary *appIDsAndNames;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -69,7 +69,6 @@
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
       [self readProcessArguments];
-	  [self fetchAppNames];
   }
   return self;
 }
@@ -94,6 +93,9 @@
   [self readAfterUploadSelection];
 
   [self.window setTitle:[self.fileURL lastPathComponent]];
+
+  [self readProcessArguments];
+  [self fetchAppNames];
 }
 
 #pragma mark - NSWindowDelegate Methods
@@ -161,7 +163,36 @@
 
   [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
-  NSString *publicID = ([self.appNameMenu indexOfSelectedItem] == -1) ? @"" : [[self.appIDsAndNames objectAtIndex:[self.appNameMenu indexOfSelectedItem]] objectAtIndex:1];
+  NSString *publicID = @"";
+    NSInteger selectedReleaseType = 0;
+    switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
+        case 1:
+            selectedReleaseType = 2;
+            break;
+        case 2:
+            selectedReleaseType = 0;
+            break;
+        case 3:
+            selectedReleaseType = 1;
+            break;
+    }
+  if ([self.appNameMenu indexOfSelectedItem] != -1 || selectedReleaseType != 0) {
+    NSString *selectedItemTitle = [self.appNameMenu selectedItem].title;
+    for (NSNumber *releaseType in self.appIDsAndNames) {
+      NSDictionary *appDict = [self.appIDsAndNames objectForKey:releaseType];
+      NSString *appName = [appDict objectForKey:@"title"];
+      if ([appName isEqualToString:selectedItemTitle]) {
+        if (selectedReleaseType == 0) { 
+            publicID = [appDict objectForKey:@"public_identifier"];
+            break;
+        }
+        else if ([releaseType integerValue] == selectedReleaseType) {
+            publicID = [appDict objectForKey:@"public_identifier"];
+            break;
+        }
+      }
+    }
+  }
 	
   if (self.bundleIdentifier) {
     [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
@@ -356,10 +387,13 @@
       [self uploadButtonWasClicked:nil];
     }
     else if ([argument isEqualToString:@"setBeta"]) {
-      [self.releaseTypeMenu selectItemAtIndex:1];
+        [self.releaseTypeMenu selectItemAtIndex:2];
+    }
+    else if ([argument isEqualToString:@"setAlpha"]) {
+        [self.releaseTypeMenu selectItemAtIndex:1];
     }
     else if ([argument isEqualToString:@"setLive"]) {
-      [self.releaseTypeMenu selectItemAtIndex:2];
+        [self.releaseTypeMenu selectItemAtIndex:3];
     }
     else if ([argument isEqualToString:@"openNoPage"]) {
       [self.afterUploadMenu selectItemAtIndex:0];
@@ -436,7 +470,7 @@
 	else {
 		NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
 		NSDictionary *json = [result JSONValue];
-		self.appIDsAndNames = [NSMutableArray array];
+		self.appIDsAndNames = [NSMutableDictionary dictionary];
 		
 		// Include only those apps which have the selected Bundle ID
 		for (NSDictionary *appDict in [json objectForKey:@"apps"]) {
@@ -445,19 +479,18 @@
 			
 			NSString *appName = [appDict objectForKey:@"title"];
 			NSString *publicID = [appDict objectForKey:@"public_identifier"];
+            NSNumber *releaseType = [appDict objectForKey:@"release_type"];
 			
 			if([appName length] > 0 && [publicID length] > 0) {
-				[self.appIDsAndNames addObject:[NSArray arrayWithObjects:appName, publicID, nil]];
+				[self.appIDsAndNames setObject:appDict forKey:releaseType];
 			}
 		}
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self.appNameMenu removeAllItems];
-			
-			for (NSArray *appIDsAndName in self.appIDsAndNames)
-			{
-				[self.appNameMenu addItemWithTitle:[appIDsAndName objectAtIndex:0]];
-			}
+            [self.appIDsAndNames enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary *appDict, BOOL *stop) {
+				[self.appNameMenu addItemWithTitle:[appDict objectForKey:@"title"]];
+			}];
 			
 			[self.appNameMenu selectItemAtIndex:0];
 		});

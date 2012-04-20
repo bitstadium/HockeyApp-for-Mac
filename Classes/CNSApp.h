@@ -34,7 +34,7 @@
   NSString *bundleShortVersion;
   NSString *bundleVersion;
   NSMatrix *__unsafe_unretained notesTypeMatrix;
-  NSMutableDictionary *appIDsAndNames;
+  NSMutableDictionary *appsByReleaseType;
   NSPopUpButton *__unsafe_unretained afterUploadMenu;
   NSPopUpButton *__unsafe_unretained fileTypeMenu;
   NSPopUpButton *__unsafe_unretained releaseTypeMenu;
@@ -81,6 +81,8 @@
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)downloadButtonWasClicked:(id)sender;
 - (IBAction)fileTypeMenuWasChanged:(id)sender;
+- (IBAction)releaseTypeMenuWasChanged:(id)sender;
+- (IBAction)appNameMenuWasChanged:(id)sender;
 - (IBAction)uploadButtonWasClicked:(id)sender;
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;

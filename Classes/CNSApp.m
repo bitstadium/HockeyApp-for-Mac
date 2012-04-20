@@ -44,6 +44,8 @@ enum CNSHockeyAppReleaseType {
 - (void)fetchAppNames;
 - (NSInteger)currentSelectedReleaseType;
 - (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType;
+- (NSDictionary *)currentSelectedApp;
+- (NSString *)titleForReleaseType:(NSInteger)releaseType;
 
 @end
 
@@ -162,6 +164,39 @@ enum CNSHockeyAppReleaseType {
   }
 }
 
+- (IBAction)releaseTypeMenuWasChanged:(id)sender {
+  if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
+    NSInteger selectedReleaseType = [self currentSelectedReleaseType];
+    NSDictionary *currentApp = [self currentSelectedApp];
+    if ([[currentApp valueForKey:@"release_type"] integerValue] != selectedReleaseType) {
+      NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
+      if ([appsForReleaseType count] > 0) {
+        [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
+      }
+      else {
+        [self.appNameMenu selectItemAtIndex:-1];
+        self.appNameMenu.enabled = NO;
+      }
+    }
+  }
+  else {
+    self.appNameMenu.enabled = YES;
+  }
+}
+
+- (IBAction)appNameMenuWasChanged:(id)sender {
+  if ([self.appNameMenu indexOfSelectedItem] >= 0) {
+    NSString *title = [self.appNameMenu selectedItem].title;
+    NSDictionary *appDictionary = [self appForTitle:title releaseType:[self currentSelectedReleaseType]];
+    if (!appDictionary) {
+      appDictionary = [self appForTitle:title releaseType:CNSHockeyAppReleaseTypeAuto];
+    }
+    if (appDictionary) {
+      [self.releaseTypeMenu selectItemWithTitle:[self titleForReleaseType:[[appDictionary valueForKey:@"release_type"] integerValue]]];
+    }
+  }
+}
+
 - (IBAction)uploadButtonWasClicked:(id)sender {
   self.statusLabel.stringValue = @"Initializing...";
   self.progressIndicator.doubleValue = 0;
@@ -203,6 +238,13 @@ enum CNSHockeyAppReleaseType {
   return nil;
 }
 
+- (NSDictionary *)currentSelectedApp {
+  if ([self.appNameMenu indexOfSelectedItem] > -1) {
+    return nil;
+  }
+  return [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
+}
+
 - (NSInteger)currentSelectedReleaseType {
   NSInteger selectedReleaseType = 0;
   switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
@@ -216,6 +258,20 @@ enum CNSHockeyAppReleaseType {
       return CNSHockeyAppReleaseTypeLive;
   }
   return selectedReleaseType;
+}
+
+- (NSString *)titleForReleaseType:(NSInteger)releaseType {
+  switch (releaseType) {
+    case CNSHockeyAppReleaseTypeAuto:
+      return @"Auto Detect";
+    case CNSHockeyAppReleaseTypeAlpha:
+      return @"Alpha";
+    case CNSHockeyAppReleaseTypeBeta:
+      return @"Beta";
+    case CNSHockeyAppReleaseTypeLive:
+      return @"Live";
+  }
+  return nil;
 }
 
 - (NSString *)bundleIdentifier {

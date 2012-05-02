@@ -167,16 +167,13 @@ enum CNSHockeyAppReleaseType {
 - (IBAction)releaseTypeMenuWasChanged:(id)sender {
   if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
     NSInteger selectedReleaseType = [self currentSelectedReleaseType];
-    NSDictionary *currentApp = [self currentSelectedApp];
-    if ([[currentApp valueForKey:@"release_type"] integerValue] != selectedReleaseType) {
-      NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
-      if ([appsForReleaseType count] > 0) {
-        [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
-      }
-      else {
-        [self.appNameMenu selectItemAtIndex:-1];
-        self.appNameMenu.enabled = NO;
-      }
+    NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
+    if ([appsForReleaseType count] > 0) {
+      [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
+    }
+    else {
+      [self.appNameMenu selectItemAtIndex:-1];
+      self.appNameMenu.enabled = NO;
     }
   }
   else {

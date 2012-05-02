@@ -568,6 +568,8 @@ enum CNSHockeyAppReleaseType {
       
       [self.appNameMenu selectItemAtIndex:0];
       [self appNameMenuWasChanged:nil];
+      [self readProcessArguments];
+      [self releaseTypeMenuWasChanged:nil];
     });
   }
 }

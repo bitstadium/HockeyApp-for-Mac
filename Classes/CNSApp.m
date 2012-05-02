@@ -565,8 +565,9 @@ enum CNSHockeyAppReleaseType {
           [self.appNameMenu addItemWithTitle:[obj objectForKey:@"title"]];
         }];
       }];
-
+      
       [self.appNameMenu selectItemAtIndex:0];
+      [self appNameMenuWasChanged:nil];
     });
   }
 }

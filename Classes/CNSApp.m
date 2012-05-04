@@ -175,6 +175,9 @@ enum CNSHockeyAppReleaseType {
       [self.appNameMenu selectItemAtIndex:-1];
       self.appNameMenu.enabled = NO;
     }
+    if (selectedReleaseType == CNSHockeyAppReleaseTypeLive) {
+      [self.fileTypeMenu selectItemAtIndex:2];
+    }
   }
   else {
     self.appNameMenu.enabled = YES;

@@ -23,6 +23,7 @@
 #import "CNSPreferencesViewController.h"
 #import "SBJSON.h"
 #import "NSFileHandle+CNSAvailableData.h"
+#import "M3TokenController.h"
 
 enum CNSHockeyAppReleaseType {
   CNSHockeyAppReleaseTypeBeta,
@@ -33,6 +34,8 @@ enum CNSHockeyAppReleaseType {
 
 @interface CNSApp ()
 @property(nonatomic) NSMutableDictionary *appsByReleaseType;
+@property(nonatomic) NSMutableDictionary *tagsForAppID;
+@property(nonatomic) NSArray *selectedTags;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -45,7 +48,11 @@ enum CNSHockeyAppReleaseType {
 - (NSInteger)currentSelectedReleaseType;
 - (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType;
 - (NSDictionary *)currentSelectedApp;
+- (NSArray *)tagsForCurrentSelectedApp;
 - (NSString *)titleForReleaseType:(NSInteger)releaseType;
+- (void)reloadTagsMenu;
+
+- (NSSet *)tagsForTokenController:(M3TokenController *)controller;
 
 @end
 
@@ -74,13 +81,20 @@ enum CNSHockeyAppReleaseType {
 @synthesize uploadSheet;
 @synthesize window;
 @synthesize appsByReleaseType;
+@synthesize tagsForAppID;
 @synthesize apiToken;
+@synthesize restrictDownloadButton;
+@synthesize tagSheet;
+@synthesize cancelTagSheetButton;
+@synthesize saveTagSheetButton;
+@synthesize tokenController;
+@synthesize selectedTags;
 
 #pragma mark - Initialization Methods
 
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
-      [self readProcessArguments];
+    [self readProcessArguments];
   }
   return self;
 }
@@ -139,14 +153,27 @@ enum CNSHockeyAppReleaseType {
 #pragma mark - NSControl Action Methods
 
 - (IBAction)cancelButtonWasClicked:(id)sender {
-  [self.connectionHelper cancelConnection];
-  [self.uploadButton setEnabled:YES];
-  [self.uploadSheet orderOut:self];
-  [NSApp endSheet:self.uploadSheet];
+  if (sender == self.cancelButton) {
+    [self.connectionHelper cancelConnection];
+    [self.uploadButton setEnabled:YES];
+    [self.uploadSheet orderOut:self];
+    [NSApp endSheet:self.uploadSheet];
+  }
+  else if (sender == self.cancelTagSheetButton) {
+    [self.tagSheet orderOut:self];
+    [NSApp endSheet:self.tagSheet];
+  }
+}
+
+- (IBAction)saveTagSheetButtonWasClicked:(id)sender {
+  self.selectedTags = self.tokenController.tokenField.objectValue;
+  [self.tagSheet orderOut:self];
+  [NSApp endSheet:self.tagSheet];
 }
 
 - (IBAction)downloadButtonWasClicked:(id)sender {
   [self.notifyButton setEnabled:(self.downloadButton.state == NSOnState)];
+  [self.restrictDownloadButton setEnabled:(self.downloadButton.state == NSOnState)];
 }
 
 - (IBAction)fileTypeMenuWasChanged:(id)sender {
@@ -155,10 +182,12 @@ enum CNSHockeyAppReleaseType {
     case 1:
       [self.downloadButton setEnabled:YES];
       [self.notifyButton setEnabled:YES];
+      [self.restrictDownloadButton setEnabled:YES];
       break;
     case 2:
       [self.downloadButton setEnabled:NO];
       [self.notifyButton setEnabled:NO];
+      [self.restrictDownloadButton setEnabled:NO];
     default:
       break;
   }
@@ -170,6 +199,7 @@ enum CNSHockeyAppReleaseType {
     NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
     if ([appsForReleaseType count] > 0) {
       [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
+      [self reloadTagsMenu];
     }
     else {
       [self.appNameMenu selectItemAtIndex:-1];
@@ -194,6 +224,7 @@ enum CNSHockeyAppReleaseType {
     if (appDictionary) {
       [self.releaseTypeMenu selectItemWithTitle:[self titleForReleaseType:[[appDictionary valueForKey:@"release_type"] integerValue]]];
     }
+    [self reloadTagsMenu];
   }
 }
 
@@ -223,7 +254,29 @@ enum CNSHockeyAppReleaseType {
   }
 }
 
+- (IBAction)restrictDownloadsWasClicked:(id)sender {
+  if (self.restrictDownloadButton.state == NSOnState) {
+    tokenController.tokenField.objectValue = [self.selectedTags copy];
+    [tokenController reloadTokens];
+    [NSApp beginSheet:self.tagSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndTagSheet:returnCode:contextInfo:) contextInfo:nil];
+  }
+}
+
 #pragma mark - Private Helper Methods
+
+- (void)reloadTagsMenu {
+  NSArray *tagsForCurrentApp = [self tagsForCurrentSelectedApp];
+  if ([tagsForCurrentApp count] == 0) {
+    self.restrictDownloadButton.state = NSOffState;
+    self.restrictDownloadButton.enabled = NO;
+  }
+  else {
+    self.restrictDownloadButton.enabled = YES;
+  }
+  if (!tagsForCurrentApp) {
+    [self fetchTagsForAppID:[[self currentSelectedApp] valueForKey:@"public_identifier"]];
+  }
+}
 
 - (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType {
   for (NSNumber *releaseType in self.appsByReleaseType) {
@@ -240,9 +293,19 @@ enum CNSHockeyAppReleaseType {
 
 - (NSDictionary *)currentSelectedApp {
   if ([self.appNameMenu indexOfSelectedItem] > -1) {
+    return [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
+  }
+  return nil;
+}
+
+- (NSArray *)tagsForCurrentSelectedApp {
+  NSDictionary *appDictionary = [self currentSelectedApp];
+  if (appDictionary) {
+    return [self.tagsForAppID valueForKey:[appDictionary valueForKey:@"public_identifier"]];
+  }
+  else {
     return nil;
   }
-  return [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
 }
 
 - (NSInteger)currentSelectedReleaseType {
@@ -367,6 +430,12 @@ enum CNSHockeyAppReleaseType {
     [body appendData:[NSData dataWithContentsOfURL:ipaURL]];
     [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
   }
+  
+  if ((self.restrictDownloadButton.state == NSOnState) && ([self.selectedTags count] > 0)) {
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"tags\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%@\r\n", [self.selectedTags componentsJoinedByString:@","]] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
 
   return body;
 }
@@ -442,6 +511,17 @@ enum CNSHockeyAppReleaseType {
   self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken];
 }
 
+- (void)fetchTagsForAppID:(NSString *)appID {
+  if (appID) {
+    NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/tags", baseURL, appID]]];
+    [request setHTTPMethod:@"GET"];
+    [request setTimeoutInterval:300];
+    
+    self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppTagsResponse:) identifier:appID token:self.apiToken];
+  }
+}
+
 - (void)readProcessArguments {
   NSArray *arguments = [[NSProcessInfo processInfo] arguments];
   for (NSString *argument in arguments) {
@@ -478,7 +558,10 @@ enum CNSHockeyAppReleaseType {
       ignoreNotesFile = YES;
     }
     else if ([argument hasPrefix:@"token="]) {
-        self.apiToken = [[argument componentsSeparatedByString:@"="] lastObject];
+      self.apiToken = [[argument componentsSeparatedByString:@"="] lastObject];
+    }
+    else if ([argument hasPrefix:@"tags="]) {
+      self.selectedTags = [[[argument componentsSeparatedByString:@"="] lastObject] componentsSeparatedByString:@","];
     }
   }
 }
@@ -612,11 +695,41 @@ enum CNSHockeyAppReleaseType {
   }
 }
 
+- (void)parseAppTagsResponse:(CNSConnectionHelper *)aConnectionHelper {
+  if (aConnectionHelper.statusCode != 200) {
+    [self connectionHelperDidFail:aConnectionHelper];
+  }
+  else {
+    NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
+    NSDictionary *json = [result JSONValue];
+		
+    if (!self.tagsForAppID) {
+      self.tagsForAppID = [NSMutableDictionary dictionaryWithCapacity:0];
+    }
+    
+    [self.tagsForAppID setValue:[json objectForKey:@"tags"] forKey:aConnectionHelper.identifier];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self reloadTagsMenu];
+    });
+  }  
+}
+
 #pragma mark - NSApp Delegate Methods
 
 - (void)didEndUploadSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
   [sheet orderOut:self];
   [NSApp endSheet:self.uploadSheet];
+}
+
+- (void)didEndTagSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+  [NSApp endSheet:self.tagSheet];  
+}
+
+#pragma mark - M3TokenController Delegate Mehtods
+
+- (NSSet *)tagsForTokenController:(M3TokenController *)controller {
+  return [NSSet setWithArray:[self tagsForCurrentSelectedApp]];
 }
 
 #pragma mark - Memory Management Mehtods
@@ -627,6 +740,8 @@ enum CNSHockeyAppReleaseType {
   self.bundleVersionLabel = nil;
   self.bundleShortVersionLabel = nil;
   self.cancelButton = nil;
+  self.cancelTagSheetButton = nil;
+  self.saveTagSheetButton = nil;
   self.downloadButton = nil;
   self.errorLabel = nil;
   self.fileTypeMenu = nil;
@@ -638,7 +753,10 @@ enum CNSHockeyAppReleaseType {
   self.statusLabel = nil;
   self.uploadButton = nil;
   self.uploadSheet = nil;
+  self.tagSheet = nil;
+  self.tagsForAppID = nil;
   self.window = nil;
+  self.tokenController = nil;
   
 }
 

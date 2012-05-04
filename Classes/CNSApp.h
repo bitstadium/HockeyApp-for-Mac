@@ -21,15 +21,19 @@
 #import <Cocoa/Cocoa.h>
 
 @class CNSConnectionHelper;
+@class M3TokenController;
 
 @interface CNSApp : NSDocument <NSWindowDelegate> {
 @private
   BOOL ignoreNotesFile;
   CNSConnectionHelper *connectionHelper;
   NSButton *__unsafe_unretained cancelButton;
-	NSButton *__unsafe_unretained downloadButton;
+  NSButton *__unsafe_unretained cancelTagSheetButton;
+  NSButton *__unsafe_unretained saveTagSheetButton;
+  NSButton *__unsafe_unretained downloadButton;
   NSButton *__unsafe_unretained notifyButton;
   NSButton *__unsafe_unretained uploadButton;
+  NSButton *__unsafe_unretained restrictDownloadButton;
   NSString *bundleIdentifier;
   NSString *bundleShortVersion;
   NSString *bundleVersion;
@@ -47,15 +51,20 @@
   NSTextField *__unsafe_unretained statusLabel;
   NSTextView *__unsafe_unretained releaseNotesField;
   NSWindow *__unsafe_unretained uploadSheet;
+  NSWindow *__unsafe_unretained tagSheet;
   NSWindow *__unsafe_unretained window;
-
+  M3TokenController *__unsafe_unretained tokenController;
+  
   NSString* apiToken;
 }
 
 @property (unsafe_unretained) IBOutlet NSButton *cancelButton;
+@property (unsafe_unretained) IBOutlet NSButton *cancelTagSheetButton;
+@property (unsafe_unretained) IBOutlet NSButton *saveTagSheetButton;
 @property (unsafe_unretained) IBOutlet NSButton *downloadButton;
 @property (unsafe_unretained) IBOutlet NSButton *notifyButton;
 @property (unsafe_unretained) IBOutlet NSButton *uploadButton;
+@property (unsafe_unretained) IBOutlet NSButton *restrictDownloadButton;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleIdentifierLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleShortVersionLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleVersionLabel;
@@ -69,7 +78,9 @@
 @property (unsafe_unretained) IBOutlet NSProgressIndicator *progressIndicator;
 @property (unsafe_unretained) IBOutlet NSMatrix *notesTypeMatrix;
 @property (unsafe_unretained) IBOutlet NSWindow *uploadSheet;
+@property (unsafe_unretained) IBOutlet NSWindow *tagSheet;
 @property (unsafe_unretained) IBOutlet NSWindow *window;
+@property (unsafe_unretained) IBOutlet M3TokenController *tokenController;
 
 @property (strong) CNSConnectionHelper *connectionHelper;
 
@@ -79,11 +90,13 @@
 @property (nonatomic, copy) NSString* apiToken;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
+- (IBAction)saveTagSheetButtonWasClicked:(id)sender;
 - (IBAction)downloadButtonWasClicked:(id)sender;
 - (IBAction)fileTypeMenuWasChanged:(id)sender;
 - (IBAction)releaseTypeMenuWasChanged:(id)sender;
 - (IBAction)appNameMenuWasChanged:(id)sender;
 - (IBAction)uploadButtonWasClicked:(id)sender;
+- (IBAction)restrictDownloadsWasClicked:(id)sender;
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;
 

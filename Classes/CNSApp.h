@@ -26,6 +26,7 @@
 @interface CNSApp : NSDocument <NSWindowDelegate> {
 @private
   BOOL ignoreNotesFile;
+  BOOL autoSubmit;
   CNSConnectionHelper *connectionHelper;
   NSButton *__unsafe_unretained cancelButton;
   NSButton *__unsafe_unretained cancelTagSheetButton;
@@ -101,5 +102,7 @@
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;
 
 - (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID;
+
+- (void)setupViews;
 
 @end

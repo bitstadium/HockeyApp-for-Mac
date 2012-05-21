@@ -105,23 +105,12 @@ enum CNSHockeyAppReleaseType {
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {
   [super windowControllerDidLoadNib:aController];
-  
-  self.bundleIdentifierLabel.stringValue = (self.bundleIdentifier ?: @"unknown");
-  self.bundleShortVersionLabel.stringValue = (self.bundleShortVersion ?: @"not set");
-  self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
-  
-  self.statusLabel.stringValue = @"";
 
-  [self.fileTypeMenu selectItemAtIndex:1];
-  [self.fileTypeMenu setEnabled:NO];
+  [self setupViews];
   
-  [self readNotesType];
-  [self readAfterUploadSelection];
-
-  [self.window setTitle:[self.fileURL lastPathComponent]];
-
-  [self readProcessArguments];
-  [self fetchAppNames];
+  if (autoSubmit) {
+    [self uploadButtonWasClicked:nil];
+  }
 }
 
 #pragma mark - NSWindowDelegate Methods
@@ -337,6 +326,25 @@ enum CNSHockeyAppReleaseType {
   return nil;
 }
 
+- (void)setupViews {
+  self.bundleIdentifierLabel.stringValue = (self.bundleIdentifier ?: @"unknown");
+  self.bundleShortVersionLabel.stringValue = (self.bundleShortVersion ?: @"not set");
+  self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
+
+  self.statusLabel.stringValue = @"";
+  
+  [self.fileTypeMenu selectItemAtIndex:1];
+  [self.fileTypeMenu setEnabled:NO];
+
+  [self readNotesType];
+  [self readAfterUploadSelection];
+
+  [self.window setTitle:[self.fileURL lastPathComponent]];
+
+  [self readProcessArguments];
+  [self fetchAppNames];
+}
+
 - (NSString *)bundleIdentifier {
   if (bundleIdentifier) {
     return bundleIdentifier;
@@ -533,7 +541,7 @@ enum CNSHockeyAppReleaseType {
       [self.notifyButton setEnabled:NO];
     }
     else if ([argument isEqualToString:@"autoSubmit"]) {
-      [self uploadButtonWasClicked:nil];
+      autoSubmit = YES;
     }
     else if ([argument isEqualToString:@"setBeta"]) {
         [self.releaseTypeMenu selectItemAtIndex:2];

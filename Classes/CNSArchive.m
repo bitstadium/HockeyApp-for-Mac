@@ -49,26 +49,6 @@
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {
   [super windowControllerDidLoadNib:aController];
-  
-  [self.fileTypeMenu setEnabled:(self.dsymCreated || self.ipaCreated)];
-  [[self.fileTypeMenu itemAtIndex:0] setEnabled:(self.dsymCreated && self.ipaCreated)];
-  [[self.fileTypeMenu itemAtIndex:1] setEnabled:self.ipaCreated];
-  [[self.fileTypeMenu itemAtIndex:2] setEnabled:self.dsymCreated];
-  [self.fileTypeMenu selectItemAtIndex:(self.dsymCreated && !self.ipaCreated ? 2 : (self.ipaCreated && !self.dsymCreated ? 1 : 0))];
-  
-  if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyIPA"]) && (self.ipaCreated)) {
-    [self.fileTypeMenu selectItemAtIndex:1];
-  }
-  else if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyDSYM"]) && (self.dsymCreated)) {
-    [self.fileTypeMenu selectItemAtIndex:2];
-  }
-  
-  if ([self isMacApp:self.info]) {
-    [[self.fileTypeMenu itemAtIndex:0] setTitle:@".app.zip & dSYM.zip"];
-    [[self.fileTypeMenu itemAtIndex:1] setTitle:@"Only .app.zip"];
-  }
-
-  [self fileTypeMenuWasChanged:self.fileTypeMenu];
 }
 
 #pragma mark - NSDocument Methods
@@ -103,6 +83,30 @@
 }
 
 #pragma mark - Private Helper Methods
+
+- (void)setupViews {
+  [super setupViews];
+
+  [self.fileTypeMenu setEnabled:(self.dsymCreated || self.ipaCreated)];
+  [[self.fileTypeMenu itemAtIndex:0] setEnabled:(self.dsymCreated && self.ipaCreated)];
+  [[self.fileTypeMenu itemAtIndex:1] setEnabled:self.ipaCreated];
+  [[self.fileTypeMenu itemAtIndex:2] setEnabled:self.dsymCreated];
+  [self.fileTypeMenu selectItemAtIndex:(self.dsymCreated && !self.ipaCreated ? 2 : (self.ipaCreated && !self.dsymCreated ? 1 : 0))];
+
+  if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyIPA"]) && (self.ipaCreated)) {
+    [self.fileTypeMenu selectItemAtIndex:1];
+  }
+  else if (([[[NSProcessInfo processInfo] arguments] containsObject:@"onlyDSYM"]) && (self.dsymCreated)) {
+    [self.fileTypeMenu selectItemAtIndex:2];
+  }
+
+  if ([self isMacApp:self.info]) {
+    [[self.fileTypeMenu itemAtIndex:0] setTitle:@".app.zip & dSYM.zip"];
+    [[self.fileTypeMenu itemAtIndex:1] setTitle:@"Only .app.zip"];
+  }
+
+  [self fileTypeMenuWasChanged:self.fileTypeMenu];
+}
 
 - (NSString *)bundleIdentifier {
   return [self.info valueForKey:@"CFBundleIdentifier"];

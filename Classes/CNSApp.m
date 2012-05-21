@@ -33,9 +33,10 @@ enum CNSHockeyAppReleaseType {
 };
 
 @interface CNSApp ()
-@property(nonatomic) NSMutableDictionary *appsByReleaseType;
-@property(nonatomic) NSMutableDictionary *tagsForAppID;
-@property(nonatomic) NSArray *selectedTags;
+@property (nonatomic) NSMutableDictionary *appsByReleaseType;
+@property (nonatomic) NSMutableDictionary *tagsForAppID;
+@property (nonatomic) NSArray *selectedTags;
+@property (nonatomic) NSString* publicIdentifier;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -89,6 +90,7 @@ enum CNSHockeyAppReleaseType {
 @synthesize saveTagSheetButton;
 @synthesize tokenController;
 @synthesize selectedTags;
+@synthesize publicIdentifier;
 
 #pragma mark - Initialization Methods
 
@@ -108,7 +110,7 @@ enum CNSHockeyAppReleaseType {
 
   [self setupViews];
   
-  if (autoSubmit) {
+  if (autoSubmit && !(self.publicIdentifier)) { // Can't upload right now if publicIdentifier is set, need to fetch apps first
     [self uploadButtonWasClicked:nil];
   }
 }
@@ -326,13 +328,34 @@ enum CNSHockeyAppReleaseType {
   return nil;
 }
 
+- (NSDictionary *)appForPublicIdentifier:(NSString *)identifier {
+  for (NSNumber *releaseType in self.appsByReleaseType) {
+    NSArray *appDictionaries = [self.appsByReleaseType objectForKey:releaseType];
+    for (NSDictionary *appDictionary in appDictionaries) {
+      if ([[appDictionary valueForKey:@"public_identifier"] isEqualToString:identifier]) {
+        return appDictionary;
+      }
+    }
+  }
+  return nil;
+}
+
+- (void)selectAppForPublicIdentifier:(NSString *)identifier {
+  NSDictionary *appDictionary = [self appForPublicIdentifier:identifier];
+  if (appDictionary) {
+    [self.releaseTypeMenu selectItemWithTitle:[self titleForReleaseType:[[appDictionary valueForKey:@"release_type"] integerValue]]];
+    [self.appNameMenu selectItemAtIndex:[[self.appsByReleaseType objectForKey:[appDictionary valueForKey:@"release_type"]] indexOfObject:appDictionary]];
+    [self reloadTagsMenu];
+  }
+}
+
 - (void)setupViews {
   self.bundleIdentifierLabel.stringValue = (self.bundleIdentifier ?: @"unknown");
   self.bundleShortVersionLabel.stringValue = (self.bundleShortVersion ?: @"not set");
   self.bundleVersionLabel.stringValue = (self.bundleVersion ?: @"invalid");
 
   self.statusLabel.stringValue = @"";
-  
+
   [self.fileTypeMenu selectItemAtIndex:1];
   [self.fileTypeMenu setEnabled:NO];
 
@@ -568,6 +591,9 @@ enum CNSHockeyAppReleaseType {
     else if ([argument hasPrefix:@"token="]) {
       self.apiToken = [[argument componentsSeparatedByString:@"="] lastObject];
     }
+    else if ([argument hasPrefix:@"identifier="]) {
+      self.publicIdentifier = [[argument componentsSeparatedByString:@"="] lastObject];
+    }
     else if ([argument hasPrefix:@"tags="]) {
       self.selectedTags = [[[argument componentsSeparatedByString:@"="] lastObject] componentsSeparatedByString:@","];
     }
@@ -657,10 +683,19 @@ enum CNSHockeyAppReleaseType {
         }];
       }];
       
-      [self.appNameMenu selectItemAtIndex:0];
-      [self appNameMenuWasChanged:nil];
-      [self readProcessArguments];
-      [self releaseTypeMenuWasChanged:nil];
+      if (self.publicIdentifier) {
+        [self selectAppForPublicIdentifier:self.publicIdentifier];
+        if (autoSubmit) {
+          [self uploadButtonWasClicked:nil];
+        }
+        self.publicIdentifier = nil;
+      }
+      else {
+        [self.appNameMenu selectItemAtIndex:0];
+        [self appNameMenuWasChanged:nil];
+        [self readProcessArguments];
+        [self releaseTypeMenuWasChanged:nil];
+      }
     });
   }
 }

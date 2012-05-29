@@ -56,9 +56,16 @@
 	}
 
 #if defined (CONFIGURATION_Release)
+  sparkleUpdater.feedURL = [NSURL URLWithString:@"https://rink.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1"];
   [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"67503a7926431872c4b6c1549f5bd6b1"];
   [[BWQuincyManager sharedQuincyManager] setCompanyName:@"Codenauts UG"];
   [[BWQuincyManager sharedQuincyManager] setDelegate:self];  
+#endif
+#if defined (CONFIGURATION_Alpha)
+  sparkleUpdater.feedURL = [NSURL URLWithString:@"https://rink.hockeyapp.net/api/2/apps/806ccd5cdb077a58460c28c90fdce846"];
+  [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"806ccd5cdb077a58460c28c90fdce846"];
+  [[BWQuincyManager sharedQuincyManager] setCompanyName:@"Codenauts UG"];
+  [[BWQuincyManager sharedQuincyManager] setDelegate:self];
 #endif
 }
 

@@ -34,15 +34,19 @@ You can specify the following command line options:
 
 * autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
 * downloadOff - the checkbox "Download" will be set to off after the file was opened.
+* identifier - upload to app with this public identifier
 * notes - absolute path to release notes file
 * notifyOn - the checkbox "Notify" will be set to on after the file was opened.
 * onlyIPA - only for .xcarchive files; uploads only the .ipa file
 * onlyDSYM - only for .xcarchive files; uploads only the .dSYM.zip file
-* setLive - set release type to 'live'
-* setBeta - set release type to 'beta'
 * openNoPage - do nothing after upload was successful
 * openDownloadPage - open the download page after upload was successful
 * openVersionPage - open the version page after upload was successful
+* setAlpha - set release type to 'alpha'
+* setBeta - set release type to 'beta'
+* setLive - set release type to 'live'
+* tags - only allow users who are tagged by these tags to download the app (restrict downloads)
+* token - use this api token instead of the one configured in settings
 
 Please note that the command line options are passed to the app only at the first start. If the HockeyMac is already running, it will not consider any new arguments.
 
@@ -57,6 +61,16 @@ HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archiv
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 
 ## RELEASE NOTES
+
+### Version 1.1 
+
+* Added option to choose a distinct app version when uploading a release (Previews automatic selection too)
+* Added option to restrict download to tags/groups
+* Added command line option "tags"
+* Added command line option "identifier"
+* Added command line option "token"
+* Added command line option "setAlpha"
+* Fixed a problem when using autoSubmit not uploading dsyms
 
 ### Version 1.0.2 - 16/Mar/2012
 

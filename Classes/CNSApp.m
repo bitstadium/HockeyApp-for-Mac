@@ -35,6 +35,7 @@ enum CNSHockeyAppReleaseType {
 @interface CNSApp ()
 @property (nonatomic) NSMutableDictionary *appsByReleaseType;
 @property (nonatomic) NSMutableDictionary *tagsForAppID;
+@property (nonatomic) NSMutableDictionary *appVersionsForAppID;
 @property (nonatomic) NSArray *selectedTags;
 @property (nonatomic) NSString* publicIdentifier;
 
@@ -52,7 +53,6 @@ enum CNSHockeyAppReleaseType {
 - (NSArray *)tagsForCurrentSelectedApp;
 - (NSString *)titleForReleaseType:(NSInteger)releaseType;
 - (void)reloadTagsMenu;
-
 - (NSSet *)tagsForTokenController:(M3TokenController *)controller;
 
 @end
@@ -91,6 +91,7 @@ enum CNSHockeyAppReleaseType {
 @synthesize tokenController;
 @synthesize selectedTags;
 @synthesize publicIdentifier;
+@synthesize appVersionsForAppID;
 
 #pragma mark - Initialization Methods
 
@@ -220,7 +221,10 @@ enum CNSHockeyAppReleaseType {
 }
 
 - (IBAction)uploadButtonWasClicked:(id)sender {
+  self.errorLabel.hidden = YES;
+  self.statusLabel.hidden = NO;
   self.statusLabel.stringValue = @"Initializing...";
+  self.progressIndicator.hidden = NO;
   self.progressIndicator.doubleValue = 0;
   [self.cancelButton setTitle:@"Cancel"];
   [self.uploadButton setEnabled:NO];
@@ -238,7 +242,12 @@ enum CNSHockeyAppReleaseType {
   }
 
   if (self.bundleIdentifier) {
-    [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
+    if (publicID) {
+      [self checkBundleVersion:self.bundleVersion forAppID:publicID];
+    }
+    else {
+      [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:nil];
+    }
   }
   else {
     self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
@@ -548,8 +557,19 @@ enum CNSHockeyAppReleaseType {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/tags", baseURL, appID]]];
     [request setHTTPMethod:@"GET"];
     [request setTimeoutInterval:300];
-    
+
     self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppTagsResponse:) identifier:appID token:self.apiToken];
+  }
+}
+
+- (void)checkBundleVersion:(NSString *)aBundleVersion forAppID:(NSString *)appID {
+  if (aBundleVersion) {
+    NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions/check?bundle_version=%@", baseURL, appID, aBundleVersion]]];
+    [request setHTTPMethod:@"GET"];
+    [request setTimeoutInterval:300];
+
+    self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseCheckBundleVersionResponse:) identifier:appID token:self.apiToken];
   }
 }
 
@@ -685,10 +705,6 @@ enum CNSHockeyAppReleaseType {
       
       if (self.publicIdentifier) {
         [self selectAppForPublicIdentifier:self.publicIdentifier];
-        if (autoSubmit) {
-          [self uploadButtonWasClicked:nil];
-        }
-        self.publicIdentifier = nil;
       }
       else {
         [self.appNameMenu selectItemAtIndex:0];
@@ -756,6 +772,28 @@ enum CNSHockeyAppReleaseType {
       [self reloadTagsMenu];
     });
   }  
+}
+
+- (void)parseCheckBundleVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if (aConnectionHelper.statusCode == 200) {
+      // BundleVersion exists
+      [self.errorLabel setHidden:NO];
+      self.errorLabel.stringValue = [NSString stringWithFormat:@"The BundleVersion %@ has already been taken", self.bundleVersion];
+      [self.statusLabel setHidden:YES];
+
+      self.progressIndicator.doubleValue = 0;
+      [self.progressIndicator setHidden:YES];
+      [self.cancelButton setTitle:@"Done"];
+    }
+    else if (aConnectionHelper.statusCode == 404) {
+      // Upload
+      [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:aConnectionHelper.identifier];
+    }
+    else {
+      [self connectionHelperDidFail:aConnectionHelper];
+    }
+  });
 }
 
 #pragma mark - NSApp Delegate Methods

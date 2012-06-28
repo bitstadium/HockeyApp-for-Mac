@@ -26,4 +26,17 @@
 #endif
 #define CNS_LION_OR_GREATER (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_7)
 
+typedef enum CNSHockeyAppReleaseType {
+  CNSHockeyAppReleaseTypeBeta,
+  CNSHockeyAppReleaseTypeLive,
+  CNSHockeyAppReleaseTypeAlpha,
+  CNSHockeyAppReleaseTypeAuto = 0x100
+} CNSHockeyAppReleaseType;
+
+typedef enum CNSHockeyBuildReleaseType {
+  CNSHockeyBuildReleaseTypeUnknown,
+  CNSHockeyBuildReleaseTypeBeta,
+  CNSHockeyBuildReleaseTypeStore
+} CNSHockeyBuildReleaseType;
+
 @end

@@ -89,6 +89,7 @@
 @property (nonatomic, copy) NSString *bundleShortVersion;
 @property (nonatomic, copy) NSString *bundleVersion;
 @property (nonatomic, copy) NSString* apiToken;
+@property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)saveTagSheetButtonWasClicked:(id)sender;

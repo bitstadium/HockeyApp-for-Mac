@@ -24,13 +24,7 @@
 #import "SBJSON.h"
 #import "NSFileHandle+CNSAvailableData.h"
 #import "M3TokenController.h"
-
-enum CNSHockeyAppReleaseType {
-  CNSHockeyAppReleaseTypeBeta,
-  CNSHockeyAppReleaseTypeLive,
-  CNSHockeyAppReleaseTypeAlpha,
-  CNSHockeyAppReleaseTypeAuto = 0x100
-};
+#import "CNSConstants.h"
 
 @interface CNSApp ()
 @property (nonatomic) NSMutableDictionary *appsByReleaseType;
@@ -92,6 +86,7 @@ enum CNSHockeyAppReleaseType {
 @synthesize selectedTags;
 @synthesize publicIdentifier;
 @synthesize appVersionsForAppID;
+@synthesize appStoreBuild;
 
 #pragma mark - Initialization Methods
 
@@ -397,6 +392,8 @@ enum CNSHockeyAppReleaseType {
   self.bundleVersion = [info valueForKey:@"CFBundleVersion"];
   self.bundleShortVersion = [info valueForKey:@"CFBundleShortVersionString"];
   
+  self.appStoreBuild = !([self hasProvisionedDevicesInIPAAtPath:targetFilename]);
+
   return bundleIdentifier;
 }
 
@@ -421,6 +418,39 @@ enum CNSHockeyAppReleaseType {
   }
   
   return nil;
+}
+
+- (CNSHockeyBuildReleaseType)hasProvisionedDevicesInIPAAtPath:(NSString *)sourcePath {
+  NSTask *unzip = [[NSTask alloc] init];
+  NSPipe *outPipe = [NSPipe pipe];
+  NSPipe *grepPipe = [NSPipe pipe];
+  [unzip setStandardOutput:grepPipe];
+  [unzip setLaunchPath:@"/usr/bin/unzip"];
+  [unzip setArguments:[NSArray arrayWithObjects:@"-p", sourcePath, @"Payload/*.app/embedded.mobileprovision", nil]];
+  [unzip launch];
+
+  NSTask *grep = [[NSTask alloc] init];
+  [grep setStandardInput:grepPipe];
+  [grep setStandardOutput:outPipe];
+  [grep setLaunchPath:@"/usr/bin/egrep"];
+  [grep setArguments:[NSArray arrayWithObjects:@"-a",@"-e",@"<key>ProvisionedDevices</key>|<key>ProvisionsAllDevices</key>", nil]];
+  [grep launch];
+
+  NSMutableData *result = [NSMutableData data];
+  NSData *dataIn = nil;
+  NSException *error = nil;
+
+  while ((dataIn = [[outPipe fileHandleForReading] availableDataOrError:&error]) && [dataIn length] && error == nil) {
+    [result appendData:dataIn];
+  }
+
+  if ([result length] > 0 && error == nil) {
+    return CNSHockeyBuildReleaseTypeBeta;
+  }
+  if (error) {
+    return CNSHockeyBuildReleaseTypeUnknown;
+  }
+  return CNSHockeyBuildReleaseTypeStore;
 }
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform {

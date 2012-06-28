@@ -144,6 +144,32 @@
   return nil;
 }
 
+- (CNSHockeyBuildReleaseType)hasProvisionedDevicesAtPath:(NSString *)path {
+  NSTask *grep = [[NSTask alloc] init];
+  NSPipe *aPipe = [NSPipe pipe];
+  [grep setStandardOutput:aPipe];
+  [grep setCurrentDirectoryPath:path];
+  [grep setLaunchPath:@"/usr/bin/egrep"];
+  [grep setArguments:[NSArray arrayWithObjects:@"-a", @"-e", @"<key>ProvisionedDevices</key>|<key>ProvisionsAllDevices</key>", @"embedded.mobileprovision", nil]];
+  [grep launch];
+
+  NSMutableData *result = [NSMutableData data];
+  NSData *dataIn = nil;
+  NSException *error = nil;
+
+  while ((dataIn = [[aPipe fileHandleForReading] availableDataOrError:&error]) && [dataIn length] && error == nil) {
+    [result appendData:dataIn];
+  }
+
+  if ([result length] > 0 && error == nil) {
+    return CNSHockeyBuildReleaseTypeBeta;
+  }
+  if (error) {
+    return CNSHockeyBuildReleaseTypeUnknown;
+  }
+  return CNSHockeyBuildReleaseTypeStore;
+}
+
 - (NSString *)tempDirectoryPath {
   NSString *tempDirectoryTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"HockeyAppMac.XXXXXX"];
   const char *tempDirectoryTemplateCString = [tempDirectoryTemplate fileSystemRepresentation];
@@ -262,6 +288,8 @@
       return NO;
     }
     
+    self.appStoreBuild = !([self hasProvisionedDevicesAtPath:targetPath]);
+
     NSString *filename = [[appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"] stringByReplacingOccurrencesOfString:@" " withString:@""];
     self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];
     self.ipaCreated = ([self zipFilesAtPath:tempDirectoryPath source:@"Payload" toFilename:self.ipaPath] != nil);

@@ -20,4 +20,5 @@
 
 #ifdef __OBJC__
   #import <Cocoa/Cocoa.h>
+  #import "CNSConstants.h"
 #endif

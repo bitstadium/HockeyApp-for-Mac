@@ -461,7 +461,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n# Increases the build number with every release build\nif [ $CONFIGURATION == \"Release\" ]; then\n  buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" Resources/Info.plist)\n  buildNumber=$(($buildNumber + 1))\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" Resources/Info.plist\nfi";
+			shellScript = "#!/bin/bash\n# Increases the build number with every release build\nif [ $CONFIGURATION == \"Release\" ] || [ $CONFIGURATION == \"Alpha\" ]; then\n  buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" Resources/Info.plist)\n  buildNumber=$(($buildNumber + 1))\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" Resources/Info.plist\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

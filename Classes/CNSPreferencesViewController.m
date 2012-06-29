@@ -34,6 +34,7 @@
 NSString *const CNSUserDefaultsHost = @"CNSUserDefaultsHost";
 NSString *const CNSUserDefaultsIcon = @"CNSUserDefaultsIcon";
 NSString *const CNSUserDefaultsToken = @"CNSUserDefaultsToken";
+NSString *const CNSUserDefaultsAAPTPath = @"CNSUserDefaultsAAPTPath";
 NSString *const CNSUserDefaultsNotesType = @"CNSUserDefaultsNotesType";
 NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUploadSelection";
 
@@ -66,7 +67,12 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
 - (IBAction)tokenFieldWasChanged:(id)sender {
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
   [[NSUserDefaults standardUserDefaults] synchronize];
-}	
+}
+
+- (IBAction)aaptPathFieldWasChanged:(id)sender {
+	[[NSUserDefaults standardUserDefaults] setValue:[aaptPathField stringValue] forKey:CNSUserDefaultsAAPTPath];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 #pragma mark - Helper Methods
 
@@ -87,6 +93,14 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
 
 - (void)loadDefaults {
 	[tokenField setStringValue:[[self class] stringForUserDefaultKey:CNSUserDefaultsToken]];
+  NSString *hostName = [[self class] stringForUserDefaultKey:CNSUserDefaultsHost];
+  if ([hostName isEqualToString:kHockeyDefaultHost]) {
+    [hostField setStringValue:@""];
+  }
+  else {
+    [hostField setStringValue:hostName];
+  }
+	[aaptPathField setStringValue:[[self class] stringForUserDefaultKey:CNSUserDefaultsAAPTPath]];
   [iconMenu selectItemWithTitle:[[self class] stringForUserDefaultKey:CNSUserDefaultsIcon ifEmpty:@"Only Dock"]];
 }
 
@@ -101,11 +115,21 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
   }
   
   self.window.delegate = self;
+  
+  NSToolbarItem *firstItem = [[[[self window] toolbar] items] objectAtIndex:0];
+  [toolBar setSelectedItemIdentifier:[firstItem itemIdentifier]];
+  
+  advancedView.hidden = YES;
+  generalView.hidden = NO;
+  
   [self loadDefaults];
 }
 
 - (BOOL)windowShouldClose:(id)sender {
-	[[NSUserDefaults standardUserDefaults] setValue:@"https://rink.hockeyapp.net" forKey:CNSUserDefaultsHost];
+  if ([[[NSUserDefaults standardUserDefaults] valueForKey:CNSUserDefaultsHost] length] == 0) {
+    [[NSUserDefaults standardUserDefaults] setValue:kHockeyDefaultHost forKey:CNSUserDefaultsHost];
+  }
+  
 	[[NSUserDefaults standardUserDefaults] setValue:[iconMenu titleOfSelectedItem] forKey:CNSUserDefaultsIcon];
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
   [[NSUserDefaults standardUserDefaults] synchronize];
@@ -113,6 +137,27 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
 	isVisible = NO;
 
   return YES;
+}
+
+#pragma mark - NSToolbar Delegate
+
+- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
+  NSMutableArray * identifiers = [NSMutableArray array];
+  for (NSToolbarItem * item in [toolbar items]) {
+    [identifiers addObject:[item itemIdentifier]];
+  }
+  return identifiers;
+}
+
+- (IBAction)toolbarItemWasClicked:(NSToolbarItem *)sender {
+  if (sender.tag == 0) {
+    advancedView.hidden = YES;
+    generalView.hidden = NO;
+  }
+  else {
+    advancedView.hidden = NO;
+    generalView.hidden = YES;
+  }
 }
 
 #pragma mark - Memory Management Methods

@@ -18,11 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@interface CNSPreferencesViewController : NSWindowController <NSWindowDelegate> {
+@interface CNSPreferencesViewController : NSWindowController <NSWindowDelegate, NSToolbarDelegate> {
 	IBOutlet NSPopUpButton *iconMenu;
 	IBOutlet NSTextField *hostField;
 	IBOutlet NSTextField *menuLabel;
 	IBOutlet NSTextField *tokenField;
+  IBOutlet NSTextField *aaptPathField;
+  IBOutlet NSToolbar *toolBar;
+  IBOutlet NSView *generalView;
+  IBOutlet NSView *advancedView;
   
   BOOL isVisible;
   id __unsafe_unretained delegate;
@@ -33,6 +37,7 @@ extern NSString *const CNSUserDefaultsIcon;
 extern NSString *const CNSUserDefaultsToken;
 extern NSString *const CNSUserDefaultsNotesType;
 extern NSString *const CNSUserDefaultsAfterUploadSelection;
+extern NSString *const CNSUserDefaultsAAPTPath;
 
 @property (unsafe_unretained) id delegate;
 
@@ -42,5 +47,7 @@ extern NSString *const CNSUserDefaultsAfterUploadSelection;
 - (IBAction)iconMenuWasChanged:(id)sender;
 - (IBAction)hostFieldWasChanged:(id)sender;
 - (IBAction)tokenFieldWasChanged:(id)sender;
+- (IBAction)toolbarItemWasClicked:(id)sender;
+- (IBAction)aaptPathFieldWasChanged:(id)sender;
 
 @end

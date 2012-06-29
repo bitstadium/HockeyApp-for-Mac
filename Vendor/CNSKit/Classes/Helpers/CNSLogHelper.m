@@ -30,7 +30,7 @@
 	NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:argList];
 	va_end(argList);
 	
-	NSLog(@"%@", [NSString stringWithFormat:@"%@ (%d): %@", [pathString lastPathComponent], line, formattedString]);
+	NSLog(@"%@", [NSString stringWithFormat:@"%@ (%ld): %@", [pathString lastPathComponent], line, formattedString]);
 	[formattedString release];
 	[pathString release];
 }

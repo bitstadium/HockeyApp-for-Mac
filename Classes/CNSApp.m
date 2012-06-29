@@ -489,7 +489,7 @@
   if ([self currentSelectedReleaseType] != CNSHockeyAppReleaseTypeAuto) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%d\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%ld\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
   if (ipaURL) {
@@ -671,7 +671,7 @@
       if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
         [serverMessage setString:@"No reason specified."];
       }
-      errorMessage = [NSString stringWithFormat:@"Failed. Status code: %d. Server response: %@", aConnectionHelper.statusCode, serverMessage];
+      errorMessage = [NSString stringWithFormat:@"Failed. Status code: %ld. Server response: %@", aConnectionHelper.statusCode, serverMessage];
     }
     
     [self.errorLabel setHidden:NO];

@@ -24,6 +24,8 @@
 @class M3TokenController;
 
 @interface CNSApp : NSDocument <NSWindowDelegate> {
+@protected
+  NSString *bundleIdentifier;
 @private
   BOOL ignoreNotesFile;
   BOOL autoSubmit;
@@ -35,7 +37,6 @@
   NSButton *__unsafe_unretained notifyButton;
   NSButton *__unsafe_unretained uploadButton;
   NSButton *__unsafe_unretained restrictDownloadButton;
-  NSString *bundleIdentifier;
   NSString *bundleShortVersion;
   NSString *bundleVersion;
   NSMatrix *__unsafe_unretained notesTypeMatrix;

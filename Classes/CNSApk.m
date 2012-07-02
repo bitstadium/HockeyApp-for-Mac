@@ -118,8 +118,8 @@
 
 - (BOOL)readyForUpload {
   if (!(self.skipWarning) && (self.aaptPathInvalid)) {
-    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
     self.infoLabel.stringValue = @"Couldn't gather infos from apk file. Please check that the path to aapt tool under Preferences -> Advanced is correct.";
+    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
     return NO;
   }
   return YES;

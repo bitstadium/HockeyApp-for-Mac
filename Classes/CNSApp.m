@@ -275,6 +275,14 @@
 #pragma mark - Private Helper Methods
 
 - (BOOL)readyForUpload {
+  if (!(self.skipWarning)) {
+    CNSHockeyAppReleaseType releaseType = [self currentSelectedReleaseType];
+    if ((self.appStoreBuild == CNSHockeyBuildReleaseTypeStore) && ((releaseType == CNSHockeyAppReleaseTypeAlpha) || (releaseType == CNSHockeyAppReleaseTypeBeta))) {
+      self.infoLabel.stringValue = [NSString stringWithFormat:@"The build is signed with a store certificate but you set the release type to %@. Are you sure?", (releaseType == CNSHockeyAppReleaseTypeAlpha ? @"alpha" : @"beta")];
+      [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
+      return NO;
+    }
+  }
   return YES;
 }
 
@@ -416,7 +424,7 @@
   self.bundleVersion = [info valueForKey:@"CFBundleVersion"];
   self.bundleShortVersion = [info valueForKey:@"CFBundleShortVersionString"];
   
-  self.appStoreBuild = !([self hasProvisionedDevicesInIPAAtPath:targetFilename]);
+  self.appStoreBuild = [self hasProvisionedDevicesInIPAAtPath:targetFilename];
 
   return bundleIdentifier;
 }

@@ -288,7 +288,7 @@
       return NO;
     }
     
-    self.appStoreBuild = !([self hasProvisionedDevicesAtPath:targetPath]);
+    self.appStoreBuild = [self hasProvisionedDevicesAtPath:targetPath];
 
     NSString *filename = [[appKey stringByReplacingOccurrencesOfString:@".app" withString:@".ipa"] stringByReplacingOccurrencesOfString:@" " withString:@""];
     self.ipaPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];

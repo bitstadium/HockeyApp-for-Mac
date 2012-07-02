@@ -41,8 +41,8 @@
 - (void)storeNotesType;
 - (void)storeAfterUploadSelection;
 - (void)fetchAppNames;
-- (NSInteger)currentSelectedReleaseType;
-- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType;
+- (CNSHockeyAppReleaseType)currentSelectedReleaseType;
+- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(CNSHockeyAppReleaseType)aReleaseType;
 - (NSDictionary *)currentSelectedApp;
 - (NSArray *)tagsForCurrentSelectedApp;
 - (NSString *)titleForReleaseType:(NSInteger)releaseType;
@@ -292,7 +292,7 @@
   }
 }
 
-- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(NSInteger)aReleaseType {
+- (NSDictionary *)appForTitle:(NSString *)aTitle releaseType:(CNSHockeyAppReleaseType)aReleaseType {
   for (NSNumber *releaseType in self.appsByReleaseType) {
     NSArray *appDictionaries = [self.appsByReleaseType objectForKey:releaseType];
     for (NSDictionary *appDictionary in appDictionaries) {
@@ -322,8 +322,8 @@
   }
 }
 
-- (NSInteger)currentSelectedReleaseType {
-  NSInteger selectedReleaseType = 0;
+- (CNSHockeyAppReleaseType)currentSelectedReleaseType {
+  CNSHockeyAppReleaseType selectedReleaseType = CNSHockeyAppReleaseTypeAuto;
   switch ([self.releaseTypeMenu indexOfSelectedItem]) { 
     case 0:
       return CNSHockeyAppReleaseTypeAuto;
@@ -513,7 +513,7 @@
   if ([self currentSelectedReleaseType] != CNSHockeyAppReleaseTypeAuto) {
     [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"release_type\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%ld\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%d\r\n", [self currentSelectedReleaseType]] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   
   if (ipaURL) {

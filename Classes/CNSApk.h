@@ -22,4 +22,6 @@
 
 @interface CNSApk : CNSApp
 
+- (IBAction)preferencesInfoSheetButtonWasClicked:(id)sender;
+
 @end

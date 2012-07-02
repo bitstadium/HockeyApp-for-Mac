@@ -130,6 +130,7 @@ NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUplo
     [[NSUserDefaults standardUserDefaults] setValue:kHockeyDefaultHost forKey:CNSUserDefaultsHost];
   }
   
+  [[NSUserDefaults standardUserDefaults] setValue:[aaptPathField stringValue] forKey:CNSUserDefaultsAAPTPath];
 	[[NSUserDefaults standardUserDefaults] setValue:[iconMenu titleOfSelectedItem] forKey:CNSUserDefaultsIcon];
 	[[NSUserDefaults standardUserDefaults] setValue:[tokenField stringValue] forKey:CNSUserDefaultsToken];
   [[NSUserDefaults standardUserDefaults] synchronize];

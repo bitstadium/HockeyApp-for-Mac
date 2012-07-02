@@ -87,6 +87,9 @@
 @synthesize publicIdentifier;
 @synthesize appVersionsForAppID;
 @synthesize appStoreBuild;
+@synthesize infoLabel;
+@synthesize infoSheet;
+@synthesize skipWarning;
 
 #pragma mark - Initialization Methods
 
@@ -216,36 +219,38 @@
 }
 
 - (IBAction)uploadButtonWasClicked:(id)sender {
-  self.errorLabel.hidden = YES;
-  self.statusLabel.hidden = NO;
-  self.statusLabel.stringValue = @"Initializing...";
-  self.progressIndicator.hidden = NO;
-  self.progressIndicator.doubleValue = 0;
-  [self.cancelButton setTitle:@"Cancel"];
-  [self.uploadButton setEnabled:NO];
-  
-  [self storeNotesType];
-  [self storeAfterUploadSelection];
-
-  [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
-  
-  NSString *publicID = nil;
-  NSInteger releaseType = [self currentSelectedReleaseType];
-  if (([self.appNameMenu indexOfSelectedItem] > -1) && (releaseType != CNSHockeyAppReleaseTypeAuto)) {
-    NSDictionary *appDictionary = [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
-    publicID = [appDictionary valueForKey:@"public_identifier"];
-  }
-
-  if (self.bundleIdentifier) {
-    if (publicID) {
-      [self checkBundleVersion:self.bundleVersion forAppID:publicID];
+  if ([self readyForUpload]) {
+    self.errorLabel.hidden = YES;
+    self.statusLabel.hidden = NO;
+    self.statusLabel.stringValue = @"Initializing...";
+    self.progressIndicator.hidden = NO;
+    self.progressIndicator.doubleValue = 0;
+    [self.cancelButton setTitle:@"Cancel"];
+    [self.uploadButton setEnabled:NO];
+    
+    [self storeNotesType];
+    [self storeAfterUploadSelection];
+    
+    [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
+    
+    NSString *publicID = nil;
+    NSInteger releaseType = [self currentSelectedReleaseType];
+    if (([self.appNameMenu indexOfSelectedItem] > -1) && (releaseType != CNSHockeyAppReleaseTypeAuto)) {
+      NSDictionary *appDictionary = [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
+      publicID = [appDictionary valueForKey:@"public_identifier"];
+    }
+    
+    if (self.bundleIdentifier) {
+      if (publicID) {
+        [self checkBundleVersion:self.bundleVersion forAppID:publicID];
+      }
+      else {
+        [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:nil];
+      }
     }
     else {
-      [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:nil];
+      self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
     }
-  }
-  else {
-    self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
   }
 }
 
@@ -257,7 +262,21 @@
   }
 }
 
+- (IBAction)cancelInfoSheetButtonWasClicked:(id)sender {
+  [self hideInfoSheet];
+}
+
+- (IBAction)continueInfoSheetButtonWasClicked:(id)sender {
+  self.skipWarning = YES;
+  [self hideInfoSheet];
+  [self uploadButtonWasClicked:nil];
+}
+
 #pragma mark - Private Helper Methods
+
+- (BOOL)readyForUpload {
+  return YES;
+}
 
 - (void)reloadTagsMenu {
   NSArray *tagsForCurrentApp = [self tagsForCurrentSelectedApp];
@@ -370,6 +389,11 @@
 
   [self readProcessArguments];
   [self fetchAppNames];
+}
+
+- (void)hideInfoSheet {
+  [self.infoSheet orderOut:self];
+  [NSApp endSheet:self.infoSheet];
 }
 
 - (NSString *)bundleIdentifier {
@@ -835,6 +859,10 @@
 
 - (void)didEndTagSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
   [NSApp endSheet:self.tagSheet];  
+}
+
+- (void)didEndInfoSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+  [self hideInfoSheet];
 }
 
 #pragma mark - M3TokenController Delegate Mehtods

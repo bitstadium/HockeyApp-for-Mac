@@ -22,8 +22,19 @@
 #import "CNSLogHelper.h"
 #import "NSFileHandle+CNSAvailableData.h"
 #import "CNSPreferencesViewController.h"
+#import "CNSApplicationDelegate.h"
+
+@interface CNSApk ()
+
+@property (nonatomic) BOOL refreshAPK;
+@property (nonatomic) BOOL aaptPathInvalid;
+
+@end
 
 @implementation CNSApk
+
+@synthesize refreshAPK;
+@synthesize aaptPathInvalid;
 
 #pragma mark - NSDocument Methods
 
@@ -33,6 +44,16 @@
 
 - (NSString *)windowNibName {
   return @"CNSApk";
+}
+
+#pragma mark - NSWindowDelegate Methods
+
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+  if (([notification object] == self.window) && (refreshAPK)) {
+    self.refreshAPK = NO;
+    self.bundleIdentifier = nil;
+    [self setupViews];
+  }
 }
 
 #pragma mark - Private Helper Methods
@@ -47,7 +68,13 @@
     [aapt setStandardOutput:grepPipe];
     [aapt setLaunchPath:aaptPath];
     [aapt setArguments:[NSArray arrayWithObjects:@"dump", @"badging", path, nil]];
-    [aapt launch];
+    @try {
+      [aapt launch];
+    }
+    @catch (NSException *exception) {
+      self.aaptPathInvalid = YES;
+      return results;
+    }
 
     NSTask *grep = [[NSTask alloc] init];
     [grep setStandardInput:grepPipe];
@@ -81,8 +108,21 @@
         };
       }
     }
+    self.aaptPathInvalid = NO;
+  }
+  else {
+    self.aaptPathInvalid = YES;
   }
   return results;
+}
+
+- (BOOL)readyForUpload {
+  if (!(self.skipWarning) && (self.aaptPathInvalid)) {
+    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
+    self.infoLabel.stringValue = @"Couldn't gather infos from apk file. Please check that the path to aapt tool under Preferences -> Advanced is correct.";
+    return NO;
+  }
+  return YES;
 }
 
 - (NSString *)bundleIdentifier {
@@ -98,4 +138,18 @@
 
   return bundleIdentifier;
 }
+
+#pragma mark - NSControl Action Methods
+
+- (IBAction)preferencesInfoSheetButtonWasClicked:(id)sender {
+  [self hideInfoSheet];
+  self.refreshAPK = YES;
+  [((CNSApplicationDelegate *)[NSApplication sharedApplication].delegate) showPreferencesView:nil];
+}
+
+- (IBAction)continueInfoSheetButtonWasClicked:(id)sender {
+  self.bundleIdentifier = @""; // We won't force aapt
+  [super continueInfoSheetButtonWasClicked:sender];
+}
+
 @end

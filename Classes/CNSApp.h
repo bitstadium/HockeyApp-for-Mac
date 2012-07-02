@@ -83,6 +83,8 @@
 @property (unsafe_unretained) IBOutlet NSWindow *tagSheet;
 @property (unsafe_unretained) IBOutlet NSWindow *window;
 @property (unsafe_unretained) IBOutlet M3TokenController *tokenController;
+@property (unsafe_unretained) IBOutlet NSWindow *infoSheet;
+@property (unsafe_unretained) IBOutlet NSTextField *infoLabel;
 
 @property (strong) CNSConnectionHelper *connectionHelper;
 
@@ -91,6 +93,7 @@
 @property (nonatomic, copy) NSString *bundleVersion;
 @property (nonatomic, copy) NSString* apiToken;
 @property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
+@property (nonatomic) BOOL skipWarning;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)saveTagSheetButtonWasClicked:(id)sender;
@@ -100,11 +103,15 @@
 - (IBAction)appNameMenuWasChanged:(id)sender;
 - (IBAction)uploadButtonWasClicked:(id)sender;
 - (IBAction)restrictDownloadsWasClicked:(id)sender;
+- (IBAction)cancelInfoSheetButtonWasClicked:(id)sender;
+- (IBAction)continueInfoSheetButtonWasClicked:(id)sender;
 
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;
 
 - (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID;
 
 - (void)setupViews;
+- (BOOL)readyForUpload;
+- (void)hideInfoSheet;
 
 @end

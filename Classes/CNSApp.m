@@ -599,8 +599,12 @@
 - (void)loadReleaseNotesFile:(NSString *)filename {
   NSError *error = nil;
   NSString *contents = [NSString stringWithContentsOfFile:filename encoding:NSUTF8StringEncoding error:&error];
-  if (!error) {
+  if (!(error) && (self.releaseNotesField)) {
+    ignoreNotesFile = YES;
     [self.releaseNotesField setString:contents];
+  }
+  else {
+    ignoreNotesFile = NO;
   }
 }
 
@@ -668,7 +672,6 @@
     }
     else if (([argument hasPrefix:@"notes="]) && (!ignoreNotesFile)) {
       [self loadReleaseNotesFile:[[argument componentsSeparatedByString:@"="] lastObject]];
-      ignoreNotesFile = YES;
     }
     else if ([argument hasPrefix:@"token="]) {
       self.apiToken = [[argument componentsSeparatedByString:@"="] lastObject];

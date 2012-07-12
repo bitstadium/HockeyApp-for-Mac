@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "BWQuincyManager.h"
+#import <HockeySDK/BITCrashReportManagerDelegate.h>
 
 @class CNSDragStatusView;
 @class CNSPreferencesViewController;
 @class SUUpdater;
 
-@interface CNSApplicationDelegate : NSObject <BWQuincyManagerDelegate, NSMenuDelegate> {
+@interface CNSApplicationDelegate : NSObject <BITCrashReportManagerDelegate, NSMenuDelegate> {
 @private
 	IBOutlet CNSPreferencesViewController *preferencesViewController;
   IBOutlet SUUpdater *sparkleUpdater;

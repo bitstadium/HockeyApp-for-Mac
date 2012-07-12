@@ -41,13 +41,12 @@
 		4D55CE701517766D00538A5C /* CNSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D55CE6F1517766D00538A5C /* CNSDevice.m */; };
 		4D55CE731517772C00538A5C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D55CE721517772C00538A5C /* IOKit.framework */; };
 		4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D589CAB13C5C219007ED5E1 /* CNSConstants.m */; };
-		4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */; };
-		4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB47C5614B5F5D800793D09 /* CNSTextView.m */; };
 		4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE69FB9142CE9E100307A1F /* CNSApk.m */; };
 		4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE69FBC142CEBB100307A1F /* CNSApk.xib */; };
 		6C3611C51554694900C60BE4 /* M3TokenCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C21554694900C60BE4 /* M3TokenCloud.m */; };
 		6C3611C61554694900C60BE4 /* M3TokenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C41554694900C60BE4 /* M3TokenController.m */; };
+		6C495B2015AF77BB006FCDEC /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */; };
 		6CFFEAE1153CB9FD00984F5F /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEAD9153CB9FD00984F5F /* NSObject+SBJson.m */; };
 		6CFFEAE2153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADC153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m */; };
 		6CFFEAE3153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADE153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m */; };
@@ -128,9 +127,6 @@
 		4D55CE721517772C00538A5C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4D589CAA13C5C219007ED5E1 /* CNSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSConstants.h; sourceTree = "<group>"; };
 		4D589CAB13C5C219007ED5E1 /* CNSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSConstants.m; sourceTree = "<group>"; };
-		4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = BWQuincyMain.nib; sourceTree = "<group>"; };
-		4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
-		4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
 		4DB47C5514B5F5D800793D09 /* CNSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSTextView.h; sourceTree = "<group>"; };
 		4DB47C5614B5F5D800793D09 /* CNSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSTextView.m; sourceTree = "<group>"; };
 		4DE69FB8142CE9E100307A1F /* CNSApk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSApk.h; sourceTree = "<group>"; };
@@ -140,6 +136,7 @@
 		6C3611C21554694900C60BE4 /* M3TokenCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M3TokenCloud.m; sourceTree = "<group>"; };
 		6C3611C31554694900C60BE4 /* M3TokenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M3TokenController.h; sourceTree = "<group>"; };
 		6C3611C41554694900C60BE4 /* M3TokenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M3TokenController.m; sourceTree = "<group>"; };
+		6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
 		6CFFEAD8153CB9FD00984F5F /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
 		6CFFEAD9153CB9FD00984F5F /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
 		6CFFEADA153CB9FD00984F5F /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
@@ -160,6 +157,7 @@
 				4D20DF56134616D600344114 /* Security.framework in Frameworks */,
 				4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */,
 				4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */,
+				6C495B2015AF77BB006FCDEC /* HockeySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,8 +229,8 @@
 			children = (
 				4D20DDF81345FC1100344114 /* CNSKit */,
 				4D20DF4F1346160400344114 /* EMKeychain */,
+				6C495B1915AF77BB006FCDEC /* HockeySDK-Mac */,
 				6C3611C01554694900C60BE4 /* M3TokenController */,
-				4D62589613C5D401005F2B75 /* QuincyKit */,
 				4D4E7B2013B9DEA7002F0439 /* SBJSON */,
 			);
 			path = Vendor;
@@ -362,16 +360,6 @@
 			path = SBJSON/Classes;
 			sourceTree = "<group>";
 		};
-		4D62589613C5D401005F2B75 /* QuincyKit */ = {
-			isa = PBXGroup;
-			children = (
-				4D6258BD13C5D401005F2B75 /* BWQuincyMain.nib */,
-				4D6258BE13C5D401005F2B75 /* BWQuincyManager.h */,
-				4D6258BF13C5D401005F2B75 /* BWQuincyManager.m */,
-			);
-			path = QuincyKit;
-			sourceTree = "<group>";
-		};
 		6C3611C01554694900C60BE4 /* M3TokenController */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,6 +369,14 @@
 				6C3611C41554694900C60BE4 /* M3TokenController.m */,
 			);
 			path = M3TokenController;
+			sourceTree = "<group>";
+		};
+		6C495B1915AF77BB006FCDEC /* HockeySDK-Mac */ = {
+			isa = PBXGroup;
+			children = (
+				6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */,
+			);
+			path = "HockeySDK-Mac";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,6 +415,12 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				de,
+				fi,
+				fr,
+				it,
+				nb,
+				sv,
 			);
 			mainGroup = 4D20DDB61345FA0500344114;
 			productRefGroup = 4D20DDC21345FA0500344114 /* Products */;
@@ -442,7 +444,6 @@
 				4D4E7B0F13B920C4002F0439 /* InfoPlist.strings in Resources */,
 				4D4E7B1013B920C4002F0439 /* MainMenu.xib in Resources */,
 				4D4E7B1713B921B8002F0439 /* Icon.icns in Resources */,
-				4D6258D913C5D401005F2B75 /* BWQuincyMain.nib in Resources */,
 				4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,7 +492,6 @@
 				4D4E7B3B13B9DEA7002F0439 /* SBJsonTokeniser.m in Sources */,
 				4D4E7B3C13B9DEA7002F0439 /* SBJsonWriter.m in Sources */,
 				4D589CAC13C5C219007ED5E1 /* CNSConstants.m in Sources */,
-				4D6258DA13C5D401005F2B75 /* BWQuincyManager.m in Sources */,
 				4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */,
 				4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */,
 				4D55CE701517766D00538A5C /* CNSDevice.m in Sources */,
@@ -597,7 +597,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
-					"\"$(SRCROOT)/Vendor/QuincyKit\"",
+					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -620,7 +620,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
-					"\"$(SRCROOT)/Vendor/QuincyKit\"",
+					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -660,7 +660,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
-					"\"$(SRCROOT)/Vendor/QuincyKit\"",
+					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

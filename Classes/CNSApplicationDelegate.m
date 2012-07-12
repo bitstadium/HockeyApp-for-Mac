@@ -23,6 +23,7 @@
 #import "CNSConstants.h"
 #import "CNSDragStatusView.h"
 #import "CNSPreferencesViewController.h"
+#import <HockeySDK/HockeySDK.h>
 
 @interface CNSApplicationDelegate ()
 
@@ -57,15 +58,17 @@
 
 #if defined (CONFIGURATION_Release)
   sparkleUpdater.feedURL = [NSURL URLWithString:@"https://rink.hockeyapp.net/api/2/apps/67503a7926431872c4b6c1549f5bd6b1"];
-  [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"67503a7926431872c4b6c1549f5bd6b1"];
-  [[BWQuincyManager sharedQuincyManager] setCompanyName:@"Codenauts UG"];
-  [[BWQuincyManager sharedQuincyManager] setDelegate:self];  
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"67503a7926431872c4b6c1549f5bd6b1" companyName:@"Bit Stadium GmbH" crashReportManagerDelegate:self];
+  [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
+  [[BITHockeyManager sharedHockeyManager] setAskUserDetails:YES];
+  [[BITHockeyManager sharedHockeyManager] startManager];
 #endif
 #if defined (CONFIGURATION_Alpha)
   sparkleUpdater.feedURL = [NSURL URLWithString:@"https://rink.hockeyapp.net/api/2/apps/806ccd5cdb077a58460c28c90fdce846"];
-  [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"806ccd5cdb077a58460c28c90fdce846"];
-  [[BWQuincyManager sharedQuincyManager] setCompanyName:@"Codenauts UG"];
-  [[BWQuincyManager sharedQuincyManager] setDelegate:self];
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"806ccd5cdb077a58460c28c90fdce846" companyName:@"Bit Stadium GmbH" crashReportManagerDelegate:self];
+  [[BITHockeyManager sharedHockeyManager] setExceptionInterceptionEnabled:YES];
+  [[BITHockeyManager sharedHockeyManager] setAskUserDetails:YES];
+  [[BITHockeyManager sharedHockeyManager] startManager];
 #endif
 }
 
@@ -78,7 +81,7 @@
   return YES;
 }
 
-#pragma mark - BWQuincyManagerDelegate Methods
+#pragma mark - BITCrashReportManagerDelegate Methods
 
 - (void)showMainApplicationWindow {
 }

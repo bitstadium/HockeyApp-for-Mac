@@ -46,7 +46,8 @@
 		4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE69FBC142CEBB100307A1F /* CNSApk.xib */; };
 		6C3611C51554694900C60BE4 /* M3TokenCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C21554694900C60BE4 /* M3TokenCloud.m */; };
 		6C3611C61554694900C60BE4 /* M3TokenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C41554694900C60BE4 /* M3TokenController.m */; };
-		6C495B2015AF77BB006FCDEC /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */; };
+		6C495B2415AF8361006FCDEC /* HockeySDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */; };
+		6C495B2515AF83E7006FCDEC /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */; };
 		6CFFEAE1153CB9FD00984F5F /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEAD9153CB9FD00984F5F /* NSObject+SBJson.m */; };
 		6CFFEAE2153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADC153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m */; };
 		6CFFEAE3153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADE153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m */; };
@@ -61,6 +62,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */,
+				6C495B2415AF8361006FCDEC /* HockeySDK.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,8 +158,8 @@
 				4D55CE731517772C00538A5C /* IOKit.framework in Frameworks */,
 				4D20DF56134616D600344114 /* Security.framework in Frameworks */,
 				4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */,
+				6C495B2515AF83E7006FCDEC /* HockeySDK.framework in Frameworks */,
 				4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */,
-				6C495B2015AF77BB006FCDEC /* HockeySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

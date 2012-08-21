@@ -52,7 +52,7 @@ Please note that the command line options are passed to the app only at the firs
 
 Example:
 
-<pre>open -a HockeyApp MyApp.xcarchive --args autoSubmit notifyOn openDownloadPage</pre>
+<pre>open -a HockeyApp MyApp.xcarchive --args autoSubmit notifyOn openDownloadPage tags=alphatesters,betatesters</pre>
 
 HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archive and notify all testers.
 

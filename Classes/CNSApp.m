@@ -885,6 +885,8 @@
 #pragma mark - Memory Management Mehtods
 
 - (void)dealloc {
+  [self.connectionHelper cancelConnection];
+  self.connectionHelper = nil;
   self.afterUploadMenu = nil;
   self.bundleIdentifierLabel = nil;
   self.bundleVersionLabel = nil;

@@ -76,7 +76,7 @@
 		4D20DDC81345FA0500344114 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		4D20DDC91345FA0500344114 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4D20DDCA1345FA0500344114 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HockeyApp-Prefix.pch"; sourceTree = "<group>"; };
+		4D20DDD11345FA0500344114 /* HockeyMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HockeyMac-Prefix.pch"; sourceTree = "<group>"; };
 		4D20DDD21345FA0500344114 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4D20DDD71345FA0500344114 /* CNSApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNSApp.h; sourceTree = "<group>"; };
 		4D20DDD81345FA0500344114 /* CNSApp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNSApp.m; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		4D20DDCC1345FA0500344114 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4D20DDD11345FA0500344114 /* HockeyApp-Prefix.pch */,
+				4D20DDD11345FA0500344114 /* HockeyMac-Prefix.pch */,
 				4D20DDD21345FA0500344114 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -384,9 +384,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4D20DDC01345FA0500344114 /* HockeyApp */ = {
+		4D20DDC01345FA0500344114 /* HockeyMac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyApp" */;
+			buildConfigurationList = 4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyMac" */;
 			buildPhases = (
 				4DAD9F7013BB84BD00D634BB /* ShellScript */,
 				4D4337FE13B3B07E00B8ADE2 /* CopyFiles */,
@@ -398,7 +398,7 @@
 			);
 			dependencies = (
 			);
-			name = HockeyApp;
+			name = HockeyMac;
 			productName = HockeyApp;
 			productReference = 4D20DDC11345FA0500344114 /* HockeyApp.app */;
 			productType = "com.apple.product-type.application";
@@ -411,7 +411,7 @@
 			attributes = {
 				LastUpgradeCheck = 0440;
 			};
-			buildConfigurationList = 4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyApp" */;
+			buildConfigurationList = 4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyMac" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -429,7 +429,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4D20DDC01345FA0500344114 /* HockeyApp */,
+				4D20DDC01345FA0500344114 /* HockeyMac */,
 			);
 		};
 /* End PBXProject section */
@@ -566,6 +566,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = HockeyApp;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 			};
@@ -584,6 +585,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DCONFIGURATION_$(CONFIGURATION)";
+				PRODUCT_NAME = HockeyApp;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 			};
@@ -605,9 +607,9 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
+				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -628,9 +630,9 @@
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
+				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -648,6 +650,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DCONFIGURATION_$(CONFIGURATION)";
+				PRODUCT_NAME = HockeyApp;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 			};
@@ -669,9 +672,9 @@
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Classes/HockeyApp-Prefix.pch";
+				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Alpha;
@@ -679,7 +682,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyApp" */ = {
+		4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D20DDE01345FA0500344114 /* Debug */,
@@ -689,7 +692,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyApp" */ = {
+		4D20DDE21345FA0500344114 /* Build configuration list for PBXNativeTarget "HockeyMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D20DDE31345FA0500344114 /* Debug */,

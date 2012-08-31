@@ -215,6 +215,10 @@
   }
   else {
     self.appNameMenu.enabled = YES;
+    [self.restrictDownloadButton setEnabled:NO];
+    self.downloadButton.state = NSOffState;
+    [self.notifyButton setEnabled:YES];
+    self.downloadButton.title = @"Download Allowed / Available in Store";
   }
 }
 

@@ -170,12 +170,10 @@
   switch ([self.fileTypeMenu indexOfSelectedItem]) {
     case 0:
     case 1:
-      [self.downloadButton setEnabled:YES];
       [self.notifyButton setEnabled:YES];
       [self.restrictDownloadButton setEnabled:YES];
       break;
     case 2:
-      [self.downloadButton setEnabled:NO];
       [self.notifyButton setEnabled:NO];
       [self.restrictDownloadButton setEnabled:NO];
     default:

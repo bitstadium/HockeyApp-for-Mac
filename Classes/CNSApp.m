@@ -208,6 +208,7 @@
       [self reloadTagsMenu];
     }
     else {
+      [self.restrictDownloadButton setEnabled:NO];
       [self.appNameMenu selectItemAtIndex:-1];
       self.appNameMenu.enabled = NO;
     }

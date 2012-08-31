@@ -186,6 +186,22 @@
 - (IBAction)releaseTypeMenuWasChanged:(id)sender {
   if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
     NSInteger selectedReleaseType = [self currentSelectedReleaseType];
+
+    if (selectedReleaseType == CNSHockeyAppReleaseTypeLive) {
+      [self.notifyButton setEnabled:NO];
+      [self.restrictDownloadButton setEnabled:NO];
+      [self.fileTypeMenu selectItemAtIndex:2];
+      self.downloadButton.title = @"Available in Store";
+      self.downloadButton.state = NSOffState;
+    }
+    else {
+      [self.notifyButton setEnabled:YES];
+      [self.restrictDownloadButton setEnabled:YES];
+      [self.fileTypeMenu selectItemAtIndex:0];
+      self.downloadButton.title = @"Download Allowed";
+    }
+
+
     NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
     if ([appsForReleaseType count] > 0) {
       [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
@@ -194,9 +210,6 @@
     else {
       [self.appNameMenu selectItemAtIndex:-1];
       self.appNameMenu.enabled = NO;
-    }
-    if (selectedReleaseType == CNSHockeyAppReleaseTypeLive) {
-      [self.fileTypeMenu selectItemAtIndex:2];
     }
   }
   else {

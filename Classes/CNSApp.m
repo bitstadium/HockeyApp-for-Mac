@@ -25,6 +25,7 @@
 #import "NSFileHandle+CNSAvailableData.h"
 #import "M3TokenController.h"
 #import "CNSConstants.h"
+#import "NSString+CNSStringAdditions.h"
 
 @interface CNSApp ()
 @property (nonatomic) NSMutableDictionary *appsByReleaseType;
@@ -647,7 +648,7 @@
 - (void)checkBundleVersion:(NSString *)aBundleVersion forAppID:(NSString *)appID {
   if (aBundleVersion) {
     NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions/check?bundle_version=%@", baseURL, appID, aBundleVersion]]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions/check?bundle_version=%@", baseURL, appID, [aBundleVersion URLEncodedString]]]];
     [request setHTTPMethod:@"GET"];
     [request setTimeoutInterval:300];
 

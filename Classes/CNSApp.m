@@ -581,7 +581,7 @@
   [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [request setHTTPBody:body];
   
-  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:nil token:self.apiToken];
+  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:kHockeyUploadConnectionIdentifier token:self.apiToken];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
@@ -705,57 +705,55 @@
 #pragma mark - CNSConnectionHelper Delegate Methods
 
 - (void)connectionHelperDidFail:(CNSConnectionHelper *)aConnectionHelper {
-  @autoreleasepool {
-  
-    NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
-    
-    NSString *errorMessage = nil;
-    if ([result length] == 0) {
-      errorMessage = @"Failed: Server did not respond. Please check your network connection.";
-    }
-    else {
-      NSDictionary *json = [result JSONValue];
-      NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
-      NSDictionary *errors = [json valueForKey:@"errors"];
-      for (NSString *attribute in errors) {
-        [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+  if ([aConnectionHelper.identifier isEqualToString:kHockeyUploadConnectionIdentifier]) {
+    @autoreleasepool {
+      NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
+
+      NSString *errorMessage = nil;
+      if ([result length] == 0) {
+        errorMessage = @"Failed: Server did not respond. Please check your network connection.";
       }
-      if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
-        [serverMessage setString:@"No reason specified."];
+      else {
+        NSDictionary *json = [result JSONValue];
+        NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
+        NSDictionary *errors = [json valueForKey:@"errors"];
+        for (NSString *attribute in errors) {
+          [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+        }
+        if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
+          [serverMessage setString:@"No reason specified."];
+        }
+        errorMessage = [NSString stringWithFormat:@"Failed. Status code: %ld. Server response: %@", aConnectionHelper.statusCode, serverMessage];
       }
-      errorMessage = [NSString stringWithFormat:@"Failed. Status code: %ld. Server response: %@", aConnectionHelper.statusCode, serverMessage];
+
+      [self.errorLabel setHidden:NO];
+      self.errorLabel.stringValue = errorMessage;
+
+      [self.statusLabel setHidden:YES];
+
+      self.progressIndicator.doubleValue = 0;
+      [self.progressIndicator setHidden:YES];
+      [self.cancelButton setTitle:@"Done"];
     }
-    
-    [self.errorLabel setHidden:NO];
-    self.errorLabel.stringValue = errorMessage;
-    
-    [self.statusLabel setHidden:YES];
-    
-    self.progressIndicator.doubleValue = 0;
-    [self.progressIndicator setHidden:YES];
-    [self.cancelButton setTitle:@"Done"];
-  
-  
   }
 }
 
 - (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didProgress:(NSNumber*)progress {
-  double currentProgress = self.progressIndicator.doubleValue;
-  if ([progress floatValue] == 1.0) {
-    self.statusLabel.stringValue = @"Processing...";
-    self.progressIndicator.doubleValue = 100.0;
-  }
-  else {
-    self.statusLabel.stringValue = [NSString stringWithFormat:@"%.0f%%", [progress floatValue] * 100];
-    self.progressIndicator.doubleValue = MAX([progress floatValue] * 100, currentProgress);
+  if ([aConnectionHelper.identifier isEqualToString:kHockeyUploadConnectionIdentifier]) {
+    double currentProgress = self.progressIndicator.doubleValue;
+    if ([progress floatValue] == 1.0) {
+      self.statusLabel.stringValue = @"Processing...";
+      self.progressIndicator.doubleValue = 100.0;
+    }
+    else {
+      self.statusLabel.stringValue = [NSString stringWithFormat:@"%.0f%%", [progress floatValue] * 100];
+      self.progressIndicator.doubleValue = MAX([progress floatValue] * 100, currentProgress);
+    }
   }
 }
 
 - (void)parseAppListResponse:(CNSConnectionHelper *)aConnectionHelper {
-  if (aConnectionHelper.statusCode != 200) {
-    [self connectionHelperDidFail:aConnectionHelper];
-  }
-  else {
+  if (aConnectionHelper.statusCode == 200) {
     NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
     NSDictionary *json = [result JSONValue];
     self.appsByReleaseType = [NSMutableDictionary dictionary];
@@ -837,10 +835,7 @@
 }
 
 - (void)parseAppTagsResponse:(CNSConnectionHelper *)aConnectionHelper {
-  if (aConnectionHelper.statusCode != 200) {
-    [self connectionHelperDidFail:aConnectionHelper];
-  }
-  else {
+  if (aConnectionHelper.statusCode == 200) {
     NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
     NSDictionary *json = [result JSONValue];
 		

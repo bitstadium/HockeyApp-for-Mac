@@ -40,5 +40,6 @@ typedef enum CNSHockeyBuildReleaseType {
 } CNSHockeyBuildReleaseType;
 
 #define kHockeyDefaultHost @"https://rink.hockeyapp.net"
+#define kHockeyUploadConnectionIdentifier @"kHockeyUploadConnectionIdentifier"
 
 @end

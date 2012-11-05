@@ -92,6 +92,7 @@
 @property (nonatomic, copy) NSString *bundleShortVersion;
 @property (nonatomic, copy) NSString *bundleVersion;
 @property (nonatomic, copy) NSString* apiToken;
+@property (nonatomic, copy) NSString *dsymPath;
 @property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
 @property (nonatomic) BOOL skipWarning;
 

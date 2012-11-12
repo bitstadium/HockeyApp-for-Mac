@@ -716,7 +716,7 @@
       else {
         NSDictionary *json = [result JSONValue];
         NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
-        NSDictionary *errors = [json valueForKey:@"errors"];
+        NSDictionary *errors = [json valueForKey:@"message"];
         for (NSString *attribute in errors) {
           [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
         }

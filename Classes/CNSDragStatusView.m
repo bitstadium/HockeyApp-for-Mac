@@ -70,10 +70,10 @@
   }
   
   if (highlight) {
-    [highlightedImage drawAtPoint:NSMakePoint(5, 4) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+    [highlightedImage drawAtPoint:NSMakePoint(5, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
   }
   else {
-    [normalImage drawAtPoint:NSMakePoint(5, 4) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+    [normalImage drawAtPoint:NSMakePoint(5, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
   }
 }
 

@@ -119,7 +119,7 @@
   
   [statusItem setMenu:menu];
   
-  dragStatusView = [[CNSDragStatusView alloc] initWithFrame:NSMakeRect(0, 0, 24, 20)];
+  dragStatusView = [[CNSDragStatusView alloc] initWithFrame:NSMakeRect(0, 0, 25, 20)];
   [dragStatusView setDelegate:self];
   [dragStatusView setNormalImage:[NSImage imageNamed:@"MenuIconNormal"] highlightedImage:[NSImage imageNamed:@"MenuIconHighlighted"]];
   [statusItem setView:dragStatusView];

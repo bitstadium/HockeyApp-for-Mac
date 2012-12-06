@@ -62,6 +62,15 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
+### Version 1.2
+
+* Renamed to HockeyMac
+* Using new HockeyApp icon
+* Fixed an issue with special characters in CFBundleVersion
+* Fixed an issue where uploading was blocked
+* Fixed an issue with errors messages from server not shown
+* Fixed an issue with release type menu and android builds
+
 ### Version 1.1 
 
 * Added option to choose a distinct app version when uploading a release (Previews automatic selection too)

@@ -531,7 +531,7 @@
     if ([self.mandatoryButton isEnabled]) {
         [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"mandatory\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((downloadOn && mandatoryOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((mandatoryOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
     }
   
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];

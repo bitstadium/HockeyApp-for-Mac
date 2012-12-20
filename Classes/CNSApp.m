@@ -728,10 +728,17 @@
       else {
         NSDictionary *json = [result JSONValue];
         NSMutableString *serverMessage = [NSMutableString stringWithCapacity:0];
-        NSDictionary *errors = [json valueForKey:@"message"];
-        for (NSString *attribute in errors) {
-          [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+
+        if ([json valueForKey:@"errors"]) {
+          NSDictionary *errors = [json valueForKey:@"errors"];
+          for (NSString *attribute in errors) {
+            [serverMessage appendFormat:@"%@ - %@. ", attribute, [[errors valueForKey:attribute] componentsJoinedByString:@" and "]];
+          }
         }
+        else if ([json valueForKey:@"message"]) {
+          [serverMessage appendString:[json valueForKey:@"message"]];
+        }
+
         if ([[serverMessage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
           [serverMessage setString:@"No reason specified."];
         }

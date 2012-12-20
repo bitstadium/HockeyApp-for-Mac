@@ -31,7 +31,6 @@
 }
 
 @property (nonatomic) NSDictionary *info;
-@property (nonatomic) NSString *dsymPath;
 @property (nonatomic) NSString *ipaPath;
 
 @property (nonatomic, assign) BOOL dsymCreated;

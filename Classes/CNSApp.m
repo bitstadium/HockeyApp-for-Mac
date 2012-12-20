@@ -404,7 +404,7 @@
 
   self.statusLabel.stringValue = @"";
 
-  [self.fileTypeMenu selectItemAtIndex:1];
+  [self.fileTypeMenu selectItemAtIndex:(self.dsymPath ? 0 : 1)];
   [self.fileTypeMenu setEnabled:NO];
 
   [self readNotesType];
@@ -579,6 +579,15 @@
   
   NSMutableData *body = [self createPostBodyWithURL:self.fileURL boundary:boundary platform:nil];
   [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  
+  if ((self.dsymPath) && ([self.fileTypeMenu indexOfSelectedItem] != 1)) {
+    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"dsym\"; filename=\"%@\"\r\n", [self.dsymPath lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Type: application/octet-stream\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Transfer-Encoding: binary\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:self.dsymPath]]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+  }
   [request setHTTPBody:body];
   
   self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:kHockeyUploadConnectionIdentifier token:self.apiToken];
@@ -698,6 +707,9 @@
     }
     else if ([argument hasPrefix:@"tags="]) {
       self.selectedTags = [[[argument componentsSeparatedByString:@"="] lastObject] componentsSeparatedByString:@","];
+    }
+    else if ([argument hasPrefix:@"dsymPath="]) {
+      self.dsymPath = [[argument componentsSeparatedByString:@"="] lastObject];
     }
   }
 }

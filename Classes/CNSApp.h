@@ -66,6 +66,7 @@
 @property (unsafe_unretained) IBOutlet NSButton *downloadButton;
 @property (unsafe_unretained) IBOutlet NSButton *notifyButton;
 @property (unsafe_unretained) IBOutlet NSButton *uploadButton;
+@property (unsafe_unretained) IBOutlet NSButton *mandatoryButton;
 @property (unsafe_unretained) IBOutlet NSButton *restrictDownloadButton;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleIdentifierLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleShortVersionLabel;

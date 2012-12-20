@@ -68,6 +68,7 @@
 @synthesize fileTypeMenu;
 @synthesize notesTypeMatrix;
 @synthesize notifyButton;
+@synthesize mandatoryButton;
 @synthesize progressIndicator;
 @synthesize releaseNotesField;
 @synthesize releaseTypeMenu;
@@ -164,6 +165,8 @@
 
 - (IBAction)downloadButtonWasClicked:(id)sender {
   [self.notifyButton setEnabled:(self.downloadButton.state == NSOnState)];
+  [self.mandatoryButton setEnabled:(self.downloadButton.state == NSOnState)];
+    
   [self.restrictDownloadButton setEnabled:(self.downloadButton.state == NSOnState)];
 }
 
@@ -172,10 +175,12 @@
     case 0:
     case 1:
       [self.notifyButton setEnabled:YES];
+      [self.mandatoryButton setEnabled:YES];
       [self.restrictDownloadButton setEnabled:YES];
       break;
     case 2:
       [self.notifyButton setEnabled:NO];
+      [self.mandatoryButton setEnabled:NO];
       [self.restrictDownloadButton setEnabled:NO];
     default:
       break;
@@ -183,42 +188,45 @@
 }
 
 - (IBAction)releaseTypeMenuWasChanged:(id)sender {
-  if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
-    NSInteger selectedReleaseType = [self currentSelectedReleaseType];
-
-    if (selectedReleaseType == CNSHockeyAppReleaseTypeLive) {
-      [self.notifyButton setEnabled:NO];
-      [self.restrictDownloadButton setEnabled:NO];
-      [self.fileTypeMenu selectItemAtIndex:2];
-      self.downloadButton.title = @"Available in Store";
-      self.downloadButton.state = NSOffState;
+    if ([self.releaseTypeMenu indexOfSelectedItem] > 0) {
+        NSInteger selectedReleaseType = [self currentSelectedReleaseType];
+        
+        if (selectedReleaseType == CNSHockeyAppReleaseTypeLive) {
+            [self.notifyButton setEnabled:NO];
+            [self.mandatoryButton setEnabled:NO];
+            [self.restrictDownloadButton setEnabled:NO];
+            [self.fileTypeMenu selectItemAtIndex:2];
+            self.downloadButton.title = @"Available in Store";
+            self.downloadButton.state = NSOffState;
+        }
+        else {
+            [self.notifyButton setEnabled:YES];
+            [self.mandatoryButton setEnabled:YES];
+            [self.restrictDownloadButton setEnabled:YES];
+            [self.fileTypeMenu selectItemAtIndex:0];
+            self.downloadButton.title = @"Download Allowed";
+        }
+        
+        
+        NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
+        if ([appsForReleaseType count] > 0) {
+            [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
+            [self reloadTagsMenu];
+        }
+        else {
+            [self.restrictDownloadButton setEnabled:NO];
+            [self.appNameMenu selectItemAtIndex:-1];
+            self.appNameMenu.enabled = NO;
+        }
     }
     else {
-      [self.notifyButton setEnabled:YES];
-      [self.restrictDownloadButton setEnabled:YES];
-      [self.fileTypeMenu selectItemAtIndex:0];
-      self.downloadButton.title = @"Download Allowed";
+        self.appNameMenu.enabled = YES;
+        [self.restrictDownloadButton setEnabled:NO];
+        self.downloadButton.state = NSOffState;
+        [self.notifyButton setEnabled:YES];
+        [self.mandatoryButton setEnabled:YES];
+        self.downloadButton.title = @"Download Allowed / Available in Store";
     }
-
-
-    NSArray *appsForReleaseType = [self.appsByReleaseType objectForKey:[NSNumber numberWithInteger:selectedReleaseType]];
-    if ([appsForReleaseType count] > 0) {
-      [self.appNameMenu selectItemWithTitle:[[appsForReleaseType objectAtIndex:0] valueForKey:@"title"]];
-      [self reloadTagsMenu];
-    }
-    else {
-      [self.restrictDownloadButton setEnabled:NO];
-      [self.appNameMenu selectItemAtIndex:-1];
-      self.appNameMenu.enabled = NO;
-    }
-  }
-  else {
-    self.appNameMenu.enabled = YES;
-    [self.restrictDownloadButton setEnabled:NO];
-    self.downloadButton.state = NSOffState;
-    [self.notifyButton setEnabled:YES];
-    self.downloadButton.title = @"Download Allowed / Available in Store";
-  }
 }
 
 - (IBAction)appNameMenuWasChanged:(id)sender {
@@ -518,6 +526,13 @@
     [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notify\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((downloadOn && notifyOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
   }
+    
+    BOOL mandatoryOn = ([self.mandatoryButton state] == NSOnState);
+    if ([self.mandatoryButton isEnabled]) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"mandatory\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"%d\r\n", ((mandatoryOn) ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
   
   [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"notes\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -674,6 +689,9 @@
     else if ([argument isEqualToString:@"downloadOff"]) {
       self.downloadButton.state = NSOffState;
       [self.notifyButton setEnabled:NO];
+    }
+    else if ([argument isEqualToString:@"mandatoryOn"]) {
+        self.mandatoryButton.state = NSOnState;
     }
     else if ([argument isEqualToString:@"autoSubmit"]) {
       autoSubmit = YES;

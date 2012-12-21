@@ -27,12 +27,16 @@
 #import "CNSConstants.h"
 #import "NSString+CNSStringAdditions.h"
 
+static NSString *CNSReleaseTypeMismatchSheet = @"CNSReleaseTypeMismatchSheet";
+static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
+
 @interface CNSApp ()
 @property (nonatomic) NSMutableDictionary *appsByReleaseType;
 @property (nonatomic) NSMutableDictionary *tagsForAppID;
 @property (nonatomic) NSMutableDictionary *appVersionsForAppID;
 @property (nonatomic) NSArray *selectedTags;
-@property (nonatomic) NSString* publicIdentifier;
+@property (nonatomic) BOOL skipUniqueVersionCheck;
+@property (nonatomic) BOOL skipReleaseTypeCheck;
 
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename;
 - (NSString *)bundleIdentifier;
@@ -91,7 +95,10 @@
 @synthesize appStoreBuild;
 @synthesize infoLabel;
 @synthesize infoSheet;
-@synthesize skipWarning;
+@synthesize skipReleaseTypeCheck;
+@synthesize skipUniqueVersionCheck;
+@synthesize continueButton;
+@synthesize didClickContinueInInfoSheet;
 
 #pragma mark - Initialization Methods
 
@@ -244,39 +251,15 @@
 }
 
 - (IBAction)uploadButtonWasClicked:(id)sender {
-  if ([self readyForUpload]) {
-    self.errorLabel.hidden = YES;
-    self.statusLabel.hidden = NO;
-    self.statusLabel.stringValue = @"Initializing...";
-    self.progressIndicator.hidden = NO;
-    self.progressIndicator.doubleValue = 0;
-    [self.cancelButton setTitle:@"Cancel"];
-    [self.uploadButton setEnabled:NO];
+  self.errorLabel.hidden = YES;
+  self.statusLabel.hidden = NO;
+  self.statusLabel.stringValue = @"Doing preflight check...";
+  [self.cancelButton setTitle:@"Cancel"];
+  [self.uploadButton setEnabled:NO];
     
-    [self storeNotesType];
-    [self storeAfterUploadSelection];
-    
-    [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
-    
-    NSString *publicID = nil;
-    NSInteger releaseType = [self currentSelectedReleaseType];
-    if (([self.appNameMenu indexOfSelectedItem] > -1) && (releaseType != CNSHockeyAppReleaseTypeAuto)) {
-      NSDictionary *appDictionary = [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
-      publicID = [appDictionary valueForKey:@"public_identifier"];
-    }
-    
-    if (self.bundleIdentifier) {
-      if (publicID) {
-        [self checkBundleVersion:self.bundleVersion forAppID:publicID];
-      }
-      else {
-        [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:nil];
-      }
-    }
-    else {
-      self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
-    }
-  }
+  [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
+  
+  [self preUploadCheck];
 }
 
 - (IBAction)restrictDownloadsWasClicked:(id)sender {
@@ -288,27 +271,97 @@
 }
 
 - (IBAction)cancelInfoSheetButtonWasClicked:(id)sender {
+  self.didClickContinueInInfoSheet = NO;
   [self hideInfoSheet];
 }
 
 - (IBAction)continueInfoSheetButtonWasClicked:(id)sender {
-  self.skipWarning = YES;
+  self.didClickContinueInInfoSheet = YES;
   [self hideInfoSheet];
-  [self uploadButtonWasClicked:nil];
 }
 
 #pragma mark - Private Helper Methods
 
-- (BOOL)readyForUpload {
-  if (!(self.skipWarning)) {
+- (void)showExistingVersionInfoSheet {
+  [NSApp endSheet:self.uploadSheet];
+  self.infoLabel.stringValue = [NSString stringWithFormat:@"The BundleVersion %@ has already been taken.", self.bundleVersion];
+  [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSExistingVersionSheet];
+}
+
+- (void)showReleaseTypeMismatchInfoSheet {
+  [NSApp endSheet:self.uploadSheet];
+  self.infoLabel.stringValue = [NSString stringWithFormat:@"The build is signed with a store certificate but you set the release type to %@. Are you sure?", ([self currentSelectedReleaseType] == CNSHockeyAppReleaseTypeAlpha ? @"alpha" : @"beta")];
+  [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSReleaseTypeMismatchSheet];
+}
+
+- (void)preUploadCheck {
+  if ([self doesReleaseTypeMatch]) {
+    if (self.bundleIdentifier) {
+      self.publicIdentifier = [self publicIdentifierForSelectedApp];
+      if (self.publicIdentifier) {
+        [self checkBundleVersion:self.bundleVersion forAppID:self.publicIdentifier];
+      }
+      else {
+        [self startUploadWithPublicID:nil];
+      }
+    }
+  }
+  else {
+    [self showReleaseTypeMismatchInfoSheet];
+  }
+}
+
+- (void)startUploadWithPublicID:(NSString *)publicID {
+  self.skipReleaseTypeCheck = NO;
+  self.skipUniqueVersionCheck = NO;
+  
+  self.errorLabel.hidden = YES;
+  self.statusLabel.hidden = NO;
+  self.statusLabel.stringValue = @"Initializing...";
+  [self.cancelButton setTitle:@"Cancel"];
+  [self.uploadButton setEnabled:NO];
+
+  self.progressIndicator.hidden = NO;
+  self.progressIndicator.doubleValue = 0;
+  
+  if (!self.uploadSheet.isKeyWindow) {
+    [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
+  }
+
+  [self storeNotesType];
+  [self storeAfterUploadSelection];
+  
+  
+  if (self.bundleIdentifier) {
+    [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
+  }
+  else {
+    self.statusLabel.stringValue = @"Couldn't read bundle identifier!";
+  }
+}
+
+- (NSString *)publicIdentifierForSelectedApp {
+  NSString *publicID = nil;
+  NSInteger releaseType = [self currentSelectedReleaseType];
+  if (([self.appNameMenu indexOfSelectedItem] > -1) && (releaseType != CNSHockeyAppReleaseTypeAuto)) {
+    NSDictionary *appDictionary = [self appForTitle:[self.appNameMenu selectedItem].title releaseType:[self currentSelectedReleaseType]];
+    publicID = [appDictionary valueForKey:@"public_identifier"];
+  }
+  return publicID;
+}
+
+- (BOOL)doesReleaseTypeMatch {
+  if (!(self.skipReleaseTypeCheck)) {
     CNSHockeyAppReleaseType releaseType = [self currentSelectedReleaseType];
     if ((self.appStoreBuild == CNSHockeyBuildReleaseTypeStore) && ((releaseType == CNSHockeyAppReleaseTypeAlpha) || (releaseType == CNSHockeyAppReleaseTypeBeta))) {
-      self.infoLabel.stringValue = [NSString stringWithFormat:@"The build is signed with a store certificate but you set the release type to %@. Are you sure?", (releaseType == CNSHockeyAppReleaseTypeAlpha ? @"alpha" : @"beta")];
-      [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
       return NO;
     }
   }
   return YES;
+}
+
+- (BOOL)isValidBuild {
+  return [self doesReleaseTypeMatch];
 }
 
 - (void)reloadTagsMenu {
@@ -891,18 +944,11 @@
 - (void)parseCheckBundleVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (aConnectionHelper.statusCode == 200) {
-      // BundleVersion exists
-      [self.errorLabel setHidden:NO];
-      self.errorLabel.stringValue = [NSString stringWithFormat:@"The BundleVersion %@ has already been taken", self.bundleVersion];
-      [self.statusLabel setHidden:YES];
-
-      self.progressIndicator.doubleValue = 0;
-      [self.progressIndicator setHidden:YES];
-      [self.cancelButton setTitle:@"Done"];
+      [self showExistingVersionInfoSheet];
     }
     else if (aConnectionHelper.statusCode == 404) {
       // Upload
-      [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:aConnectionHelper.identifier];
+      [self startUploadWithPublicID:aConnectionHelper.identifier];
     }
     else {
       [self connectionHelperDidFail:aConnectionHelper];
@@ -923,6 +969,20 @@
 
 - (void)didEndInfoSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
   [self hideInfoSheet];
+  if (self.didClickContinueInInfoSheet) {
+    NSString *sheetType = (__bridge_transfer NSString *)contextInfo;
+    if ([sheetType isEqualToString:CNSExistingVersionSheet]) {
+      self.skipUniqueVersionCheck = YES;
+      [self startUploadWithPublicID:self.publicIdentifier];
+    }
+    else if ([sheetType isEqualToString:CNSReleaseTypeMismatchSheet]) {
+      self.skipReleaseTypeCheck = YES;
+      [self preUploadCheck];
+    }
+  }
+  else {
+    [self.uploadButton setEnabled:YES];
+  }
 }
 
 #pragma mark - M3TokenController Delegate Mehtods
@@ -958,7 +1018,7 @@
   self.tagsForAppID = nil;
   self.window = nil;
   self.tokenController = nil;
-  
+  self.continueButton = nil;
 }
 
 @end

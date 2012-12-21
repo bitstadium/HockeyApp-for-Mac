@@ -28,6 +28,7 @@
 
 @property (nonatomic) BOOL refreshAPK;
 @property (nonatomic) BOOL aaptPathInvalid;
+@property (nonatomic) BOOL skipWarning;
 
 @end
 
@@ -118,11 +119,24 @@
 
 - (BOOL)readyForUpload {
   if (!(self.skipWarning) && (self.aaptPathInvalid)) {
-    self.infoLabel.stringValue = @"Couldn't gather infos from apk file. Please check that the path to aapt tool under Preferences -> Advanced is correct.";
-    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
     return NO;
   }
   return YES;
+}
+
+- (void)preUploadCheck {
+  if ([self readyForUpload]) {
+    if (self.bundleIdentifier) {
+      self.publicIdentifier = [self publicIdentifierForSelectedApp];
+      self.skipWarning = NO;
+      [self startUploadWithPublicID:self.publicIdentifier];
+    }
+  }
+  else {
+    [NSApp endSheet:self.uploadSheet];
+    self.infoLabel.stringValue = @"Couldn't gather infos from apk file. Please check that the path to aapt tool under Preferences -> Advanced is correct.";
+    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
+  }
 }
 
 - (NSString *)bundleIdentifier {
@@ -142,6 +156,7 @@
 #pragma mark - NSControl Action Methods
 
 - (IBAction)preferencesInfoSheetButtonWasClicked:(id)sender {
+  self.didClickContinueInInfoSheet = NO;
   [self hideInfoSheet];
   self.refreshAPK = YES;
   [((CNSApplicationDelegate *)[NSApplication sharedApplication].delegate) showPreferencesView:nil];
@@ -150,6 +165,19 @@
 - (IBAction)continueInfoSheetButtonWasClicked:(id)sender {
   self.bundleIdentifier = @""; // We won't force aapt
   [super continueInfoSheetButtonWasClicked:sender];
+}
+
+#pragma mark - NSApp Delegate Methods
+
+- (void)didEndInfoSheet:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+  [self hideInfoSheet];
+  if (self.didClickContinueInInfoSheet) {
+    self.skipWarning = YES;
+    [self preUploadCheck];
+  }
+  else {
+    [self.uploadButton setEnabled:YES];
+  }
 }
 
 @end

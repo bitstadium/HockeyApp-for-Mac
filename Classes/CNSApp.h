@@ -37,6 +37,7 @@
   NSButton *__unsafe_unretained notifyButton;
   NSButton *__unsafe_unretained uploadButton;
   NSButton *__unsafe_unretained restrictDownloadButton;
+  NSButton *__unsafe_unretained continueButton;
   NSString *bundleShortVersion;
   NSString *bundleVersion;
   NSMatrix *__unsafe_unretained notesTypeMatrix;
@@ -68,6 +69,7 @@
 @property (unsafe_unretained) IBOutlet NSButton *uploadButton;
 @property (unsafe_unretained) IBOutlet NSButton *mandatoryButton;
 @property (unsafe_unretained) IBOutlet NSButton *restrictDownloadButton;
+@property (unsafe_unretained) IBOutlet NSButton *continueButton;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleIdentifierLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleShortVersionLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *bundleVersionLabel;
@@ -94,8 +96,9 @@
 @property (nonatomic, copy) NSString *bundleVersion;
 @property (nonatomic, copy) NSString* apiToken;
 @property (nonatomic, copy) NSString *dsymPath;
+@property (nonatomic) NSString* publicIdentifier;
 @property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
-@property (nonatomic) BOOL skipWarning;
+@property (nonatomic) BOOL didClickContinueInInfoSheet;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)saveTagSheetButtonWasClicked:(id)sender;
@@ -111,9 +114,11 @@
 - (NSMutableData *)createPostBodyWithURL:(NSURL *)ipaURL boundary:(NSString *)boundary platform:(NSString *)platform;
 
 - (void)postMultiPartRequestWithBundleIdentifier:(NSString *)bundleIdentifier publicID:(NSString *)publicID;
+- (void)checkBundleVersion:(NSString *)aBundleVersion forAppID:(NSString *)appID;
 
 - (void)setupViews;
-- (BOOL)readyForUpload;
 - (void)hideInfoSheet;
+- (NSString *)publicIdentifierForSelectedApp;
+- (void)startUploadWithPublicID:(NSString *)publicID;
 
 @end

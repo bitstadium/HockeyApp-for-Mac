@@ -34,7 +34,10 @@ You can specify the following command line options:
 
 * autoSubmit - the .ipa or .xcarchive will be automatically uploaded after it has been opened; you will see the progress bar, but not have the chance to specify release notes; after the upload is finished HockeyApp will be closed.
 * downloadOff - the checkbox "Download" will be set to off after the file was opened.
+* dsymPath - absolute path to dsym file
 * identifier - upload to app with this public identifier
+* ignoreExistingVersion - skip duplicate version check
+* mandatoryOn - the checkbox "Set version as Mandatory" will be set to on
 * notes - absolute path to release notes file
 * notifyOn - the checkbox "Notify" will be set to on after the file was opened.
 * onlyIPA - only for .xcarchive files; uploads only the .ipa file
@@ -61,6 +64,13 @@ HockeyMac will automatically upload MyApp.ipa and MyApp.dSYM.zip from the archiv
 If you have a problem, a question or a suggestion, please let us know via email to support@hockeyapp.net or our [support forums](http://support.hockeyapp.net). We appreciate any feedback!
 
 ## RELEASE NOTES
+
+### Version 1.2.1
+
+* Added mandatory flag support (Thanks @joshbuhler!)
+* Added dsymPath command line option (Thanks @shubhammittal!)
+* Added support for uploading build which has the same version as an existing build on HockeyApp (Supported by HockeyApp since the 2.0 launch)
+* Fixed an issue when helpful error details returned by an API call weren't shown
 
 ### Version 1.2
 

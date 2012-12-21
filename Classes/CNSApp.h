@@ -98,7 +98,8 @@
 @property (nonatomic, copy) NSString *dsymPath;
 @property (nonatomic) NSString* publicIdentifier;
 @property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
-@property (nonatomic) BOOL didClickContinueInInfoSheet;
+@property (nonatomic, assign) BOOL didClickContinueInInfoSheet;
+@property (nonatomic, assign) BOOL ignoreExistingVersion;
 
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)saveTagSheetButtonWasClicked:(id)sender;
@@ -119,6 +120,6 @@
 - (void)setupViews;
 - (void)hideInfoSheet;
 - (NSString *)publicIdentifierForSelectedApp;
-- (void)startUploadWithPublicID:(NSString *)publicID;
+- (void)startUploadWithPublicIdentifier:(NSString *)publicID;
 
 @end

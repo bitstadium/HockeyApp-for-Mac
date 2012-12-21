@@ -129,7 +129,7 @@
     if (self.bundleIdentifier) {
       self.publicIdentifier = [self publicIdentifierForSelectedApp];
       self.skipWarning = NO;
-      [self startUploadWithPublicID:self.publicIdentifier];
+      [self startUploadWithPublicIdentifier:self.publicIdentifier];
     }
   }
   else {

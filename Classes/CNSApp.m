@@ -99,6 +99,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 @synthesize skipUniqueVersionCheck;
 @synthesize continueButton;
 @synthesize didClickContinueInInfoSheet;
+@synthesize ignoreExistingVersion;
 
 #pragma mark - Initialization Methods
 
@@ -299,10 +300,15 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     if (self.bundleIdentifier) {
       self.publicIdentifier = [self publicIdentifierForSelectedApp];
       if (self.publicIdentifier) {
-        [self checkBundleVersion:self.bundleVersion forAppID:self.publicIdentifier];
+        if (self.ignoreExistingVersion) {
+          [self startUploadWithPublicIdentifier:self.publicIdentifier];
+        }
+        else {
+          [self checkBundleVersion:self.bundleVersion forAppID:self.publicIdentifier];
+        }
       }
       else {
-        [self startUploadWithPublicID:nil];
+        [self startUploadWithPublicIdentifier:nil];
       }
     }
   }
@@ -311,7 +317,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   }
 }
 
-- (void)startUploadWithPublicID:(NSString *)publicID {
+- (void)startUploadWithPublicIdentifier:(NSString *)publicID {
   self.skipReleaseTypeCheck = NO;
   self.skipUniqueVersionCheck = NO;
   
@@ -782,6 +788,9 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     else if ([argument hasPrefix:@"dsymPath="]) {
       self.dsymPath = [[argument componentsSeparatedByString:@"="] lastObject];
     }
+    else if ([argument hasPrefix:@"ignoreExistingVersion"]) {
+      self.ignoreExistingVersion = YES;
+    }
   }
 }
 
@@ -948,7 +957,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     }
     else if (aConnectionHelper.statusCode == 404) {
       // Upload
-      [self startUploadWithPublicID:aConnectionHelper.identifier];
+      [self startUploadWithPublicIdentifier:aConnectionHelper.identifier];
     }
     else {
       [self connectionHelperDidFail:aConnectionHelper];
@@ -973,7 +982,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     NSString *sheetType = (__bridge_transfer NSString *)contextInfo;
     if ([sheetType isEqualToString:CNSExistingVersionSheet]) {
       self.skipUniqueVersionCheck = YES;
-      [self startUploadWithPublicID:self.publicIdentifier];
+      [self startUploadWithPublicIdentifier:self.publicIdentifier];
     }
     else if ([sheetType isEqualToString:CNSReleaseTypeMismatchSheet]) {
       self.skipReleaseTypeCheck = YES;

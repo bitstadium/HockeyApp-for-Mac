@@ -119,7 +119,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
   [self setupViews];
   
-  if (autoSubmit && !(self.publicIdentifier)) { // Can't upload right now if publicIdentifier is set, need to fetch apps first
+  if (autoSubmit && self.publicIdentifier) { // Can't upload right now if publicIdentifier is not set, need to fetch apps first
     [self uploadButtonWasClicked:nil];
   }
 }
@@ -298,7 +298,9 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 - (void)preUploadCheck {
   if ([self doesReleaseTypeMatch]) {
     if (self.bundleIdentifier) {
-      self.publicIdentifier = [self publicIdentifierForSelectedApp];
+      if (self.publicIdentifier == nil) {
+        self.publicIdentifier = [self publicIdentifierForSelectedApp];
+      }
       if (self.publicIdentifier) {
         if (self.ignoreExistingVersion) {
           [self startUploadWithPublicIdentifier:self.publicIdentifier];

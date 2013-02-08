@@ -30,6 +30,7 @@
 - (BOOL)isMacApp:(NSDictionary *)info;
 
 - (NSData *)zipFilesAtPath:(NSString *)sourcePath source:(NSString *)source toFilename:(NSString *)filename;
+- (NSData *)zipFilesAtPath:(NSString *)sourcePath sources:(NSArray *)sources toFilename:(NSString *)filename;
 
 - (NSString *)createIPAFromFileWrapper:(NSFileWrapper *)fileWrapper;
 
@@ -121,12 +122,19 @@
 }
 
 - (NSData *)zipFilesAtPath:(NSString *)sourcePath source:(NSString *)source toFilename:(NSString *)filename {
+    return [self zipFilesAtPath:sourcePath sources:@[source] toFilename:filename];
+}
+
+- (NSData *)zipFilesAtPath:(NSString *)sourcePath sources:(NSArray *)sources toFilename:(NSString *)filename {
   NSTask *zip = [[NSTask alloc] init];
   NSPipe *aPipe = [NSPipe pipe];
   [zip setStandardOutput:aPipe];
   [zip setCurrentDirectoryPath:sourcePath];
   [zip setLaunchPath:@"/usr/bin/zip"];
-  [zip setArguments:[NSArray arrayWithObjects:@"-r", @"-y", filename, source, nil]];
+    
+  NSArray * arguments = @[@"-r", @"-y", filename];
+  arguments = [arguments arrayByAddingObjectsFromArray:sources];
+  [zip setArguments:arguments];
   [zip launch];
   
   NSMutableData *dataOut = [NSMutableData data];
@@ -332,44 +340,45 @@
   return appKey;
 }
 
-- (void)copyAndZipDSYMForKey:(NSString *)dsymKey {
+- (void)copyAndZipDSYMForKeys:(NSArray *)dSYMKeys {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   
   NSString *tempDirectoryPath = [self tempDirectoryPath];
-  NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
 
   NSString *basePath = [[self fileURL] path];
-  NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", dsymKey]];
-  
-  NSError *error = nil;
-  [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];
-  if (error) {
-    return;
+
+  for (NSString * dsymKey in dSYMKeys) {
+      NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", dsymKey]];
+      NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
+      
+      NSError *error = nil;
+      [fileManager copyItemAtPath:sourcePath toPath:targetPath error:&error];
+      if (error) {
+          return;
+      }
   }
   
-  NSString *filename = [[dsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+  NSString *filename = [[[self bundleIdentifier] stringByAppendingPathExtension:@"dSYM.zip"] stringByReplacingOccurrencesOfString:@" " withString:@""];
   self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];
-  self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath source:dsymKey toFilename:self.dsymPath] != nil);
+  self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath sources:dSYMKeys toFilename:self.dsymPath] != nil);
 }
 
 - (void)createDSYMFromFileWrapper:(NSFileWrapper *)fileWrapper withAppKey:(NSString *)appKey {
   NSDictionary *contents = [fileWrapper fileWrappers];
   if ([contents valueForKey:@"dSYMs"]) {
-    NSString *dsymKey = nil;
     NSFileWrapper *dsymWrapper = [contents valueForKey:@"dSYMs"];
     NSDictionary *dsymContents = [dsymWrapper fileWrappers];
+      
+    NSMutableArray * dSYMKeys = [NSMutableArray arrayWithCapacity:10];
     
     for (NSString *key in dsymContents) {
-      // We either search for the appKey + ".dSYM" or for the first entry
-      if (((!appKey) && ([key hasSuffix:@".dSYM"])) || ((appKey) && ([key hasSuffix:[NSString stringWithFormat:@"%@.dSYM", appKey]]))) {
-        dsymKey = key;
-        break;
-      }
+        if ([key hasSuffix:@".dSYM"]) {
+            [dSYMKeys addObject:key];
+        }
     }
-    
-    if (dsymKey) {
-      [self copyAndZipDSYMForKey:dsymKey];
-    }
+        
+    if ([dSYMKeys count] > 0)
+        [self copyAndZipDSYMForKeys:dSYMKeys];
   }
 }
 

@@ -505,7 +505,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   NSDictionary *info = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
   
   self.bundleIdentifier = [info valueForKey:@"CFBundleIdentifier"];
-  self.bundleVersion = [info valueForKey:@"CFBundleVersion"];
+  self.bundleVersion = [NSString stringWithFormat:@"%@",[info valueForKey:@"CFBundleVersion"]];
   self.bundleShortVersion = [info valueForKey:@"CFBundleShortVersionString"];
   
   self.appStoreBuild = [self hasProvisionedDevicesInIPAAtPath:targetFilename];

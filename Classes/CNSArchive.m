@@ -340,16 +340,14 @@
   return appKey;
 }
 
-- (void)copyAndZipDSYMForKey:(NSString *)mainDsymKey additionalDSYMKeys:(NSArray *)additionalDSYMKeys {
+- (void)copyAndZipDSYMForKeys:(NSArray *)dSYMKeys {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   
   NSString *tempDirectoryPath = [self tempDirectoryPath];
 
   NSString *basePath = [[self fileURL] path];
 
-  NSArray * allKeys = additionalDSYMKeys == nil ? @[mainDsymKey] : [additionalDSYMKeys arrayByAddingObject:mainDsymKey];
-
-  for (NSString * dsymKey in allKeys) {
+  for (NSString * dsymKey in dSYMKeys) {
       NSString *sourcePath = [basePath stringByAppendingPathComponent:[NSString stringWithFormat:@"dSYMs/%@", dsymKey]];
       NSString *targetPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, dsymKey];
       
@@ -360,9 +358,9 @@
       }
   }
   
-  NSString *filename = [[mainDsymKey stringByReplacingOccurrencesOfString:@".app.dSYM" withString:@".dSYM.zip"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+  NSString *filename = [[[self bundleIdentifier] stringByAppendingPathExtension:@"dSYM.zip"] stringByReplacingOccurrencesOfString:@" " withString:@""];
   self.dsymPath = [NSString stringWithFormat:@"%@/%@", tempDirectoryPath, filename];
-  self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath sources:allKeys toFilename:self.dsymPath] != nil);
+  self.dsymCreated = ([self zipFilesAtPath:tempDirectoryPath sources:dSYMKeys toFilename:self.dsymPath] != nil);
 }
 
 - (void)createDSYMFromFileWrapper:(NSFileWrapper *)fileWrapper withAppKey:(NSString *)appKey {
@@ -371,29 +369,16 @@
     NSFileWrapper *dsymWrapper = [contents valueForKey:@"dSYMs"];
     NSDictionary *dsymContents = [dsymWrapper fileWrappers];
       
-    NSString *dsymKey = nil;
-    NSMutableArray * additionalDSYMKeys = [NSMutableArray arrayWithCapacity:10];
+    NSMutableArray * dSYMKeys = [NSMutableArray arrayWithCapacity:10];
     
     for (NSString *key in dsymContents) {
-      // We search for the appKey + ".dSYM" to choose the main/naming dSYM
         if ([key hasSuffix:@".dSYM"]) {
-            if (appKey != nil && [key hasSuffix:[NSString stringWithFormat:@"%@.dSYM", appKey]]) {
-                dsymKey = key;
-            } else {
-                [additionalDSYMKeys addObject:key];
-            }
+            [dSYMKeys addObject:key];
         }
-      }
-    
-    if (dsymKey == nil && [additionalDSYMKeys count] > 0)
-    {
-        dsymKey = additionalDSYMKeys[0];
-        [additionalDSYMKeys removeObjectAtIndex:0];
     }
-    
-    if (dsymKey) {
-      [self copyAndZipDSYMForKey:dsymKey additionalDSYMKeys:additionalDSYMKeys];
-    }
+        
+    if ([dSYMKeys count] > 0)
+        [self copyAndZipDSYMForKeys:dSYMKeys];
   }
 }
 

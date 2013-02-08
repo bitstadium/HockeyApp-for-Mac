@@ -65,6 +65,12 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ## RELEASE NOTES
 
+### Version 1.2.2
+
+* Added support for multiple DSYMs in xcarchive (Thanks @aufflick)
+* Fixed an issue whenm using autosubmit (Thanks @eelco)
+* Fixed a crash when CFBundleVersion isn't of type NSString in Info.plist
+
 ### Version 1.2.1
 
 * Added mandatory flag support (Thanks @joshbuhler!)

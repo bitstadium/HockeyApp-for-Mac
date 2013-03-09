@@ -641,7 +641,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   NSString *baseURL = [[NSUserDefaults standardUserDefaults] stringForKey:CNSUserDefaultsHost];
   NSString *uploadURL = nil;
   if (publicID) {
-    uploadURL = [NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions", baseURL, publicID];
+    uploadURL = [NSString stringWithFormat:@"%@/api/2/apps/%@/app_versions/upload", baseURL, publicID];
   }
   else {
     uploadURL = [NSString stringWithFormat:@"%@/api/2/apps/upload", baseURL];

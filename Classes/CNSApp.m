@@ -66,7 +66,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 @synthesize bundleVersion;
 @synthesize bundleVersionLabel;
 @synthesize cancelButton;
-@synthesize connectionHelper;
+@synthesize connectionHelpers;
 @synthesize downloadButton;
 @synthesize errorLabel;
 @synthesize fileTypeMenu;
@@ -105,6 +105,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ((self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError])) {
+    self.connectionHelpers = [NSMutableArray arrayWithCapacity:1];
     [self readProcessArguments];
   }
   return self;
@@ -127,6 +128,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 #pragma mark - NSWindowDelegate Methods
 
 - (BOOL)windowShouldClose:(id)sender {
+  [self cancelConnections];
   [self close];
   return YES;
 }
@@ -154,7 +156,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (IBAction)cancelButtonWasClicked:(id)sender {
   if (sender == self.cancelButton) {
-    [self.connectionHelper cancelConnection];
+    [self cancelConnections];
     [self.uploadButton setEnabled:YES];
     [self.uploadSheet orderOut:self];
     [NSApp endSheet:self.uploadSheet];
@@ -255,6 +257,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   self.errorLabel.hidden = YES;
   self.statusLabel.hidden = NO;
   self.statusLabel.stringValue = @"Doing preflight check...";
+  self.progressIndicator.doubleValue = 0;
   [self.cancelButton setTitle:@"Cancel"];
   [self.uploadButton setEnabled:NO];
     
@@ -282,6 +285,13 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 }
 
 #pragma mark - Private Helper Methods
+
+- (void)cancelConnections {
+  for (CNSConnectionHelper *connectionHelper in self.connectionHelpers) {
+    [connectionHelper cancelConnection];
+  }
+  [self.connectionHelpers removeAllObjects];
+}
 
 - (void)showExistingVersionInfoSheet {
   [NSApp endSheet:self.uploadSheet];
@@ -666,7 +676,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   }
   [request setHTTPBody:body];
   
-  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:kHockeyUploadConnectionIdentifier token:self.apiToken];
+  [self.connectionHelpers addObject:[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:kHockeyUploadConnectionIdentifier token:self.apiToken]];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
   [self.statusLabel setHidden:NO];
@@ -716,7 +726,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   [request setHTTPMethod:@"GET"];
   [request setTimeoutInterval:300];
 
-  self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken];
+  [self.connectionHelpers addObject:[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppListResponse:) identifier:nil token:self.apiToken]];
 }
 
 - (void)fetchTagsForAppID:(NSString *)appID {
@@ -726,7 +736,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     [request setHTTPMethod:@"GET"];
     [request setTimeoutInterval:300];
 
-    self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppTagsResponse:) identifier:appID token:self.apiToken];
+    [self.connectionHelpers addObject:[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseAppTagsResponse:) identifier:appID token:self.apiToken]];
   }
 }
 
@@ -737,7 +747,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     [request setHTTPMethod:@"GET"];
     [request setTimeoutInterval:300];
 
-    self.connectionHelper = [[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseCheckBundleVersionResponse:) identifier:appID token:self.apiToken];
+    [self.connectionHelpers addObject:[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseCheckBundleVersionResponse:) identifier:appID token:self.apiToken]];
   }
 }
 
@@ -837,6 +847,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
       [self.cancelButton setTitle:@"Done"];
     }
   }
+  
+  [self.connectionHelpers removeObject:aConnectionHelper];
 }
 
 - (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didProgress:(NSNumber*)progress {
@@ -895,6 +907,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
       }
     });
   }
+  
+  [self.connectionHelpers removeObject:aConnectionHelper];
 }
 
 - (void)parseVersionResponse:(CNSConnectionHelper *)aConnectionHelper {
@@ -933,6 +947,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     }
   
   }
+  
+  [self.connectionHelpers removeObject:aConnectionHelper];
 }
 
 - (void)parseAppTagsResponse:(CNSConnectionHelper *)aConnectionHelper {
@@ -965,6 +981,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
       [self connectionHelperDidFail:aConnectionHelper];
     }
   });
+  
+  [self.connectionHelpers removeObject:aConnectionHelper];
 }
 
 #pragma mark - NSApp Delegate Methods
@@ -1005,8 +1023,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 #pragma mark - Memory Management Mehtods
 
 - (void)dealloc {
-  [self.connectionHelper cancelConnection];
-  self.connectionHelper = nil;
+  [self cancelConnections];
+  self.connectionHelpers = nil;
   self.afterUploadMenu = nil;
   self.bundleIdentifierLabel = nil;
   self.bundleVersionLabel = nil;

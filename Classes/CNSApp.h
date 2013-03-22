@@ -29,7 +29,7 @@
 @private
   BOOL ignoreNotesFile;
   BOOL autoSubmit;
-  CNSConnectionHelper *connectionHelper;
+  NSMutableArray *connectionHelpers;
   NSButton *__unsafe_unretained cancelButton;
   NSButton *__unsafe_unretained cancelTagSheetButton;
   NSButton *__unsafe_unretained saveTagSheetButton;
@@ -89,14 +89,14 @@
 @property (unsafe_unretained) IBOutlet NSWindow *infoSheet;
 @property (unsafe_unretained) IBOutlet NSTextField *infoLabel;
 
-@property (strong) CNSConnectionHelper *connectionHelper;
+@property (strong) NSMutableArray *connectionHelpers;
 
 @property (nonatomic, copy) NSString *bundleIdentifier;
 @property (nonatomic, copy) NSString *bundleShortVersion;
 @property (nonatomic, copy) NSString *bundleVersion;
-@property (nonatomic, copy) NSString* apiToken;
+@property (nonatomic, copy) NSString *apiToken;
 @property (nonatomic, copy) NSString *dsymPath;
-@property (nonatomic) NSString* publicIdentifier;
+@property (nonatomic) NSString *publicIdentifier;
 @property (nonatomic, assign) CNSHockeyBuildReleaseType appStoreBuild;
 @property (nonatomic, assign) BOOL didClickContinueInInfoSheet;
 @property (nonatomic, assign) BOOL ignoreExistingVersion;

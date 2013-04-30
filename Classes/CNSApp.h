@@ -75,6 +75,7 @@
 @property (unsafe_unretained) IBOutlet NSTextField *bundleVersionLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *errorLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *statusLabel;
+@property (unsafe_unretained) IBOutlet NSTextField *remainingTimeLabel;
 @property (unsafe_unretained) IBOutlet NSTextView *releaseNotesField;
 @property (unsafe_unretained) IBOutlet NSPopUpButton *afterUploadMenu;
 @property (unsafe_unretained) IBOutlet NSPopUpButton *fileTypeMenu;

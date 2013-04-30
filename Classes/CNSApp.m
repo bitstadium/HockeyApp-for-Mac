@@ -255,6 +255,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (IBAction)uploadButtonWasClicked:(id)sender {
   self.errorLabel.hidden = YES;
+  self.remainingTimeLabel.stringValue = @"";
   self.statusLabel.hidden = NO;
   self.statusLabel.stringValue = @"Doing preflight check...";
   self.progressIndicator.doubleValue = 0;
@@ -334,6 +335,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   self.skipUniqueVersionCheck = NO;
   
   self.errorLabel.hidden = YES;
+  self.remainingTimeLabel.stringValue = @"";
   self.statusLabel.hidden = NO;
   self.statusLabel.stringValue = @"Initializing...";
   [self.cancelButton setTitle:@"Cancel"];
@@ -675,7 +677,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
   }
   [request setHTTPBody:body];
-  
+
   [self.connectionHelpers addObject:[[CNSConnectionHelper alloc] initWithRequest:request delegate:self selector:@selector(parseVersionResponse:) identifier:kHockeyUploadConnectionIdentifier token:self.apiToken]];
   [self.progressIndicator setHidden:NO];
   [self.errorLabel setHidden:YES];
@@ -840,6 +842,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
       [self.errorLabel setHidden:NO];
       self.errorLabel.stringValue = errorMessage;
 
+      self.remainingTimeLabel.stringValue = @"";
       [self.statusLabel setHidden:YES];
 
       self.progressIndicator.doubleValue = 0;
@@ -851,10 +854,11 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   [self.connectionHelpers removeObject:aConnectionHelper];
 }
 
-- (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didProgress:(NSNumber*)progress {
+- (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didProgress:(NSNumber *)progress {
   if ([aConnectionHelper.identifier isEqualToString:kHockeyUploadConnectionIdentifier]) {
     double currentProgress = self.progressIndicator.doubleValue;
     if ([progress floatValue] == 1.0) {
+      self.remainingTimeLabel.stringValue = @"";
       self.statusLabel.stringValue = @"Processing...";
       self.progressIndicator.doubleValue = 100.0;
     }
@@ -864,6 +868,23 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
     }
   }
 }
+
+- (void)connectionHelper:(CNSConnectionHelper *)aConnectionHelper didEstimateRemainingTime:(NSNumber *)remainingTime {
+  if ([aConnectionHelper.identifier isEqualToString:kHockeyUploadConnectionIdentifier]) {
+    long timestamp = [remainingTime longValue];
+    long hours = timestamp / 60 / 60;
+    long minutes = timestamp / 60;
+    long seconds = timestamp - hours * 60 * 60 - minutes * 60;
+    
+    if ((hours < 24) && (timestamp > 0)) {
+      self.remainingTimeLabel.stringValue = [NSString stringWithFormat:@"Finished in %02ld:%02ld:%02ld", hours, minutes, seconds];
+    }
+    else {
+      self.remainingTimeLabel.stringValue = @"";
+    }
+  }
+}
+
 
 - (void)parseAppListResponse:(CNSConnectionHelper *)aConnectionHelper {
   if (aConnectionHelper.statusCode == 200) {

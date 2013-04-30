@@ -20,6 +20,10 @@
 
 @interface CNSConnectionHelper : NSObject {
   id delegate;
+  NSInteger remaingBytesToUpload;
+  NSInteger bytesUploaded;
+  double lastAverage;
+  NSDate *startDate;
   NSInteger statusCode;
   NSMutableData *data;
   NSString *identifier;

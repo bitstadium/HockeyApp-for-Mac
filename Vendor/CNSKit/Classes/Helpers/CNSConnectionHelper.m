@@ -52,7 +52,11 @@
     }
     [request addValue:token	forHTTPHeaderField:@"X-HockeyAppToken"];
     
-    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];  
+    lastAverage = 0;
+    startDate = [[NSDate date] retain];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    [self performSelector:@selector(estimateRemaingTime) withObject:nil afterDelay:1.0];
   }
   return self;
 }
@@ -66,6 +70,11 @@
 #pragma mark Memory Management Methods
 
 - (void)releaseConnection {
+  [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(estimateRemaingTime) object:nil];
+
+  [startDate release];
+  startDate = nil;
+  
   [delegate release];
   delegate = nil;
   
@@ -117,6 +126,9 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+  bytesUploaded = totalBytesWritten;
+  remaingBytesToUpload = totalBytesExpectedToWrite - totalBytesWritten;
+  
   if ([delegate respondsToSelector:@selector(connectionHelper:didProgress:)]) {
     [delegate performSelector:@selector(connectionHelper:didProgress:) withObject:self withObject:[NSNumber numberWithFloat:(float)totalBytesWritten / (float)totalBytesExpectedToWrite]];
   }
@@ -136,6 +148,22 @@
   }
   
   [self releaseConnection];
+}
+
+#pragma mark -
+#pragma mark Time Helper Methods
+
+- (void)estimateRemaingTime {
+  double average = [startDate timeIntervalSinceNow] * -1.f / bytesUploaded;
+  lastAverage = (lastAverage == 0 ? average : lastAverage);
+  lastAverage = 0.9 * lastAverage + 0.1 * average;
+  long remainingTime = remaingBytesToUpload * lastAverage;
+
+  if ([delegate respondsToSelector:@selector(connectionHelper:didEstimateRemainingTime:)]) {
+    [delegate performSelector:@selector(connectionHelper:didEstimateRemainingTime:) withObject:self withObject:[NSNumber numberWithLong:remainingTime]];
+  }
+  
+  [self performSelector:@selector(estimateRemaingTime) withObject:nil afterDelay:1.0];
 }
 
 @end

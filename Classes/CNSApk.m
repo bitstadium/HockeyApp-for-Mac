@@ -153,6 +153,10 @@
   return bundleIdentifier;
 }
 
+- (BOOL)ignorePlatform:(NSString *)platform {
+  return (![platform isEqualToString:@"Android"]);
+}
+
 #pragma mark - NSControl Action Methods
 
 - (IBAction)preferencesInfoSheetButtonWasClicked:(id)sender {

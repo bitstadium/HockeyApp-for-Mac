@@ -527,6 +527,10 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   return bundleIdentifier;
 }
 
+- (BOOL)ignorePlatform:(NSString *)platform {
+  return ((![platform isEqualToString:@"iOS"]) && (![platform isEqualToString:@"Mac OS"]));
+}
+
 - (NSData *)unzipFileAtPath:(NSString *)sourcePath extractFilename:(NSString *)extractFilename {
   NSTask *unzip = [[NSTask alloc] init];
   NSPipe *aPipe = [NSPipe pipe];
@@ -885,7 +889,6 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   }
 }
 
-
 - (void)parseAppListResponse:(CNSConnectionHelper *)aConnectionHelper {
   if (aConnectionHelper.statusCode == 200) {
     NSString *result = [[NSString alloc] initWithData:aConnectionHelper.data encoding:NSUTF8StringEncoding];
@@ -894,8 +897,10 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 		
     // Include only those apps which have the selected Bundle ID
     for (NSDictionary *appDict in [json objectForKey:@"apps"]) {
-      if(![[appDict objectForKey:@"bundle_identifier"] isEqualToString:self.bundleIdentifier])
+      if ((![[appDict objectForKey:@"bundle_identifier"] isEqualToString:self.bundleIdentifier]) ||
+          ([self ignorePlatform:[appDict objectForKey:@"platform"]])) {
         continue;
+      }
 			
       NSString *appName = [appDict objectForKey:@"title"];
       NSString *publicID = [appDict objectForKey:@"public_identifier"];

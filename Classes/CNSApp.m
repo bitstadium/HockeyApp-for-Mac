@@ -347,11 +347,11 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 		CGFloat imageSize = (float)self.analyzer.imageSize.longValue / totalSize;
 		CGFloat imageOffset = round(self.analyzeFixedSizeBar.frame.size.width * imageSize);
-		self.analyzeImageSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.origin.x + self.analyzeFixedSizeBar.frame.size.width - imageOffset, self.analyzeFixedSizeBar.frame.origin.y, imageOffset, self.analyzeFixedSizeBar.frame.size.height));
+		self.analyzeImageSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.size.width - imageOffset, 0, imageOffset, self.analyzeFixedSizeBar.frame.size.height));
 
 		CGFloat savedSize = (float)self.analyzer.savedImageSize.longValue / totalSize;
 		CGFloat savedOffset = round(self.analyzeFixedSizeBar.frame.size.width * savedSize);
-		self.analyzeSavedSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.origin.x + self.analyzeFixedSizeBar.frame.size.width - savedOffset, self.analyzeFixedSizeBar.frame.origin.y, savedOffset, self.analyzeFixedSizeBar.frame.size.height));
+		self.analyzeSavedSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.size.width - savedOffset, 0, savedOffset, self.analyzeFixedSizeBar.frame.size.height));
 	}
 	else
 		self.analyzeFixedSizeBar.hidden = self.analyzeImageSizeBar.hidden = self.analyzeSavedSizeBar.hidden = YES;

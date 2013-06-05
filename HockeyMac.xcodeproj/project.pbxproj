@@ -54,6 +54,11 @@
 		6CFFEAE2153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADC153CB9FD00984F5F /* SBJsonStreamParserAccumulator.m */; };
 		6CFFEAE3153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEADE153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m */; };
 		6CFFEAE4153CB9FD00984F5F /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFEAE0153CB9FD00984F5F /* SBJsonUTF8Stream.m */; };
+		DE03D21A175F14B600196772 /* BOMAnalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = DE03D219175F14B600196772 /* BOMAnalyze.m */; };
+		DE03D21D175F19F800196772 /* BOMProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = DE03D21C175F19F800196772 /* BOMProtocol.m */; };
+		DE03D226175F22D300196772 /* COPYRIGHT in Resources */ = {isa = PBXBuildFile; fileRef = DE03D222175F22D300196772 /* COPYRIGHT */; };
+		DE03D227175F22D300196772 /* pngquant in Resources */ = {isa = PBXBuildFile; fileRef = DE03D223175F22D300196772 /* pngquant */; };
+		DE03D229175F22D300196772 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DE03D225175F22D300196772 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -152,6 +157,14 @@
 		6CFFEADE153CB9FD00984F5F /* SBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
 		6CFFEADF153CB9FD00984F5F /* SBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonUTF8Stream.h; sourceTree = "<group>"; };
 		6CFFEAE0153CB9FD00984F5F /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
+		DE03D218175F14B600196772 /* BOMAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BOMAnalyze.h; sourceTree = "<group>"; };
+		DE03D219175F14B600196772 /* BOMAnalyze.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOMAnalyze.m; sourceTree = "<group>"; };
+		DE03D21B175F19F800196772 /* BOMProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BOMProtocol.h; sourceTree = "<group>"; };
+		DE03D21C175F19F800196772 /* BOMProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOMProtocol.m; sourceTree = "<group>"; };
+		DE03D222175F22D300196772 /* COPYRIGHT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYRIGHT; sourceTree = "<group>"; };
+		DE03D223175F22D300196772 /* pngquant */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = pngquant; sourceTree = "<group>"; };
+		DE03D224175F22D300196772 /* pngquant-openmp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "pngquant-openmp"; sourceTree = "<group>"; };
+		DE03D225175F22D300196772 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +246,7 @@
 		4D20DDF71345FC1100344114 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				DE03D221175F22D300196772 /* pngquant */,
 				4D20DDF81345FC1100344114 /* CNSKit */,
 				4D20DF4F1346160400344114 /* EMKeychain */,
 				6C495B1915AF77BB006FCDEC /* HockeySDK-Mac */,
@@ -331,6 +345,7 @@
 				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
 				4DB47C5514B5F5D800793D09 /* CNSTextView.h */,
 				4DB47C5614B5F5D800793D09 /* CNSTextView.m */,
+				DE03D21E175F207000196772 /* Analyze */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -387,6 +402,28 @@
 			path = "HockeySDK-Mac";
 			sourceTree = "<group>";
 		};
+		DE03D21E175F207000196772 /* Analyze */ = {
+			isa = PBXGroup;
+			children = (
+				DE03D218175F14B600196772 /* BOMAnalyze.h */,
+				DE03D219175F14B600196772 /* BOMAnalyze.m */,
+				DE03D21B175F19F800196772 /* BOMProtocol.h */,
+				DE03D21C175F19F800196772 /* BOMProtocol.m */,
+			);
+			name = Analyze;
+			sourceTree = "<group>";
+		};
+		DE03D221175F22D300196772 /* pngquant */ = {
+			isa = PBXGroup;
+			children = (
+				DE03D222175F22D300196772 /* COPYRIGHT */,
+				DE03D223175F22D300196772 /* pngquant */,
+				DE03D224175F22D300196772 /* pngquant-openmp */,
+				DE03D225175F22D300196772 /* README.md */,
+			);
+			path = pngquant;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -415,7 +452,7 @@
 		4D20DDB81345FA0500344114 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 4D20DDBB1345FA0500344114 /* Build configuration list for PBXProject "HockeyMac" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -455,6 +492,9 @@
 				4D23DE591652D7BD00541BE1 /* Icon.iconset in Resources */,
 				4D23DE5C1652E81800541BE1 /* MenuIconHighlighted@2x.png in Resources */,
 				4D23DE5D1652E81800541BE1 /* MenuIconNormal@2x.png in Resources */,
+				DE03D226175F22D300196772 /* COPYRIGHT in Resources */,
+				DE03D227175F22D300196772 /* pngquant in Resources */,
+				DE03D229175F22D300196772 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +551,8 @@
 				6CFFEAE4153CB9FD00984F5F /* SBJsonUTF8Stream.m in Sources */,
 				6C3611C51554694900C60BE4 /* M3TokenCloud.m in Sources */,
 				6C3611C61554694900C60BE4 /* M3TokenController.m in Sources */,
+				DE03D21A175F14B600196772 /* BOMAnalyze.m in Sources */,
+				DE03D21D175F19F800196772 /* BOMProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +606,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -571,6 +617,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
@@ -584,11 +631,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
@@ -605,7 +657,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Bit Stadium GmbH";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -619,7 +671,6 @@
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = HockeyApp;
-				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -630,7 +681,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Bit Stadium GmbH";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -644,7 +695,6 @@
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = HockeyApp;
-				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -653,11 +703,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
@@ -674,7 +729,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Bit Stadium GmbH";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -688,7 +743,6 @@
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = HockeyApp;
-				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Alpha;

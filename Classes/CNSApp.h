@@ -19,11 +19,12 @@
 // THE SOFTWARE.
 
 #import <Cocoa/Cocoa.h>
+#import "BOMAnalyze.h"
 
 @class CNSConnectionHelper;
 @class M3TokenController;
 
-@interface CNSApp : NSDocument <NSWindowDelegate> {
+@interface CNSApp : NSDocument <NSWindowDelegate, BOMAnalyzeDelegate> {
 @protected
   NSString *bundleIdentifier;
 @private
@@ -77,6 +78,14 @@
 @property (unsafe_unretained) IBOutlet NSTextField *statusLabel;
 @property (unsafe_unretained) IBOutlet NSTextField *remainingTimeLabel;
 @property (unsafe_unretained) IBOutlet NSTextView *releaseNotesField;
+@property (unsafe_unretained) IBOutlet NSView *analyzeContainer;
+@property (unsafe_unretained) IBOutlet NSBox *analyzeBar;
+@property (unsafe_unretained) IBOutlet NSLevelIndicator *analyzeFixedSizeBar;
+@property (unsafe_unretained) IBOutlet NSLevelIndicator *analyzeImageSizeBar;
+@property (unsafe_unretained) IBOutlet NSLevelIndicator *analyzeSavedSizeBar;
+@property (unsafe_unretained) IBOutlet NSTextField *analyzeInfo;
+@property (unsafe_unretained) IBOutlet NSProgressIndicator *analyzeSpinner;
+@property (unsafe_unretained) IBOutlet NSButton *analyzeButton;
 @property (unsafe_unretained) IBOutlet NSPopUpButton *afterUploadMenu;
 @property (unsafe_unretained) IBOutlet NSPopUpButton *fileTypeMenu;
 @property (unsafe_unretained) IBOutlet NSPopUpButton *appNameMenu;
@@ -102,12 +111,15 @@
 @property (nonatomic, assign) BOOL didClickContinueInInfoSheet;
 @property (nonatomic, assign) BOOL ignoreExistingVersion;
 
+@property (strong) BOMAnalyze *analyzer;
+
 - (IBAction)cancelButtonWasClicked:(id)sender;
 - (IBAction)saveTagSheetButtonWasClicked:(id)sender;
 - (IBAction)downloadButtonWasClicked:(id)sender;
 - (IBAction)fileTypeMenuWasChanged:(id)sender;
 - (IBAction)releaseTypeMenuWasChanged:(id)sender;
 - (IBAction)appNameMenuWasChanged:(id)sender;
+- (IBAction)analyzeButtonWasClicked:(id)sender;
 - (IBAction)uploadButtonWasClicked:(id)sender;
 - (IBAction)restrictDownloadsWasClicked:(id)sender;
 - (IBAction)cancelInfoSheetButtonWasClicked:(id)sender;

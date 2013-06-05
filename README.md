@@ -67,7 +67,7 @@ If you have a problem, a question or a suggestion, please let us know via email 
 
 ### Version 1.4
 
-* Added image analysis (for iOS and OS-X), which optimizes all embedded PNG and JPG images: provides a space saving indicator and a protocol about and with the optimized images (@omichde, ported from [http://wasted.werk01.de](http://wasted.werk01.de))
+* Added image analysis (for iOS and OS-X), which optimizes all embedded PNG and JPG images: provides a space saving indicator and a protocol about and with the optimized images (@omichde, based on [http://wasted.werk01.de](http://wasted.werk01.de))
 
 ### Version 1.2.3
 

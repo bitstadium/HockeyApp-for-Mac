@@ -47,6 +47,6 @@
 		default:;
 	}
 	NSString *filePath = [self.file.path substringFromIndex: self.rootFolder.path.length+1];
-	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%@;%d%%;;;", filePath, typeString, [formatter stringForObjectValue:self.size], self.size, [formatter stringForObjectValue:self.savedSize], self.savedSize, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
+	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%ld;%d%%;;;", filePath, typeString, [formatter stringForObjectValue:self.size], self.size, [formatter stringFromByteCount: self.optimizedData.length], self.optimizedData.length, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
 }
 @end

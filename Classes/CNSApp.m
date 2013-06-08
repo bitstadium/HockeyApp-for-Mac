@@ -136,8 +136,15 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 #pragma mark - NSWindowDelegate Methods
 
-- (BOOL)windowShouldClose:(id)sender {
+- (BOOL) windowShouldClose:(id)sender {
   [self cancelConnections];
+	if (self.analyzer) {
+		[self.analyzer stop];
+		while (self.analyzer.isRunning)
+			;
+		self.analyzer.delegate = nil;
+		self.analyzer = nil;
+	}
   [self close];
   return YES;
 }
@@ -1145,7 +1152,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 #pragma mark - Memory Management Mehtods
 
-- (void)dealloc {
+- (void) dealloc {
   [self cancelConnections];
   self.connectionHelpers = nil;
   self.afterUploadMenu = nil;
@@ -1161,6 +1168,14 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   self.notesTypeMatrix = nil;
   self.progressIndicator = nil;
   self.releaseNotesField = nil;
+	self.analyzeContainer = nil;
+	self.analyzeBar = nil;
+	self.analyzeFixedSizeBar = nil;
+	self.analyzeImageSizeBar = nil;
+	self.analyzeSavedSizeBar = nil;
+	self.analyzeInfo = nil;
+	self.analyzeSpinner = nil;
+	self.analyzeButton = nil;
   self.releaseTypeMenu = nil;
   self.appNameMenu = nil;
   self.statusLabel = nil;

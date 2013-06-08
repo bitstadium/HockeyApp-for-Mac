@@ -18,8 +18,7 @@
 @interface BOMAnalyze ()
 @property (strong) NSMutableArray *exceptionList;
 @property (assign) BOOL isCompleting;
-
-- (void) analyze:(NSURL*) file;
+- (void) analyze:(NSURL*) file atFolder:(NSURL*) rootFolder;
 @end
 
 @implementation BOMAnalyze
@@ -203,6 +202,11 @@ NSLog(@"%@", file);
 					self.savedImageSize = [NSNumber numberWithLong: self.savedImageSize.longValue + diff];
 					[self.protocol addObject: [BOMProtocol protocolWithFile:file atFolder: rootFolder ofType:BOMProtocolOptimizedJPG	originalSize:[NSNumber numberWithLong: objectSize] savedSize: [NSNumber numberWithLong: diff] data: jpgData]];
 				}
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self.delegate analyzeChanged: objectName];
+				});
+			}
+			else {
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[self.delegate analyzeChanged: objectName];
 				});

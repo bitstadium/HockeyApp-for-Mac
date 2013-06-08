@@ -76,6 +76,8 @@
 		[task waitUntilExit];	// we are alrady in background
 	}
 
+NSLog(@"%@", file);
+
 	// find Info.plist
 	NSDirectoryEnumerator *infoFileEnumerator = [fm enumeratorAtPath: file.path];
 	NSString *info = nil;
@@ -99,7 +101,7 @@
 
 	NSArray *fileList = [fm contentsOfDirectoryAtPath:file.path error:nil];
 	for (NSString *fileItem in fileList)
-		[self analyze: [NSURL fileURLWithPath: [file.path stringByAppendingPathComponent:fileItem]]];
+		[self analyze: [NSURL fileURLWithPath: [file.path stringByAppendingPathComponent:fileItem]]atFolder: file];
 
 	if ([self.file.path hasSuffix:@".ipa"])
 		[fm removeItemAtPath: file.path error:nil];
@@ -116,7 +118,7 @@
 	self.isCompleting = NO;
 }
 
-- (void) analyze:(NSURL*) file {
+- (void) analyze:(NSURL*) file atFolder:(NSURL*) rootFolder {
 	if (!self.isCompleting)
 		return;
 	NSFileManager *fm = [NSFileManager defaultManager];
@@ -124,7 +126,7 @@
 	if ([fm fileExistsAtPath:file.path isDirectory:&isDir] && isDir) {
 		NSArray *fileList = [fm contentsOfDirectoryAtPath:file.path error:nil];
 		for (NSString *fileItem in fileList)
-			[self analyze: [NSURL fileURLWithPath: [file.path stringByAppendingPathComponent:fileItem]]];
+			[self analyze: [NSURL fileURLWithPath: [file.path stringByAppendingPathComponent:fileItem]]  atFolder: rootFolder];
 	}
 	else {
 		@autoreleasepool {
@@ -159,7 +161,7 @@
 						long diff = objectSize - jpgData.length;
 						if (diff > 0) {
 							self.savedImageSize = [NSNumber numberWithLong: self.savedImageSize.longValue + diff];
-							[self.protocol addObject: [BOMProtocol protocolWithFile:file ofType:BOMProtocolPNGtoJPG originalSize:[NSNumber numberWithLong: objectSize] savedSize:[NSNumber numberWithLong: diff] data:jpgData]];
+							[self.protocol addObject: [BOMProtocol protocolWithFile:file atFolder: rootFolder ofType:BOMProtocolPNGtoJPG originalSize:[NSNumber numberWithLong: objectSize] savedSize:[NSNumber numberWithLong: diff] data:jpgData]];
 						}
 					}
 					else {	// requantisize PNG
@@ -181,7 +183,7 @@
 						long diff = objectSize - optimizedSize.longValue;
 						if (diff > 0 && optimizedSize.longValue > 0) {
 							self.savedImageSize = [NSNumber numberWithLong: self.savedImageSize.longValue + diff];
-							[self.protocol addObject: [BOMProtocol protocolWithFile:tempFile ofType:BOMProtocolOptimizedPNG originalSize:[NSNumber numberWithLong: objectSize] savedSize: [NSNumber numberWithLong: diff] data: [NSData dataWithContentsOfFile:tempOptimizedFile.path]]];
+							[self.protocol addObject: [BOMProtocol protocolWithFile:file atFolder: rootFolder ofType:BOMProtocolOptimizedPNG originalSize:[NSNumber numberWithLong: objectSize] savedSize: [NSNumber numberWithLong: diff] data: [NSData dataWithContentsOfFile:tempOptimizedFile.path]]];
 						}
 						[fm removeItemAtPath:tempFile.path error:nil];
 						[fm removeItemAtPath:tempOptimizedFile.path error:nil];
@@ -199,7 +201,7 @@
 				long diff = objectSize - jpgData.length;
 				if (diff > 0) {
 					self.savedImageSize = [NSNumber numberWithLong: self.savedImageSize.longValue + diff];
-					[self.protocol addObject: [BOMProtocol protocolWithFile:file ofType:BOMProtocolOptimizedJPG	originalSize:[NSNumber numberWithLong: objectSize] savedSize: [NSNumber numberWithLong: diff] data: jpgData]];
+					[self.protocol addObject: [BOMProtocol protocolWithFile:file atFolder: rootFolder ofType:BOMProtocolOptimizedJPG	originalSize:[NSNumber numberWithLong: objectSize] savedSize: [NSNumber numberWithLong: diff] data: jpgData]];
 				}
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[self.delegate analyzeChanged: objectName];

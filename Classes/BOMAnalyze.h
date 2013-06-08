@@ -34,7 +34,6 @@
 @end
 
 @protocol BOMAnalyzeDelegate <NSObject>
-@optional
 - (void) analyzeStarted;
 - (void) analyzeChanged: (NSString*) text;
 - (void) analyzeFinished:(BOOL) isComplete;

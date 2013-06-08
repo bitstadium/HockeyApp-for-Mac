@@ -319,11 +319,16 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 				NSString *output = [NSString stringWithFormat:@"%@;;;\n%@", [@[@"File name", @"Action", @"Original Size (readable)", @"Original Size", @"Optimized Size (readable)", @"Optimized Size", @"Wasted"] componentsJoinedByString:@";"], [self.analyzer.protocol componentsJoinedByString:@"\n"]];
 				[output writeToFile: [panel.URL.path stringByAppendingPathComponent: [panel.nameFieldStringValue stringByAppendingPathExtension:@"csv"]] atomically:NO encoding:NSUTF8StringEncoding error:nil];
 				for (BOMProtocol *entry in self.analyzer.protocol) {
-					NSString *filename = entry.file.pathComponents.lastObject;
+					NSString *filename = [entry.file.path substringFromIndex: entry.rootFolder.path.length+1];
+					// prevent bundling
+					filename = [filename stringByReplacingOccurrencesOfString:@".app" withString:@".app~"];
 					if (entry.type == BOMProtocolPNGtoJPG)
 						filename = [filename stringByReplacingOccurrencesOfString:@".png" withString:@".jpg"];
 					filename = [panel.URL.path stringByAppendingPathComponent: filename];
 					[fm removeItemAtPath: filename error:nil];
+					NSArray *folderList = filename.pathComponents;
+					NSString *folderName = [[folderList subarrayWithRange:NSMakeRange(0, folderList.count-1)] componentsJoinedByString:@"/"];
+					[fm createDirectoryAtPath: folderName withIntermediateDirectories:YES attributes:nil error:nil];
 					[entry.optimizedData writeToFile: filename atomically:NO];
 				}
 			}

@@ -17,13 +17,14 @@
 
 @implementation BOMProtocol
 
-+ (BOMProtocol*) protocolWithFile:(NSURL*) file ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data {
-	return [[BOMProtocol alloc] initWithFile:file ofType:type originalSize:size savedSize:savedSize data:data];
++ (BOMProtocol*) protocolWithFile:(NSURL*) file atFolder:(NSURL*) rootFolder ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data {
+	return [[BOMProtocol alloc] initWithFile:file atFolder:(NSURL*) rootFolder ofType:type originalSize:size savedSize:savedSize data:data];
 }
 
-- (id) initWithFile:(NSURL*) file ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data {
+- (id) initWithFile:(NSURL*) file atFolder:(NSURL*) rootFolder ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data {
 	if ((self = [super init])) {
 		self.file = file;
+		self.rootFolder = rootFolder;
 		self.type = type;
 		self.size = size;
 		self.savedSize = savedSize;
@@ -45,6 +46,7 @@
 			break;
 		default:;
 	}
-	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%@;%d%%;;;", self.file.path.pathComponents.lastObject, typeString, [formatter stringForObjectValue:self.size], self.size, [formatter stringForObjectValue:self.savedSize], self.savedSize, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
+	NSString *filePath = [self.file.path substringFromIndex: self.rootFolder.path.length+1];
+	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%@;%d%%;;;", filePath, typeString, [formatter stringForObjectValue:self.size], self.size, [formatter stringForObjectValue:self.savedSize], self.savedSize, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
 }
 @end

@@ -24,12 +24,13 @@ typedef enum {
 @interface BOMProtocol : NSObject
 
 @property (strong) NSURL *file;
+@property (strong) NSURL *rootFolder;
 @property (assign) BOMProtocolType type;
 @property (strong) NSNumber *size;
 @property (strong) NSNumber *savedSize;
 @property (strong) NSData *optimizedData;
 
-+ (BOMProtocol*) protocolWithFile:(NSURL*) file ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data;
-- (id) initWithFile:(NSURL*) file ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data;
++ (BOMProtocol*) protocolWithFile:(NSURL*) file atFolder:(NSURL*) rootFolder ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data;
+- (id) initWithFile:(NSURL*) file atFolder:(NSURL*) rootFolder ofType:(BOMProtocolType) type originalSize:(NSNumber*) size savedSize:(NSNumber*) savedSize data:(NSData*) data;
 
 @end

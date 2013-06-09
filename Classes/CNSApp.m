@@ -75,6 +75,14 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 @synthesize mandatoryButton;
 @synthesize progressIndicator;
 @synthesize releaseNotesField;
+@synthesize analyzeContainer;
+@synthesize analyzeBar;
+@synthesize analyzeFixedSizeBar;
+@synthesize analyzeImageSizeBar;
+@synthesize analyzeSavedSizeBar;
+@synthesize analyzeSpinner;
+@synthesize analyzeButton;
+@synthesize analyzeInfo;
 @synthesize releaseTypeMenu;
 @synthesize appNameMenu;
 @synthesize statusLabel;
@@ -100,6 +108,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 @synthesize continueButton;
 @synthesize didClickContinueInInfoSheet;
 @synthesize ignoreExistingVersion;
+@synthesize analyzer;
 
 #pragma mark - Initialization Methods
 
@@ -127,8 +136,15 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 #pragma mark - NSWindowDelegate Methods
 
-- (BOOL)windowShouldClose:(id)sender {
+- (BOOL) windowShouldClose:(id)sender {
   [self cancelConnections];
+	if (self.analyzer) {
+		[self.analyzer stop];
+		while (self.analyzer.isRunning)
+			;
+		self.analyzer.delegate = nil;
+		self.analyzer = nil;
+	}
   [self close];
   return YES;
 }
@@ -283,6 +299,91 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 - (IBAction)continueInfoSheetButtonWasClicked:(id)sender {
   self.didClickContinueInInfoSheet = YES;
   [self hideInfoSheet];
+}
+
+#pragma mark - Analyzer
+
+- (IBAction) analyzeButtonWasClicked:(id) sender {
+	if (!self.analyzer) {
+		analyzer = [[BOMAnalyze alloc] initWithFile: self.fileURL];
+		analyzer.delegate = self;
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+			[analyzer start];
+		});
+	}
+	else if (analyzer.isRunning)
+		[analyzer stop];
+	else if (self.analyzer.protocol.count) {
+		NSSavePanel *panel = [NSSavePanel savePanel];
+		panel.canCreateDirectories = YES;
+		panel.nameFieldLabel = @"Save Protocol as:";
+		panel.nameFieldStringValue = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
+		[panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+			if (result == NSFileHandlingPanelOKButton) {
+				NSFileManager *fm = [NSFileManager defaultManager];
+				[fm removeItemAtPath: panel.URL.path error:nil];
+				[fm createDirectoryAtPath: panel.URL.path withIntermediateDirectories:YES attributes:nil error:nil];
+				NSString *output = [NSString stringWithFormat:@"%@;;;\n%@", [@[@"File name", @"Action", @"Original Size (readable)", @"Original Size", @"Optimized Size (readable)", @"Optimized Size", @"Wasted"] componentsJoinedByString:@";"], [self.analyzer.protocol componentsJoinedByString:@"\n"]];
+				[output writeToFile: [panel.URL.path stringByAppendingPathComponent: [panel.nameFieldStringValue stringByAppendingPathExtension:@"csv"]] atomically:NO encoding:NSUTF8StringEncoding error:nil];
+				for (BOMProtocol *entry in self.analyzer.protocol) {
+					NSString *filename = [entry.file.path substringFromIndex: entry.rootFolder.path.length+1];
+					// prevent bundling
+					filename = [filename stringByReplacingOccurrencesOfString:@".app" withString:@".app~"];
+					if (entry.type == BOMProtocolPNGtoJPG)
+						filename = [filename stringByReplacingOccurrencesOfString:@".png" withString:@".jpg"];
+					filename = [panel.URL.path stringByAppendingPathComponent: filename];
+					[fm removeItemAtPath: filename error:nil];
+					NSArray *folderList = filename.pathComponents;
+					NSString *folderName = [[folderList subarrayWithRange:NSMakeRange(0, folderList.count-1)] componentsJoinedByString:@"/"];
+					[fm createDirectoryAtPath: folderName withIntermediateDirectories:YES attributes:nil error:nil];
+					[entry.optimizedData writeToFile: filename atomically:NO];
+				}
+			}
+		}];
+	}
+}
+
+- (void) analyzeStarted {
+	self.analyzeInfo.stringValue = @"";
+	self.analyzeButton.title = @"Stop";
+	self.analyzeBar.hidden = self.analyzeSpinner.hidden = NO;
+	self.analyzeFixedSizeBar.hidden = self.analyzeImageSizeBar.hidden = self.analyzeSavedSizeBar.hidden = YES;
+	[self.analyzeSpinner startAnimation:nil];
+}
+
+- (void) analyzeChanged:(NSString*) title {
+	self.analyzeInfo.stringValue = title;
+	if (self.analyzer.fixedSize.longValue || self.analyzer.imageSize.longValue) {
+		self.analyzeFixedSizeBar.hidden = self.analyzeImageSizeBar.hidden = self.analyzeSavedSizeBar.hidden = NO;
+		CGFloat totalSize = (float)self.analyzer.fixedSize.longValue + (float)self.analyzer.imageSize.longValue;
+
+		CGFloat imageSize = (float)self.analyzer.imageSize.longValue / totalSize;
+		CGFloat imageOffset = round(self.analyzeFixedSizeBar.frame.size.width * imageSize);
+		self.analyzeImageSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.size.width - imageOffset, 0, imageOffset, self.analyzeFixedSizeBar.frame.size.height));
+
+		CGFloat savedSize = (float)self.analyzer.savedImageSize.longValue / totalSize;
+		CGFloat savedOffset = round(self.analyzeFixedSizeBar.frame.size.width * savedSize);
+		self.analyzeSavedSizeBar.frame = NSRectFromCGRect(CGRectMake(self.analyzeFixedSizeBar.frame.size.width - savedOffset, 0, savedOffset, self.analyzeFixedSizeBar.frame.size.height));
+	}
+	else
+		self.analyzeFixedSizeBar.hidden = self.analyzeImageSizeBar.hidden = self.analyzeSavedSizeBar.hidden = YES;
+}
+
+- (void) analyzeFinished:(BOOL) complete {
+	self.analyzeInfo.stringValue = @"";
+	if (complete) {
+		self.analyzeButton.title = @"Export";
+		NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
+		formatter.allowsNonnumericFormatting = NO;
+		self.analyzeInfo.stringValue = [NSString stringWithFormat:@"Wasted: %.0f%% (%@)", (100.0 * self.analyzer.savedImageSize.floatValue) / (self.analyzer.fixedSize.floatValue + self.analyzer.imageSize.floatValue), [formatter stringForObjectValue: self.analyzer.savedImageSize]];
+	}
+	else {
+		self.analyzeButton.title = @"Start";
+		self.analyzeBar.hidden = YES;
+		self.analyzer = nil;
+	}
+	self.analyzeSpinner.hidden = YES;
+	[self.analyzeSpinner stopAnimation:nil];
 }
 
 #pragma mark - Private Helper Methods
@@ -495,6 +596,9 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
   [self readProcessArguments];
   [self fetchAppNames];
+
+	self.analyzeBar.hidden = self.analyzeSpinner.hidden = YES;
+	self.analyzeInfo.stringValue = @"";
 }
 
 - (void)hideInfoSheet {
@@ -1048,7 +1152,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 #pragma mark - Memory Management Mehtods
 
-- (void)dealloc {
+- (void) dealloc {
   [self cancelConnections];
   self.connectionHelpers = nil;
   self.afterUploadMenu = nil;
@@ -1064,6 +1168,14 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   self.notesTypeMatrix = nil;
   self.progressIndicator = nil;
   self.releaseNotesField = nil;
+	self.analyzeContainer = nil;
+	self.analyzeBar = nil;
+	self.analyzeFixedSizeBar = nil;
+	self.analyzeImageSizeBar = nil;
+	self.analyzeSavedSizeBar = nil;
+	self.analyzeInfo = nil;
+	self.analyzeSpinner = nil;
+	self.analyzeButton = nil;
   self.releaseTypeMenu = nil;
   self.appNameMenu = nil;
   self.statusLabel = nil;

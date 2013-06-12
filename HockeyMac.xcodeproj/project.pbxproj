@@ -59,6 +59,7 @@
 		DE03D226175F22D300196772 /* COPYRIGHT in Resources */ = {isa = PBXBuildFile; fileRef = DE03D222175F22D300196772 /* COPYRIGHT */; };
 		DE03D227175F22D300196772 /* pngquant in Resources */ = {isa = PBXBuildFile; fileRef = DE03D223175F22D300196772 /* pngquant */; };
 		DE03D229175F22D300196772 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DE03D225175F22D300196772 /* README.md */; };
+		DEF99CBB1768FD4700DBD45C /* FileSizeNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF99CBA1768FD4700DBD45C /* FileSizeNumberFormatter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -165,6 +166,8 @@
 		DE03D223175F22D300196772 /* pngquant */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = pngquant; sourceTree = "<group>"; };
 		DE03D224175F22D300196772 /* pngquant-openmp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "pngquant-openmp"; sourceTree = "<group>"; };
 		DE03D225175F22D300196772 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		DEF99CB91768FD4700DBD45C /* FileSizeNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSizeNumberFormatter.h; sourceTree = "<group>"; };
+		DEF99CBA1768FD4700DBD45C /* FileSizeNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSizeNumberFormatter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -409,6 +412,8 @@
 				DE03D219175F14B600196772 /* BOMAnalyze.m */,
 				DE03D21B175F19F800196772 /* BOMProtocol.h */,
 				DE03D21C175F19F800196772 /* BOMProtocol.m */,
+				DEF99CB91768FD4700DBD45C /* FileSizeNumberFormatter.h */,
+				DEF99CBA1768FD4700DBD45C /* FileSizeNumberFormatter.m */,
 			);
 			name = Analyze;
 			sourceTree = "<group>";
@@ -553,6 +558,7 @@
 				6C3611C61554694900C60BE4 /* M3TokenController.m in Sources */,
 				DE03D21A175F14B600196772 /* BOMAnalyze.m in Sources */,
 				DE03D21D175F19F800196772 /* BOMProtocol.m in Sources */,
+				DEF99CBB1768FD4700DBD45C /* FileSizeNumberFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

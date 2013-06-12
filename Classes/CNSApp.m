@@ -26,6 +26,7 @@
 #import "M3TokenController.h"
 #import "CNSConstants.h"
 #import "NSString+CNSStringAdditions.h"
+#import "FileSizeNumberFormatter.h"
 
 static NSString *CNSReleaseTypeMismatchSheet = @"CNSReleaseTypeMismatchSheet";
 static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
@@ -373,9 +374,10 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 	self.analyzeInfo.stringValue = @"";
 	if (complete) {
 		self.analyzeButton.title = @"Export";
-		NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
-		formatter.allowsNonnumericFormatting = NO;
-		self.analyzeInfo.stringValue = [NSString stringWithFormat:@"Wasted: %.0f%% (%@)", (100.0 * self.analyzer.savedImageSize.floatValue) / (self.analyzer.fixedSize.floatValue + self.analyzer.imageSize.floatValue), [formatter stringForObjectValue: self.analyzer.savedImageSize]];
+		FileSizeNumberFormatter *sizeFormatter = [[FileSizeNumberFormatter alloc] init];
+		sizeFormatter.maximumFractionDigits = 2;
+
+		self.analyzeInfo.stringValue = [NSString stringWithFormat:@"Wasted: %.0f%% (%@)", (100.0 * self.analyzer.savedImageSize.floatValue) / (self.analyzer.fixedSize.floatValue + self.analyzer.imageSize.floatValue), [sizeFormatter stringFromNumber: self.analyzer.savedImageSize]];
 	}
 	else {
 		self.analyzeButton.title = @"Start";

@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #import <Cocoa/Cocoa.h>
+#import <IOKit/pwr_mgt/IOPMLib.h>
 #import "BOMAnalyze.h"
 
 @class CNSConnectionHelper;
@@ -60,6 +61,7 @@
   M3TokenController *__unsafe_unretained tokenController;
   
   NSString* apiToken;
+  IOPMAssertionID _assertionID;
 }
 
 @property (unsafe_unretained) IBOutlet NSButton *cancelButton;

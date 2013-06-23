@@ -452,8 +452,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   [self storeNotesType];
   [self storeAfterUploadSelection];
   
-  
   if (self.bundleIdentifier) {
+    [self preventIdleSleep];
     [self postMultiPartRequestWithBundleIdentifier:self.bundleIdentifier publicID:publicID];
   }
   else {
@@ -956,6 +956,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
       self.progressIndicator.doubleValue = 0;
       [self.progressIndicator setHidden:YES];
       [self.cancelButton setTitle:@"Done"];
+      
+      [self allowIdleSleep];
     }
   }
   
@@ -1060,6 +1062,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
         [self.window performClose:self];
         [self close];
 
+        [self allowIdleSleep];
+
         if (([self.afterUploadMenu indexOfSelectedItem] == 1) && ([json valueForKey:@"public_url"])) {
           NSURL *publicURL = [NSURL URLWithString:[json valueForKey:@"public_url"]];
           [[NSWorkspace sharedWorkspace] openURL:publicURL];
@@ -1148,6 +1152,26 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (NSSet *)tagsForTokenController:(M3TokenController *)controller {
   return [NSSet setWithArray:[self tagsForCurrentSelectedApp]];
+}
+
+#pragma mark - Preventing Sleep Mehtods
+
+- (void)preventIdleSleep {
+  CFStringRef reasonForActivity = CFSTR("Upload to HockeyApp is running");
+  
+  IOPMAssertionID newAssertionID = 0;
+  IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep,
+                                                 kIOPMAssertionLevelOn, reasonForActivity, &newAssertionID);
+  if (success == kIOReturnSuccess) {
+    _assertionID = newAssertionID;
+  }
+}
+
+- (void)allowIdleSleep {
+  if (_assertionID != 0) {
+    IOPMAssertionRelease(_assertionID);
+    _assertionID = 0;
+  }
 }
 
 #pragma mark - Memory Management Mehtods

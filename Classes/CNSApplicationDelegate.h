@@ -19,12 +19,13 @@
 // THE SOFTWARE.
 
 #import <HockeySDK/BITCrashReportManagerDelegate.h>
+#import <CDEvents/CDEvents.h>
 
 @class CNSDragStatusView;
 @class CNSPreferencesViewController;
 @class SUUpdater;
 
-@interface CNSApplicationDelegate : NSObject <BITCrashReportManagerDelegate, NSMenuDelegate> {
+@interface CNSApplicationDelegate : NSObject <BITCrashReportManagerDelegate, NSMenuDelegate, NSUserNotificationCenterDelegate> {
 @private
 	IBOutlet CNSPreferencesViewController *preferencesViewController;
   IBOutlet SUUpdater *sparkleUpdater;
@@ -34,5 +35,7 @@
 }
 
 - (IBAction)showPreferencesView:(id)sender;
+
+@property (nonatomic, strong) CDEvents *events;
 
 @end

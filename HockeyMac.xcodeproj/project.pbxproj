@@ -46,6 +46,8 @@
 		4DB47C5714B5F5D800793D09 /* CNSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB47C5614B5F5D800793D09 /* CNSTextView.m */; };
 		4DE69FBA142CE9E100307A1F /* CNSApk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE69FB9142CE9E100307A1F /* CNSApk.m */; };
 		4DE69FBE142CEBB100307A1F /* CNSApk.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE69FBC142CEBB100307A1F /* CNSApk.xib */; };
+		4DFCA9D71776F01800B8B673 /* CDEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DFCA9D51776F01800B8B673 /* CDEvents.framework */; };
+		4DFCA9D91776F02900B8B673 /* CDEvents.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DFCA9D51776F01800B8B673 /* CDEvents.framework */; };
 		6C3611C51554694900C60BE4 /* M3TokenCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C21554694900C60BE4 /* M3TokenCloud.m */; };
 		6C3611C61554694900C60BE4 /* M3TokenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3611C41554694900C60BE4 /* M3TokenController.m */; };
 		6C495B2415AF8361006FCDEC /* HockeySDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C495B1B15AF77BB006FCDEC /* HockeySDK.framework */; };
@@ -68,6 +70,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4DFCA9D91776F02900B8B673 /* CDEvents.framework in CopyFiles */,
 				4D4337FF13B3B08400B8ADE2 /* Sparkle.framework in CopyFiles */,
 				6C495B2415AF8361006FCDEC /* HockeySDK.framework in CopyFiles */,
 			);
@@ -143,6 +146,7 @@
 		4DE69FB8142CE9E100307A1F /* CNSApk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNSApk.h; sourceTree = "<group>"; };
 		4DE69FB9142CE9E100307A1F /* CNSApk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSApk.m; sourceTree = "<group>"; };
 		4DE69FBD142CEBB100307A1F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CNSApk.xib; sourceTree = "<group>"; };
+		4DFCA9D51776F01800B8B673 /* CDEvents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CDEvents.framework; sourceTree = "<group>"; };
 		6C3611C11554694900C60BE4 /* M3TokenCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M3TokenCloud.h; sourceTree = "<group>"; };
 		6C3611C21554694900C60BE4 /* M3TokenCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M3TokenCloud.m; sourceTree = "<group>"; };
 		6C3611C31554694900C60BE4 /* M3TokenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M3TokenController.h; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 				4D20DDC61345FA0500344114 /* Cocoa.framework in Frameworks */,
 				6C495B2515AF83E7006FCDEC /* HockeySDK.framework in Frameworks */,
 				4D4337FC13B3AA4F00B8ADE2 /* Sparkle.framework in Frameworks */,
+				4DFCA9D71776F01800B8B673 /* CDEvents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				DE03D221175F22D300196772 /* pngquant */,
+				4DFCA9D41776F01800B8B673 /* CDEvents */,
 				4D20DDF81345FC1100344114 /* CNSKit */,
 				4D20DF4F1346160400344114 /* EMKeychain */,
 				6C495B1915AF77BB006FCDEC /* HockeySDK-Mac */,
@@ -381,6 +387,14 @@
 			);
 			name = SBJSON;
 			path = SBJSON/Classes;
+			sourceTree = "<group>";
+		};
+		4DFCA9D41776F01800B8B673 /* CDEvents */ = {
+			isa = PBXGroup;
+			children = (
+				4DFCA9D51776F01800B8B673 /* CDEvents.framework */,
+			);
+			path = CDEvents;
 			sourceTree = "<group>";
 		};
 		6C3611C01554694900C60BE4 /* M3TokenController */ = {
@@ -664,12 +678,14 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
 					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
+					"\"$(SRCROOT)/Vendor/CDEvents\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};
@@ -689,11 +705,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
 					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
+					"\"$(SRCROOT)/Vendor/CDEvents\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};
@@ -737,11 +755,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
 					"\"$(SRCROOT)/Vendor/HockeySDK-Mac\"",
+					"\"$(SRCROOT)/Vendor/CDEvents\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Classes/HockeyMac-Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = HockeyApp;
 				WRAPPER_EXTENSION = app;
 			};

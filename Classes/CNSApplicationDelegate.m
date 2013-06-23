@@ -70,9 +70,43 @@
   [[BITHockeyManager sharedHockeyManager] setAskUserDetails:YES];
   [[BITHockeyManager sharedHockeyManager] startManager];
 #endif
+
+  [self registerFileEvents];
+}
+
+- (void)registerFileEvents {
+  self.events = [[CDEvents alloc] initWithURLs:@[[NSURL URLWithString:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Developer/Xcode/Archives"]]]
+                                         block:^(CDEvents *watcher, CDEvent *event) {
+                                           NSString *path = [event.URL absoluteString];
+                                           if ([[path pathExtension] isEqualToString:@"xcarchive"]) {
+                                             [self showUserNotificationForFileEvent:event];
+                                           }
+                                         }];
+}
+
+- (void)showUserNotificationForFileEvent:(CDEvent *)event {
+  NSString *path = [event.URL absoluteString];
+  
+  NSUserNotification *notification = [[NSUserNotification alloc] init];
+  notification.title = @"Xcode Archive found";
+  notification.informativeText = [[path lastPathComponent] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  notification.actionButtonTitle = @"Upload";
+  notification.hasActionButton = YES;
+  notification.userInfo = @{ @"fileURL" : [event.URL absoluteString] };
+  
+  [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+  [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+}
+
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
+  [center removeDeliveredNotification:notification];
+  
+  NSDictionary *userInfo = notification.userInfo;
+  [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL URLWithString:[userInfo valueForKey:@"fileURL"]] display:YES error:NULL];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
+  self.events = nil;
   [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
 }
 

@@ -115,6 +115,18 @@
   return YES;
 }
 
+- (NSMenu *)applicationDockMenu:(NSApplication *)sender {
+  NSMenu *menu = [[NSMenu alloc] init];
+  menu.delegate = self;
+  
+  NSMenuItem *webAppItem = [[NSMenuItem alloc] initWithTitle:@"Open Web App..." action:@selector(openWebApp:) keyEquivalent:@""];
+  [webAppItem setTarget:self];
+  [webAppItem setEnabled:YES];
+  [menu addItem:webAppItem];
+
+  return menu;
+}
+
 #pragma mark - BITCrashReportManagerDelegate Methods
 
 - (void)showMainApplicationWindow {

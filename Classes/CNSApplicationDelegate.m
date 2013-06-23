@@ -132,7 +132,14 @@
 
   NSMenu *menu = [[NSMenu alloc] init];
   menu.delegate = self;
-  
+
+  NSMenuItem *webAppItem = [[NSMenuItem alloc] initWithTitle:@"Open Web App..." action:@selector(openWebApp:) keyEquivalent:@""];
+  [webAppItem setTarget:self];
+  [webAppItem setEnabled:YES];
+  [menu addItem:webAppItem];
+
+  [menu addItem:[NSMenuItem separatorItem]];
+
   NSMenuItem *preferencesItem = [[NSMenuItem alloc] initWithTitle:@"Preferences..." action:@selector(showPreferencesView:) keyEquivalent:@""];
   [preferencesItem setTarget:self];
   [preferencesItem setEnabled:YES];
@@ -195,6 +202,10 @@
 
 - (void)dragStatusViewWasClicked:(id)dragView {
   [statusItem popUpStatusItemMenu:[statusItem menu]];
+}
+
+- (void)openWebApp:(id)sender {
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://rink.hockeyapp.net"]];
 }
 
 - (void)quitApplication:(id)sender {

@@ -172,6 +172,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (IBAction)cancelButtonWasClicked:(id)sender {
   if (sender == self.cancelButton) {
+    [self allowIdleSleep];
     [self cancelConnections];
     [self.uploadButton setEnabled:YES];
     [self.uploadSheet orderOut:self];

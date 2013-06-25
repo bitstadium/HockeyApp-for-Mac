@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "BOMProtocol.h"
+#import "FileSizeNumberFormatter.h"
 
 @implementation BOMProtocol
 
@@ -42,8 +43,8 @@
 }
 
 - (NSString*) description {
-	NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
-	formatter.allowsNonnumericFormatting = NO;
+	FileSizeNumberFormatter *sizeFormatter = [[FileSizeNumberFormatter alloc] init];
+	sizeFormatter.maximumFractionDigits = 2;
 	NSString *typeString = @"convert opaque PNG to JPG";
 	switch (self.type) {
 		case BOMProtocolOptimizedPNG:
@@ -55,6 +56,6 @@
 		default:;
 	}
 	NSString *filePath = [self.file.path substringFromIndex: self.rootFolder.path.length+1];
-	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%ld;%d%%;;;", filePath, typeString, [formatter stringForObjectValue:self.size], self.size, [formatter stringFromByteCount: self.optimizedData.length], self.optimizedData.length, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
+	return [NSString stringWithFormat:@"%@;%@;%@;%@;%@;%ld;%d%%;;;", filePath, typeString, [sizeFormatter stringFromNumber:self.size], self.size, [sizeFormatter stringFromNumber: [NSNumber numberWithLong:self.optimizedData.length]], self.optimizedData.length, (int)round((self.savedSize.longValue*100.0)/(float)self.size.longValue)];
 }
 @end

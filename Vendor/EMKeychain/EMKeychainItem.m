@@ -262,7 +262,7 @@ static BOOL _logsErrors;
 	if (returnStatus != noErr)
 	{
 		if (_logsErrors) {
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), [[NSError errorWithDomain:NSOSStatusErrorDomain code:returnStatus userInfo:nil] description]);
     }
 		return nil;
 	}
@@ -290,7 +290,7 @@ static BOOL _logsErrors;
 	if (returnStatus != noErr || !item)
 	{
 		if (_logsErrors) {
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), [[NSError errorWithDomain:NSOSStatusErrorDomain code:returnStatus userInfo:nil] description]);
     }
 		return nil;
 	}
@@ -408,7 +408,7 @@ static BOOL _logsErrors;
 	if (returnStatus != noErr)
 	{
 		if (_logsErrors) {
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), [[NSError errorWithDomain:NSOSStatusErrorDomain code:returnStatus userInfo:nil] description]);
     }
 		return nil;
 	}
@@ -442,7 +442,7 @@ static BOOL _logsErrors;
 	if (returnStatus != noErr || !item)
 	{
 		if (_logsErrors)
-			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
+			NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), [[NSError errorWithDomain:NSOSStatusErrorDomain code:returnStatus userInfo:nil] description]);
 		return nil;
 	}
 	return [EMInternetKeychainItem _internetKeychainItemWithCoreKeychainItem:item forServer:server username:username password:password path:path port:port protocol:protocol];

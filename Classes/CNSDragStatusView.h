@@ -19,8 +19,6 @@
 // THE SOFTWARE.
 
 @interface CNSDragStatusView : NSView {
-  BOOL highlight;
-  id __unsafe_unretained delegate;
   NSImage *highlightedImage;
   NSImage *normalImage;
 }

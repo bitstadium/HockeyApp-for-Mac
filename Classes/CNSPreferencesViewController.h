@@ -29,7 +29,6 @@
   IBOutlet NSView *advancedView;
   
   BOOL isVisible;
-  id __unsafe_unretained delegate;
 }
 
 extern NSString *const CNSUserDefaultsHost;

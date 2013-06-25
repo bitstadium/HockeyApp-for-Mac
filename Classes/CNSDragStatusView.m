@@ -23,9 +23,6 @@
 
 @implementation CNSDragStatusView
 
-@synthesize delegate;
-@synthesize highlight;
-
 #pragma mark - Initialization Methods
 
 - (id)initWithFrame:(NSRect)frame {
@@ -60,16 +57,16 @@
 #pragma mark NSView Methods
 
 - (void)mouseDown:(NSEvent *)event {
-  [CNSClassUtils checkDelegate:delegate performSelector:@selector(dragStatusViewWasClicked:) withObject:self];
+  [CNSClassUtils checkDelegate:_delegate performSelector:@selector(dragStatusViewWasClicked:) withObject:self];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-  if (highlight) {
+  if (_highlight) {
     [[NSColor selectedMenuItemColor] setFill];
     NSRectFill([self bounds]);
   }
   
-  if (highlight) {
+  if (_highlight) {
     [highlightedImage drawAtPoint:NSMakePoint(5, 3) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
   }
   else {

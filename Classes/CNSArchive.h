@@ -22,12 +22,7 @@
 
 @interface CNSArchive : CNSApp {
 @private
-  BOOL dsymCreated;
-  BOOL ipaCreated;
-  NSDictionary *info;
   NSMutableArray *tempDirectoryPaths;
-  NSString *dsymPath;
-  NSString *ipaPath;
 }
 
 @property (nonatomic) NSDictionary *info;

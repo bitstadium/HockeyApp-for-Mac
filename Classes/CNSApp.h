@@ -27,40 +27,10 @@
 
 @interface CNSApp : NSDocument <NSWindowDelegate, BOMAnalyzeDelegate> {
 @protected
-  NSString *bundleIdentifier;
+  NSString *_bundleIdentifier;
 @private
   BOOL ignoreNotesFile;
   BOOL autoSubmit;
-  NSMutableArray *connectionHelpers;
-  NSButton *__unsafe_unretained cancelButton;
-  NSButton *__unsafe_unretained cancelTagSheetButton;
-  NSButton *__unsafe_unretained saveTagSheetButton;
-  NSButton *__unsafe_unretained downloadButton;
-  NSButton *__unsafe_unretained notifyButton;
-  NSButton *__unsafe_unretained uploadButton;
-  NSButton *__unsafe_unretained restrictDownloadButton;
-  NSButton *__unsafe_unretained continueButton;
-  NSString *bundleShortVersion;
-  NSString *bundleVersion;
-  NSMatrix *__unsafe_unretained notesTypeMatrix;
-  NSMutableDictionary *appsByReleaseType;
-  NSPopUpButton *__unsafe_unretained afterUploadMenu;
-  NSPopUpButton *__unsafe_unretained fileTypeMenu;
-  NSPopUpButton *__unsafe_unretained releaseTypeMenu;
-  NSPopUpButton *__unsafe_unretained appNameMenu;
-  NSProgressIndicator *__unsafe_unretained progressIndicator;
-  NSTextField *__unsafe_unretained bundleIdentifierLabel;
-  NSTextField *__unsafe_unretained bundleVersionLabel;
-  NSTextField *__unsafe_unretained bundleShortVersionLabel;
-  NSTextField *__unsafe_unretained errorLabel;
-  NSTextField *__unsafe_unretained statusLabel;
-  NSTextView *__unsafe_unretained releaseNotesField;
-  NSWindow *__unsafe_unretained uploadSheet;
-  NSWindow *__unsafe_unretained tagSheet;
-  NSWindow *__unsafe_unretained window;
-  M3TokenController *__unsafe_unretained tokenController;
-  
-  NSString* apiToken;
   IOPMAssertionID _assertionID;
 }
 
@@ -96,7 +66,7 @@
 @property (unsafe_unretained) IBOutlet NSMatrix *notesTypeMatrix;
 @property (unsafe_unretained) IBOutlet NSWindow *uploadSheet;
 @property (unsafe_unretained) IBOutlet NSWindow *tagSheet;
-@property (unsafe_unretained) IBOutlet NSWindow *window;
+@property (unsafe_unretained) IBOutlet NSWindow *documentWindow;
 @property (unsafe_unretained) IBOutlet M3TokenController *tokenController;
 @property (unsafe_unretained) IBOutlet NSWindow *infoSheet;
 @property (unsafe_unretained) IBOutlet NSTextField *infoLabel;

@@ -31,6 +31,7 @@ static NSString *CNSReleaseTypeMismatchSheet = @"CNSReleaseTypeMismatchSheet";
 static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 @interface CNSApp ()
+
 @property (nonatomic) NSMutableDictionary *appsByReleaseType;
 @property (nonatomic) NSMutableDictionary *tagsForAppID;
 @property (nonatomic) NSMutableDictionary *appVersionsForAppID;
@@ -57,58 +58,6 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 @end
 
 @implementation CNSApp
-
-@synthesize afterUploadMenu;
-@synthesize bundleIdentifier;
-@synthesize bundleIdentifierLabel;
-@synthesize bundleShortVersion;
-@synthesize bundleShortVersionLabel;
-@synthesize bundleVersion;
-@synthesize bundleVersionLabel;
-@synthesize cancelButton;
-@synthesize connectionHelpers;
-@synthesize downloadButton;
-@synthesize errorLabel;
-@synthesize fileTypeMenu;
-@synthesize notesTypeMatrix;
-@synthesize notifyButton;
-@synthesize mandatoryButton;
-@synthesize progressIndicator;
-@synthesize releaseNotesField;
-@synthesize analyzeContainer;
-@synthesize analyzeBar;
-@synthesize analyzeFixedSizeBar;
-@synthesize analyzeImageSizeBar;
-@synthesize analyzeSavedSizeBar;
-@synthesize analyzeSpinner;
-@synthesize analyzeButton;
-@synthesize analyzeInfo;
-@synthesize releaseTypeMenu;
-@synthesize appNameMenu;
-@synthesize statusLabel;
-@synthesize uploadButton;
-@synthesize uploadSheet;
-@synthesize window;
-@synthesize appsByReleaseType;
-@synthesize tagsForAppID;
-@synthesize apiToken;
-@synthesize restrictDownloadButton;
-@synthesize tagSheet;
-@synthesize cancelTagSheetButton;
-@synthesize saveTagSheetButton;
-@synthesize tokenController;
-@synthesize selectedTags;
-@synthesize publicIdentifier;
-@synthesize appVersionsForAppID;
-@synthesize appStoreBuild;
-@synthesize infoLabel;
-@synthesize infoSheet;
-@synthesize skipReleaseTypeCheck;
-@synthesize skipUniqueVersionCheck;
-@synthesize continueButton;
-@synthesize didClickContinueInInfoSheet;
-@synthesize ignoreExistingVersion;
-@synthesize analyzer;
 
 #pragma mark - Initialization Methods
 
@@ -279,16 +228,16 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   [self.cancelButton setTitle:@"Cancel"];
   [self.uploadButton setEnabled:NO];
     
-  [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
+  [NSApp beginSheet:self.uploadSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   
   [self preUploadCheck];
 }
 
 - (IBAction)restrictDownloadsWasClicked:(id)sender {
   if (self.restrictDownloadButton.state == NSOnState) {
-    tokenController.tokenField.objectValue = [self.selectedTags copy];
-    [tokenController reloadTokens];
-    [NSApp beginSheet:self.tagSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndTagSheet:returnCode:contextInfo:) contextInfo:nil];
+    self.tokenController.tokenField.objectValue = [self.selectedTags copy];
+    [self.tokenController reloadTokens];
+    [NSApp beginSheet:self.tagSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndTagSheet:returnCode:contextInfo:) contextInfo:nil];
   }
 }
 
@@ -306,20 +255,20 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 
 - (IBAction) analyzeButtonWasClicked:(id) sender {
 	if (!self.analyzer) {
-		analyzer = [[BOMAnalyze alloc] initWithFile: self.fileURL];
-		analyzer.delegate = self;
+		_analyzer = [[BOMAnalyze alloc] initWithFile: self.fileURL];
+		_analyzer.delegate = self;
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-			[analyzer start];
+			[_analyzer start];
 		});
 	}
-	else if (analyzer.isRunning)
-		[analyzer stop];
+	else if (_analyzer.isRunning)
+		[_analyzer stop];
 	else if (self.analyzer.protocol.count) {
 		NSSavePanel *panel = [NSSavePanel savePanel];
 		panel.canCreateDirectories = YES;
 		panel.nameFieldLabel = @"Save Protocol as:";
 		panel.nameFieldStringValue = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-		[panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+		[panel beginSheetModalForWindow:self.documentWindow completionHandler:^(NSInteger result) {
 			if (result == NSFileHandlingPanelOKButton) {
 				NSFileManager *fm = [NSFileManager defaultManager];
 				[fm removeItemAtPath: panel.URL.path error:nil];
@@ -399,13 +348,13 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 - (void)showExistingVersionInfoSheet {
   [NSApp endSheet:self.uploadSheet];
   self.infoLabel.stringValue = [NSString stringWithFormat:@"The BundleVersion %@ has already been taken.", self.bundleVersion];
-  [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSExistingVersionSheet];
+  [NSApp beginSheet:self.infoSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSExistingVersionSheet];
 }
 
 - (void)showReleaseTypeMismatchInfoSheet {
   [NSApp endSheet:self.uploadSheet];
   self.infoLabel.stringValue = [NSString stringWithFormat:@"The build is signed with a store certificate but you set the release type to %@. Are you sure?", ([self currentSelectedReleaseType] == CNSHockeyAppReleaseTypeAlpha ? @"alpha" : @"beta")];
-  [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSReleaseTypeMismatchSheet];
+  [NSApp beginSheet:self.infoSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:(__bridge_retained void *)CNSReleaseTypeMismatchSheet];
 }
 
 - (void)preUploadCheck {
@@ -447,7 +396,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   self.progressIndicator.doubleValue = 0;
   
   if (!self.uploadSheet.isKeyWindow) {
-    [NSApp beginSheet:self.uploadSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
+    [NSApp beginSheet:self.uploadSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndUploadSheet:returnCode:contextInfo:) contextInfo:nil];
   }
 
   [self storeNotesType];
@@ -593,7 +542,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   [self readNotesType];
   [self readAfterUploadSelection];
 
-  [self.window setTitle:[self.fileURL lastPathComponent]];
+  [self.documentWindow setTitle:[self.fileURL lastPathComponent]];
 
   [self readProcessArguments];
   [self fetchAppNames];
@@ -608,8 +557,8 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
 }
 
 - (NSString *)bundleIdentifier {
-  if (bundleIdentifier) {
-    return bundleIdentifier;
+  if (_bundleIdentifier) {
+    return _bundleIdentifier;
   }
   
   NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
@@ -629,7 +578,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
   
   self.appStoreBuild = [self hasProvisionedDevicesInIPAAtPath:targetFilename];
 
-  return bundleIdentifier;
+  return _bundleIdentifier;
 }
 
 - (BOOL)ignorePlatform:(NSString *)platform {
@@ -1060,7 +1009,7 @@ static NSString *CNSExistingVersionSheet = @"CNSExistingVersionSheet";
         [self.uploadButton setEnabled:YES];
         [self.uploadSheet orderOut:self];
         [NSApp endSheet:self.uploadSheet];
-        [self.window performClose:self];
+        [self.documentWindow performClose:self];
         [self close];
 
         [self allowIdleSleep];

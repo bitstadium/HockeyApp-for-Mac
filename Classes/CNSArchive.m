@@ -40,12 +40,6 @@
 
 @implementation CNSArchive
 
-@synthesize dsymCreated;
-@synthesize dsymPath;
-@synthesize info;
-@synthesize ipaCreated;
-@synthesize ipaPath;
-
 #pragma mark - Initialization Methods
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {

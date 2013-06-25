@@ -1,17 +1,25 @@
+// Created by Oliver Michalak on 05.06.13.
+// (c) oliver@werk01.de
+// based on http://wasted.werk01.de
+// available under the MIT license:
 //
-//  BOMAnalyze.m
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  Created by Oliver Michalak on 05.06.13.
-//	(c) oliver@werk01.de
-//	based on http://wasted.werk01.de
-//	available under the MIT license:
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-//	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-//
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-//
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #import "BOMAnalyze.h"
 
@@ -22,14 +30,6 @@
 @end
 
 @implementation BOMAnalyze
-
-@synthesize fixedSize;
-@synthesize imageSize;
-@synthesize savedImageSize;
-@synthesize protocol;
-@synthesize delegate;
-@synthesize isRunning;
-@synthesize exceptionList;
 
 - (id) initWithFile:(NSURL*) file {
 	if ((self = [super init])) {
@@ -42,8 +42,9 @@
 													 @"Default-Portrait.png", @"Default-Portrait~iPad.png",
 													 @"Default.png", @"Default-568h.png",
 													 @"Icon-72.png", @"Icon-Small-50.png", @"Icon-Small.png", @"Icon.png", @"iTunesArtwork.png"] mutableCopy];
-		for (long index=exceptionList.count-1; index >=0; index--)
-			[exceptionList addObject:[exceptionList[index] stringByReplacingOccurrencesOfString:@".png" withString:@"@2x.png"]];
+		for (long index=_exceptionList.count-1; index >=0; index--) {
+			[_exceptionList addObject:[_exceptionList[index] stringByReplacingOccurrencesOfString:@".png" withString:@"@2x.png"]];
+    }
 	}
 	return self;
 }

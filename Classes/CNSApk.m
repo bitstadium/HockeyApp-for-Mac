@@ -34,9 +34,6 @@
 
 @implementation CNSApk
 
-@synthesize refreshAPK;
-@synthesize aaptPathInvalid;
-
 #pragma mark - NSDocument Methods
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
@@ -50,7 +47,7 @@
 #pragma mark - NSWindowDelegate Methods
 
 - (void)windowDidBecomeKey:(NSNotification *)notification {
-  if (([notification object] == self.window) && (refreshAPK)) {
+  if (([notification object] == self.documentWindow) && (_refreshAPK)) {
     self.refreshAPK = NO;
     self.bundleIdentifier = nil;
     [self setupViews];
@@ -135,13 +132,13 @@
   else {
     [NSApp endSheet:self.uploadSheet];
     self.infoLabel.stringValue = @"Couldn't gather infos from apk file. Please check that the path to aapt tool under Preferences -> Advanced is correct.";
-    [NSApp beginSheet:self.infoSheet modalForWindow:self.window modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
+    [NSApp beginSheet:self.infoSheet modalForWindow:self.documentWindow modalDelegate:self didEndSelector:@selector(didEndInfoSheet:returnCode:contextInfo:) contextInfo:nil];
   }
 }
 
 - (NSString *)bundleIdentifier {
-  if (bundleIdentifier) {
-    return bundleIdentifier;
+  if (_bundleIdentifier) {
+    return _bundleIdentifier;
   }
 
   NSDictionary *info = [self getInfosFromAPKAtPath:[self.fileURL path]];
@@ -150,7 +147,7 @@
   self.bundleVersion = [info valueForKey:@"versionCode"];
   self.bundleShortVersion = [info valueForKey:@"versionName"];
 
-  return bundleIdentifier;
+  return _bundleIdentifier;
 }
 
 - (BOOL)ignorePlatform:(NSString *)platform {

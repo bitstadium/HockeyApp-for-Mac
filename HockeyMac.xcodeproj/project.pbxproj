@@ -312,6 +312,38 @@
 			path = EMKeychain;
 			sourceTree = "<group>";
 		};
+		4D3DB3221779784C008DC8A9 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
+				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
+				4D589CAA13C5C219007ED5E1 /* CNSConstants.h */,
+				4D589CAB13C5C219007ED5E1 /* CNSConstants.m */,
+				4D55CE6E1517766D00538A5C /* CNSDevice.h */,
+				4D55CE6F1517766D00538A5C /* CNSDevice.m */,
+				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
+				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
+				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
+				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
+				4DB47C5514B5F5D800793D09 /* CNSTextView.h */,
+				4DB47C5614B5F5D800793D09 /* CNSTextView.m */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		4D3DB32317797888008DC8A9 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				4DE69FB8142CE9E100307A1F /* CNSApk.h */,
+				4DE69FB9142CE9E100307A1F /* CNSApk.m */,
+				4D20DDD71345FA0500344114 /* CNSApp.h */,
+				4D20DDD81345FA0500344114 /* CNSApp.m */,
+				4D4D07E513B277B30063E405 /* CNSArchive.h */,
+				4D4D07E613B277B30063E405 /* CNSArchive.m */,
+			);
+			name = Upload;
+			sourceTree = "<group>";
+		};
 		4D4E7AF813B8D39A002F0439 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,24 +365,8 @@
 		4D4E7B1313B9211E002F0439 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4DE69FB8142CE9E100307A1F /* CNSApk.h */,
-				4DE69FB9142CE9E100307A1F /* CNSApk.m */,
-				4D20DDD71345FA0500344114 /* CNSApp.h */,
-				4D20DDD81345FA0500344114 /* CNSApp.m */,
-				4D20DF481345FCF900344114 /* CNSApplicationDelegate.h */,
-				4D20DF491345FCF900344114 /* CNSApplicationDelegate.m */,
-				4D4D07E513B277B30063E405 /* CNSArchive.h */,
-				4D4D07E613B277B30063E405 /* CNSArchive.m */,
-				4D589CAA13C5C219007ED5E1 /* CNSConstants.h */,
-				4D589CAB13C5C219007ED5E1 /* CNSConstants.m */,
-				4D55CE6E1517766D00538A5C /* CNSDevice.h */,
-				4D55CE6F1517766D00538A5C /* CNSDevice.m */,
-				4D4E7B0013B912FC002F0439 /* CNSDragStatusView.h */,
-				4D4E7B0113B912FC002F0439 /* CNSDragStatusView.m */,
-				4D1C7F0A13AA7BD100E2C048 /* CNSPreferencesViewController.h */,
-				4D1C7F0B13AA7BD100E2C048 /* CNSPreferencesViewController.m */,
-				4DB47C5514B5F5D800793D09 /* CNSTextView.h */,
-				4DB47C5614B5F5D800793D09 /* CNSTextView.m */,
+				4D3DB3221779784C008DC8A9 /* Base */,
+				4D3DB32317797888008DC8A9 /* Upload */,
 				DE03D21E175F207000196772 /* Analyze */,
 			);
 			name = Classes;

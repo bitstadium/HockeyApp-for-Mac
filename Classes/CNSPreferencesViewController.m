@@ -38,8 +38,6 @@ NSString *const CNSUserDefaultsAAPTPath = @"CNSUserDefaultsAAPTPath";
 NSString *const CNSUserDefaultsNotesType = @"CNSUserDefaultsNotesType";
 NSString *const CNSUserDefaultsAfterUploadSelection = @"CNSUserDefaultsAfterUploadSelection";
 
-@synthesize delegate;
-
 #pragma mark - Initialization Methods
 
 - (id)init {

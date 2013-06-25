@@ -130,8 +130,6 @@ NSLog(@"%@", file);
 	}
 	else {
 		@autoreleasepool {
-			NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
-			formatter.allowsNonnumericFormatting = NO;
 			NSFileManager *fm = [NSFileManager defaultManager];
 			NSArray *fileComponent = file.path.pathComponents;
 			NSString *objectName = fileComponent.lastObject;

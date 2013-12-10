@@ -1,8 +1,0 @@
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-*.xcworkspace/*
-*.xcworkspace/xcuserdata
-!*.xcworkspace/contents.xcworkspacedata
-.DS_Store
-.idea/*
-build/*

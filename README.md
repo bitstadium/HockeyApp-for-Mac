@@ -4,7 +4,7 @@ HockeyMac is a client application for Mac OS X to upload files to HockeyApp. Aft
 
 ## INSTALLATION
 
-You can download the latest version from [here](https://hockeyapp.net/releases/)
+You can download the latest version from [here](http://hockeyapp.net/releases/)
 
 ## Open Source
 
